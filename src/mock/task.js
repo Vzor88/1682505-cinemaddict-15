@@ -1,5 +1,8 @@
 import {getRandomArray, getRandomInteger, getRandomIntegerFloat} from '../utils.js';
-import {DESCRIPTIONS, GENRES, POSTERS, SMILES, TITLES} from './data.js';
+import {DESCRIPTIONS, GENRES, POSTERS, SMILES, TITLES, ALTERNATIVE_TITLES, DIRECTORS, WRITERS, ACTORS, COUNTRIES, AUTHORS_COMMENT, COUNT} from './data.js';
+import dayjs from 'dayjs';
+
+let index = 0;
 
 const generateData = (array) => {
   const randomIndex = getRandomInteger(0, array.length - 1);
@@ -7,43 +10,66 @@ const generateData = (array) => {
   return array[randomIndex];
 };
 
-const generateDuration = () => {
-  const hour = getRandomInteger(0,1);
-  if (hour === 0) {
-    return `${getRandomInteger(0,60)}m`;
-  } else {
-    return `${hour}h ${getRandomInteger(0,60)}m`;
+const generateDuration = (minutes) => {
+  let hour = 0;
+  while (minutes > 60) {
+    hour += 1;
+    minutes -= 60;
   }
+  return hour === 0 ? `${minutes}m` : `${hour}h ${minutes}m`;
 };
 
-const generateDescription = () => {
+const generateDescription = (text) => text.length >= 139 ? `${text.substr(0, 139)} <span class='more'>...</span>` : text;
+const getGenerateDate = () => `${getRandomInteger(1920, 2020)}-${getRandomInteger(1, 12)}-${getRandomInteger(1, 30)}`;
+
+const generateComment = () => {
+  const maxGap = 3;
+  const gap = getRandomInteger(0, maxGap);
+
+  return {
+    id: getRandomInteger(0, 10000),
+    author: generateData(AUTHORS_COMMENT),
+    text: generateData(DESCRIPTIONS),
+    date: dayjs()
+      .subtract(gap, 'minute')
+      .subtract(gap, 'hour')
+      .subtract(gap, 'day')
+      .format('YYYY/MM/DD HH:mm'),
+    emotion: generateData(SMILES),
+  };
+};
+
+const generateTask = (commentsId) => {
   const description = String(getRandomArray(1, 5, DESCRIPTIONS));
-  return description.length >= 139 ? `${description.substr(0, 139)} <span class='more'>...</span>` : description;
+  const randomDate = dayjs(getGenerateDate());
+  index += 1;
+  return {
+    id: index,
+    poster: generateData(POSTERS),
+    title: generateData(TITLES),
+    alternativeTitle: generateData(ALTERNATIVE_TITLES),
+    rating: getRandomIntegerFloat(0, 10, 1),
+    ageRating: getRandomInteger(0, 18),
+    productionDate: dayjs(randomDate).format('DD MMMM YYYY'),
+    productionYear: dayjs(randomDate).format('YYYY'),
+    country: generateData(COUNTRIES),
+    duration: generateDuration(getRandomInteger(1,200)),
+    genre: getRandomArray(1, 2, GENRES),
+    description: description,
+    descriptionShort: generateDescription(description),
+    director: generateData(DIRECTORS),
+    writer: getRandomArray(1, 3, WRITERS),
+    actor: getRandomArray(1, 3, ACTORS),
+    isWatchlist: Boolean(getRandomInteger(0, 1)),
+    isFavorite: Boolean(getRandomInteger(0, 1)),
+    isHistory: Boolean(getRandomInteger(0, 1)),
+    comment: commentsId,
+  };
 };
 
-
-const createComment = () => ({
-  id: getRandomInteger(0, 10000),
-  author: 'Ilya Reilly',
-  comment: getRandomArray(1, 1, DESCRIPTIONS),
-  date: '2019-05-11T16:12:32.554Z',
-  emotion: getRandomArray(1, 2, SMILES),
-});
-
-const generateComments = () => new Array(getRandomInteger (0, 5)).fill().map(createComment);
-
-const generateTask = () => ({
-  poster: generateData(POSTERS),
-  title: generateData(TITLES),
-  rating: getRandomIntegerFloat(0, 10, 1),
-  productionYear: getRandomInteger(1920, 2000),
-  duration: generateDuration(),
-  genre: getRandomArray(1, 2, GENRES),
-  description: generateDescription(),
-  isWatchlist: Boolean(getRandomInteger(0, 1)),
-  isFavorite: Boolean(getRandomInteger(0, 1)),
-  isHistory: Boolean(getRandomInteger(0, 1)),
-  comment: generateComments(),
-});
-
-export {generateTask};
+export const createCardFilmsTemplate = () => {
+  const comments = new Array(getRandomInteger(1, COUNT.MAX_COMMENTS_FILMS)).fill(null).map(generateComment);
+  const commentsId = comments.map((item) => item.id);
+  const tasks = generateTask(commentsId);
+  return {tasks, comments};
+};

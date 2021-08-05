@@ -1,11 +1,19 @@
-const SMILES = [
+export const SMILES = [
   'smile',
   'sleeping',
   'puke',
   'angry',
 ];
 
-const GENRES = [
+export const COUNT = {
+  FILMS: 5,
+  SORT_FILMS: 2,
+  MAX_COMMENTS_FILMS: 5,
+  GENERATE_FILMS: 20,
+  FILMS_PER_STEP: 5,
+};
+
+export const GENRES = [
   ' Musical',
   ' Western',
   ' Drama',
@@ -14,7 +22,7 @@ const GENRES = [
   ' Mystery',
 ];
 
-const DESCRIPTIONS = [
+export const DESCRIPTIONS = [
   'Lorem ipsum dolor sit amet, consectetur adipiscing elit.',
   'Cras aliquet varius magna, non porta ligula feugiat eget.',
   'Fusce tristique felis at fermentum pharetra.',
@@ -28,7 +36,7 @@ const DESCRIPTIONS = [
   'In rutrum ac purus sit amet tempus.',
 ];
 
-const POSTERS = [
+export const POSTERS = [
   './images/posters/the-dance-of-life.jpg',
   './images/posters/sagebrush-trail.jpg',
   './images/posters/the-man-with-the-golden-arm.jpg',
@@ -38,7 +46,7 @@ const POSTERS = [
   './images/posters/made-for-each-other.png',
 ];
 
-const TITLES = [
+export const TITLES = [
   'The Dance of Life',
   'Sagebrush Trail',
   'The Man with the Golden Arm',
@@ -48,4 +56,74 @@ const TITLES = [
   'Made for Each Other',
 ];
 
-export {SMILES, GENRES, DESCRIPTIONS, POSTERS, TITLES};
+export const ALTERNATIVE_TITLES = [
+  'The Dance of Life',
+  'Sagebrush Trail',
+  'The Man with the Golden Arm',
+  'Santa Claus Conquers the Martians',
+  'Popeye the Sailor Meets Sindbad the Sailor',
+  'The Great Flamarion',
+  'Made for Each Other',
+];
+
+
+export const DIRECTORS = [
+  'Steven Spielberg',
+  'David Fincher',
+  'James Cameron',
+  'Martin Scorsese',
+  'Christopher Nolan',
+];
+
+export const WRITERS = [
+  ' Billy Wilder',
+  ' Robert Towne',
+  ' Quentin Tarantino',
+  ' Charlie Kaufman',
+  ' Woody Allen',
+  ' Steven Spielberg',
+  ' David Fincher',
+  ' James Cameron',
+  ' Martin Scorsese',
+  ' Christopher Nolan',
+];
+
+export const ACTORS = [
+  ' Alan Rickman',
+  ' Benedict Cumberbatch',
+  ' Benicio del Toro',
+  ' Vincent Cassel',
+  ' Viggo Mortensen',
+  ' James McAvoy',
+  ' Jake Gyllenhaal',
+  ' Daniel Day-Lewis',
+  ' Daniel Radcliffe',
+  ' Casey Affleck',
+];
+
+export const AUTHORS_COMMENT = [
+  ' Ванька',
+  ' Петька',
+  ' Илюха',
+  ' Нагибатор666',
+  ' Оленька',
+  ' Алена',
+  ' Злая девочка',
+  ' Просто придурок',
+  ' Альфонс',
+  ' Задрот',
+];
+
+export const COUNTRIES = [
+  ' Afghanistan',
+  ' Albania',
+  ' Algeria',
+  ' Andorra',
+  ' Angola',
+  ' Argentina',
+  ' Armenia',
+  ' Azerbaijan',
+  ' Bangladesh',
+  ' Barbados',
+];
+
