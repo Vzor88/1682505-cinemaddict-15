@@ -85,7 +85,9 @@ render(siteFooterElement, createStatisticFooterTemplate(cardsFilm.length), 'befo
 
 const getCreatePopupRender = () => {
   render(siteBodyElement, createPopupContainerTemplate(), 'beforeend');
+
   const popupFilmContainerElement = document.querySelector('.film-details__inner');
+  popupFilmContainerElement.innerHTML = '';
 
   render(popupFilmContainerElement, createPopupFilmTemplate(cardsFilm[0].film), 'beforeend');
   generateGenreList(cardsFilm[0].film);
@@ -97,14 +99,19 @@ const filmPosters = siteFilmsElement.querySelectorAll('.film-card__poster');
 
 filmPosters.forEach((item) => {
   item.addEventListener('click', () => {
-    getCreatePopupRender();
+    const cardFilmPopup = document.querySelector('.film-details');
+
+    if (!cardFilmPopup) {
+      getCreatePopupRender();
+    }
+
     siteBodyElement.classList.add('hide-overflow');
 
-    const cardFilmPopup = document.querySelector('.film-details');
-    const buttonClosePopup = cardFilmPopup.querySelector('.film-details__close-btn');
+    const popup = document.querySelector('.film-details');
+    const buttonClosePopup = popup.querySelector('.film-details__close-btn');
 
     buttonClosePopup.addEventListener('click', () => {
-      cardFilmPopup.remove();
+      popup.remove();
       siteBodyElement.classList.remove('hide-overflow');
     });
   });
