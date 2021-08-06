@@ -5,12 +5,61 @@ export const SMILES = [
   'angry',
 ];
 
+export const RANK = {
+  FAN: {
+    MIN: 11,
+    MAX: 20,
+  },
+  MOVIE_BUFF: 21,
+};
+
 export const COUNT = {
   FILMS: 5,
   SORT_FILMS: 2,
   MAX_COMMENTS_FILMS: 5,
   GENERATE_FILMS: 20,
   FILMS_PER_STEP: 5,
+};
+
+export const LENGTH_STRING = 139;
+
+export const COUNT_RANDOM_DATE = {
+  YEAR: {
+    MIN: 1920,
+    MAX: 2020,
+  },
+  MONTH: {
+    MIN: 1,
+    MAX: 12,
+  },
+  DAY: {
+    MIN: 1,
+    MAX: 30,
+  },
+};
+
+export const DURATION = {
+  FILM: {
+    MIN: 1,
+    MAX: 200,
+  },
+  GAP: 3,
+};
+
+export const INDEX_COMMENT = {
+  MIN: 0,
+  MAX: 10000,
+};
+
+export const RATING = {
+  FILM: {
+    MIN: 0,
+    MAX: 10,
+  },
+  AGE: {
+    MIN: 0,
+    MAX: 18,
+  },
 };
 
 export const GENRES = [

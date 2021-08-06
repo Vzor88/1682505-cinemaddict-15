@@ -1,12 +1,12 @@
 const taskToFilterMap = {
-  watchList: (tasks) => tasks.filter((task) => task.isWatchlist).length,
-  history: (tasks) => tasks.filter((task) => task.isHistory).length,
-  favorites: (tasks) => tasks.filter((task) => task.isFavorite).length,
+  watchList: (films) => films.filter((film) => film.userDetails.watchList).length,
+  history: (films) => films.filter((film) => film.userDetails.alreadyWatched).length,
+  favorites: (films) => films.filter((film) => film.userDetails.favorite).length,
 };
 
-export const generateFilter = (tasks) => Object.entries(taskToFilterMap).map(
+export const generateFilter = (films) => Object.entries(taskToFilterMap).map(
   ([filterName, countTasks]) => ({
     name: filterName,
-    count: countTasks(tasks),
+    count: countTasks(films),
   }),
 );

@@ -50,8 +50,9 @@ export const createPopupCommentsTemplate = (length) => (
 
 export const getGenerateCommentsList = (comments = {}) => {
   const commentsList = document.querySelector('.film-details__comments-list');
-  for (const comment of comments) {
-    const {author, text, date, emotion} = comment;
+  commentsList.innerHTML = '';
+  for (const commentary of comments) {
+    const {author, comment, date, emotion} = commentary;
 
     const timePassed = dayjs(date).fromNow();
 
@@ -61,7 +62,7 @@ export const getGenerateCommentsList = (comments = {}) => {
         <img src="./images/emoji/${emotion}.png" width="55" height="55" alt="emoji-smile">
       </span>
       <div>
-        <p class="film-details__comment-text">${text}</p>
+        <p class="film-details__comment-text">${comment}</p>
         <p class="film-details__comment-info">
           <span class="film-details__comment-author">${author}</span>
           <span class="film-details__comment-day">${timePassed}</span>

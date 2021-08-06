@@ -1,10 +1,11 @@
 import {ucFirstName} from '../utils.js';
+import {RANK} from '../mock/data.js';
 
 const isNameRank = (count) => {
   let nameRank = 'novice';
-  if (count >= 11 && count <= 20) {
+  if (count >= RANK.FAN.MIN && count <= RANK.FAN.MAX) {
     nameRank = 'fan';
-  } else if (count >= 21) {
+  } else if (count >= RANK.MOVIE_BUFF) {
     nameRank = 'movie buff';
   }
   nameRank = ucFirstName(nameRank);
