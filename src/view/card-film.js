@@ -1,8 +1,8 @@
-import {isClassName} from '../utils.js';
+import {isClassName, createElement} from '../utils.js';
 import {LENGTH_STRING} from '../mock/data.js';
 import dayjs from 'dayjs';
 
-export const createCardFilmTemplate = (film) => {
+const createCardFilmTemplate = (film) => {
   const {filmInfo, comments, userDetails} = film;
   const {title, totalRating, releaseFilm, runtime, genre, poster, description} = filmInfo;
   const {date} = releaseFilm;
@@ -29,3 +29,27 @@ export const createCardFilmTemplate = (film) => {
     </div>
   </article>`;
 };
+
+export default class CardFilm {
+  constructor(film) {
+    this._film = film;
+    this._element = null;
+  }
+
+  getTemplate() {
+
+    return createCardFilmTemplate(this._film);
+  }
+
+  getElement() {
+    if (!this._element) {
+      this._element = createElement(this.getTemplate());
+    }
+
+    return this._element;
+  }
+
+  removeElement() {
+    this._element = null;
+  }
+}

@@ -1,8 +1,8 @@
-import {isClassNamePopup} from '../utils.js';
+import {isClassNamePopup, createElement} from '../utils.js';
 
 const isGenre = (array) => array.length > 1 ? 'Genres' : 'Genre';
 
-export const createPopupFilmTemplate = (film = {}) => {
+const createPopupFilmTemplate = (film = {}) => {
   const {filmInfo, userDetails} = film;
   const {title, totalRating, releaseFilm, genre, poster, description, ageRating, alternativeTitle, writers, director, actors, runtime} = filmInfo;
   const {date, releaseCountry} = releaseFilm;
@@ -87,3 +87,27 @@ export const generateGenreList = (array = {}) => {
   });
 };
 
+export default class PopupFilm {
+  constructor(film) {
+    this._film = film;
+    this._element = null;
+  }
+
+  getTemplate() {
+
+    return createPopupFilmTemplate(this._film);
+  }
+
+  getElement() {
+    if (!this._element) {
+      this._element = createElement(this.getTemplate());
+
+    }
+
+    return this._element;
+  }
+
+  removeElement() {
+    this._element = null;
+  }
+}

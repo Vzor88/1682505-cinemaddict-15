@@ -1,9 +1,10 @@
 import dayjs from 'dayjs';
 import relativeTime from 'dayjs/plugin/relativeTime.js';
+import {createElement} from '../utils.js';
 
 dayjs.extend(relativeTime);
 
-export const createPopupCommentsTemplate = (length) => (
+const createPopupCommentsTemplate = (length) => (
   `<div class="film-details__bottom-container">
     <section class="film-details__comments-wrap">
       <h3 class="film-details__comments-title">
@@ -48,7 +49,7 @@ export const createPopupCommentsTemplate = (length) => (
   </div>`
 );
 
-export const getGenerateCommentsList = (comments = {}) => {
+export const generateCommentsList = (comments = {}) => {
   const commentsList = document.querySelector('.film-details__comments-list');
   commentsList.innerHTML = '';
   for (const commentary of comments) {
@@ -73,3 +74,27 @@ export const getGenerateCommentsList = (comments = {}) => {
     commentsList.insertAdjacentHTML('beforeEnd', elementList);
   }
 };
+
+export default class PopupComments {
+  constructor(length) {
+    this._length = length;
+    this._element = null;
+  }
+
+  getTemplate() {
+
+    return createPopupCommentsTemplate(this._length);
+  }
+
+  getElement() {
+    if (!this._element) {
+      this._element = createElement(this.getTemplate());
+    }
+
+    return this._element;
+  }
+
+  removeElement() {
+    this._element = null;
+  }
+}
