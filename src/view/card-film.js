@@ -2,7 +2,8 @@ import {isClassName, createElement} from '../utils.js';
 import {LENGTH_STRING} from '../mock/data.js';
 import dayjs from 'dayjs';
 
-const createCardFilmTemplate = (film) => {
+const createCardFilmTemplate = (card) => {
+  const {film} = card;
   const {filmInfo, comments, userDetails} = film;
   const {title, totalRating, releaseFilm, runtime, genre, poster, description} = filmInfo;
   const {date} = releaseFilm;
