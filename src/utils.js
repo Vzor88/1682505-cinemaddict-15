@@ -17,3 +17,35 @@ export const isClassName = (boolean) =>  boolean ? 'film-card__controls-item--ac
 export const isClassNamePopup = (boolean) =>  boolean ? 'film-details__control-button--active' : '';
 
 export const ucFirstName = (name) => name[0].toUpperCase() + name.substr(1).toLowerCase();
+
+export const RenderPosition = {
+  AFTERBEGIN: 'afterbegin',
+  BEFOREEND: 'beforeend',
+};
+
+export const renderElement = (container, element, place) => {
+  switch (place) {
+    case RenderPosition.AFTERBEGIN:
+      container.prepend(element);
+      break;
+    case RenderPosition.BEFOREEND:
+      container.append(element);
+      break;
+  }
+};
+
+export const createElement = (template) => {
+  const newElement = document.createElement('div'); // 1
+  newElement.innerHTML = template;
+  return newElement.firstChild;
+};
+
+
+export const onEscKeyDown = (evt) => {
+  if (evt.key === 'Escape' || evt.key === 'Esc') {
+    const popup = document.querySelector('.film-details');
+    evt.preventDefault();
+    popup.remove();
+    document.removeEventListener('keydown', onEscKeyDown);
+  }
+};
