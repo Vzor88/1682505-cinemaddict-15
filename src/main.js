@@ -1,4 +1,4 @@
-import {renderElement, RenderPosition} from './utils.js';
+import {renderElement, RenderPosition, onEscKeyDown} from './utils.js';
 import {COUNT} from './mock/data.js';
 import RankUserView from './view/rank-user.js';
 import MenuView from './view/menu.js';
@@ -47,13 +47,24 @@ const renderFilm = (filmListElement, film) => {
       generateCommentsList(cinema.comments);
       siteBodyElement.classList.add('hide-overflow');
     }
+
     popup = document.querySelector('.film-details');
     popup.querySelector('.film-details__close-btn').addEventListener('click', () => {
       popup.remove();siteBodyElement.classList.remove('hide-overflow');
     });
+
+    document.addEventListener('keydown', onEscKeyDown);
   };
 
   filmComponent.getElement().querySelector('.film-card__poster').addEventListener('click', () => {
+    replaceCardFilmToPopup(film);
+  });
+
+  filmComponent.getElement().querySelector('.film-card__comments').addEventListener('click', () => {
+    replaceCardFilmToPopup(film);
+  });
+
+  filmComponent.getElement().querySelector('.film-card__title').addEventListener('click', () => {
     replaceCardFilmToPopup(film);
   });
 

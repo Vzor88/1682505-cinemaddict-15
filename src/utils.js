@@ -39,3 +39,13 @@ export const createElement = (template) => {
   newElement.innerHTML = template;
   return newElement.firstChild;
 };
+
+
+export const onEscKeyDown = (evt) => {
+  if (evt.key === 'Escape' || evt.key === 'Esc') {
+    const popup = document.querySelector('.film-details');
+    evt.preventDefault();
+    popup.remove();
+    document.removeEventListener('keydown', onEscKeyDown);
+  }
+};
