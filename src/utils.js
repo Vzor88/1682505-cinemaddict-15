@@ -18,6 +18,8 @@ export const isClassNamePopup = (boolean) =>  boolean ? 'film-details__control-b
 
 export const ucFirstName = (name) => name[0].toUpperCase() + name.substr(1).toLowerCase();
 
+export const isEscEvent = (evt) => evt.key === 'Escape' || evt.key === 'Esc';
+
 export const RenderPosition = {
   AFTERBEGIN: 'afterbegin',
   BEFOREEND: 'beforeend',
@@ -42,7 +44,7 @@ export const createElement = (template) => {
 
 
 export const onEscKeyDown = (evt) => {
-  if (evt.key === 'Escape' || evt.key === 'Esc') {
+  if (isEscEvent(evt)) {
     const popup = document.querySelector('.film-details');
     evt.preventDefault();
     popup.remove();

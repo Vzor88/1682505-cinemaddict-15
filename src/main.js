@@ -9,7 +9,8 @@ import CardFilmView from './view/card-film.js';
 import {generateCardFilmTemplate} from './mock/film.js';
 import ShowMoreButtonView from './view/show-more-button.js';
 import StatisticView from './view/statistic.js';
-import PopupView, {generateCommentsList} from './view/popup.js';
+import PopupView  from './view/popup.js';
+import {generateCommentsList} from './view/template.js';
 
 
 const siteBodyElement = document.querySelector('.body');
