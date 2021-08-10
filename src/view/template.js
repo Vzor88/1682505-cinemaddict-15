@@ -39,13 +39,12 @@ const isNameRank = (count) => {
   return ucFirstName(nameRank);
 };
 
-const isGenerateProfile = (count) => (count === 0) ? ' ' : `<p class="profile__rating">${isNameRank(count)}</p>`;
+const isGenerateProfile = (count) => (count === 0) ? ' ' : `<p class="profile__rating">${isNameRank(count)}</p><img class="profile__avatar" src="images/bitmap@2x.png" alt="Avatar" width="35" height="35">`;
 
 export const createRankUserTemplate = (filter) => {
   const count = filter[0].count;
   return `<section class="header__profile profile">
       ${isGenerateProfile(count)}
-      <img class="profile__avatar" src="images/bitmap@2x.png" alt="Avatar" width="35" height="35">
     </section>`;
 };
 
@@ -76,6 +75,16 @@ export const createSortTemplate = () => (
     <li><a href="#" class="sort__button">Sort by date</a></li>
     <li><a href="#" class="sort__button">Sort by rating</a></li>
   </ul>`
+);
+
+export const createNoFilmTemplate = () => (
+  `<section class="films">
+    <section class="films-list">
+      <h2 class="films-list__title">
+        There are no movies in our database
+      </h2>
+    </section>
+  </section>`
 );
 
 
