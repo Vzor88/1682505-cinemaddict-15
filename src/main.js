@@ -1,4 +1,4 @@
-import {renderElement, RenderPosition, onEscKeyDown, render} from './utils.js';
+import {onEscKeyDown, render} from './utils.js';
 import {COUNT} from './mock/data.js';
 import RankUserView from './view/rank-user.js';
 import MenuView from './view/menu.js';

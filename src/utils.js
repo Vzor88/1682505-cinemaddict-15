@@ -22,12 +22,12 @@ export const ucFirstName = (name) => name[0].toUpperCase() + name.substr(1).toLo
 
 export const isEscEvent = (evt) => evt.key === 'Escape' || evt.key === 'Esc';
 
-export const RenderPosition = {
+const RenderPosition = {
   AFTERBEGIN: 'afterbegin',
   BEFOREEND: 'beforeend',
 };
 
-export const renderElement = (container, element, place) => {
+const renderElement = (container, element, place) => {
   switch (place) {
     case RenderPosition.AFTERBEGIN:
       container.prepend(element);
