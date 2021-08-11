@@ -1,12 +1,5 @@
 import {createElement} from '../utils.js';
-
-const createSortTemplate = () => (
-  `<ul class="sort">
-    <li><a href="#" class="sort__button sort__button--active">Sort by default</a></li>
-    <li><a href="#" class="sort__button">Sort by date</a></li>
-    <li><a href="#" class="sort__button">Sort by rating</a></li>
-  </ul>`
-);
+import {createSortTemplate} from './template.js';
 
 export default class Sort {
   constructor() {

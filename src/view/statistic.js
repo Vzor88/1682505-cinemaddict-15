@@ -1,10 +1,6 @@
 import {createElement} from '../utils.js';
+import {createStatisticTemplate} from './template.js';
 
-const createStatisticTemplate = (length) => (
-  `<section class="footer__statistics">
-    <p>${length} movies inside</p>
-   </section>`
-);
 
 export default class Statistic {
   constructor(length) {
