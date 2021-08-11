@@ -1,13 +1,13 @@
-import {createElement} from '../utils.js';
-import {createSortTemplate} from './template.js';
+import {createElement} from '../../utils.js';
+import {createNoFilmTemplate} from './no-films-tpl.js';
 
-export default class Sort {
+export default class NoFilms {
   constructor() {
     this._element = null;
   }
 
   getTemplate() {
-    return createSortTemplate();
+    return createNoFilmTemplate();
   }
 
   getElement() {

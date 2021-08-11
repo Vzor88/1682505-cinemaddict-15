@@ -1,14 +1,15 @@
-import {createElement} from '../utils.js';
-import {createFilterTemplate} from './template.js';
+import {createElement} from '../../utils.js';
+import {createStatisticTemplate} from './statistic-tpl.js';
 
-export default class Menu {
-  constructor(filters) {
-    this._filters = filters;
+export default class Statistic {
+  constructor(length) {
+    this._length = length;
     this._element = null;
   }
 
   getTemplate() {
-    return createFilterTemplate(this._filters);
+
+    return createStatisticTemplate(this._length);
   }
 
   getElement() {
@@ -23,5 +24,3 @@ export default class Menu {
     this._element = null;
   }
 }
-
-

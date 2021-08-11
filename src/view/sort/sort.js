@@ -1,15 +1,13 @@
-import {createElement} from '../utils.js';
-import {createCardFilmTemplate} from './template.js';
+import {createElement} from '../../utils.js';
+import {createSortTemplate} from './sort-tpl.js';
 
-export default class CardFilm {
-  constructor(film) {
-    this._film = film;
+export default class Sort {
+  constructor() {
     this._element = null;
   }
 
   getTemplate() {
-
-    return createCardFilmTemplate(this._film);
+    return createSortTemplate();
   }
 
   getElement() {

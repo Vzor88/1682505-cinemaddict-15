@@ -1,13 +1,14 @@
-import {createElement} from '../utils.js';
-import {createNoFilmTemplate} from './template.js';
+import {createElement} from '../../utils.js';
+import {createFilterTemplate} from './menu-tpl.js';
 
-export default class NoFilms {
-  constructor() {
+export default class Menu {
+  constructor(filters) {
+    this._filters = filters;
     this._element = null;
   }
 
   getTemplate() {
-    return createNoFilmTemplate();
+    return createFilterTemplate(this._filters);
   }
 
   getElement() {
@@ -22,3 +23,5 @@ export default class NoFilms {
     this._element = null;
   }
 }
+
+

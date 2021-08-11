@@ -1,15 +1,13 @@
-import {createElement} from '../utils.js';
-import {createRankUserTemplate} from './template.js';
+import {createElement} from '../../utils.js';
+import {createShowMoreButtonTemplate} from './show-more-button-tpl.js';
 
-
-export default class RankUser {
-  constructor(filter) {
-    this._filter = filter;
+export default class ShowMoreButton {
+  constructor() {
     this._element = null;
   }
 
   getTemplate() {
-    return createRankUserTemplate(this._filter);
+    return createShowMoreButtonTemplate();
   }
 
   getElement() {
@@ -24,4 +22,3 @@ export default class RankUser {
     this._element = null;
   }
 }
-

@@ -1,17 +1,17 @@
 import {onEscKeyDown, render} from './utils.js';
 import {COUNT} from './mock/data.js';
-import RankUserView from './view/rank-user.js';
-import MenuView from './view/menu.js';
+import RankUserView from './view/rank-user/rank-user.js';
+import MenuView from './view/menu/menu.js';
 import {generateFilter} from './mock/filters.js';
-import SortView from './view/sort.js';
-import FilmsView from './view/films.js';
-import CardFilmView from './view/card-film.js';
+import SortView from './view/sort/sort.js';
+import FilmsView from './view/films/films.js';
+import CardFilmView from './view/card-film/card-film.js';
 import {generateCardFilmTemplate} from './mock/film.js';
-import ShowMoreButtonView from './view/show-more-button.js';
-import StatisticView from './view/statistic.js';
-import PopupView  from './view/popup.js';
-import {generateCommentsList} from './view/template.js';
-import NoFilmsView from './view/no-films.js';
+import ShowMoreButtonView from './view/show-more-button/show-more-button.js';
+import StatisticView from './view/statistic/statistic.js';
+import PopupView  from './view/popup/popup.js';
+import {generateCommentsList} from './view/popup/popup-tpl.js';
+import NoFilmsView from './view/no-films/no-films.js';
 
 
 export const siteBodyElement = document.querySelector('.body');

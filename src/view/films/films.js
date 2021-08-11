@@ -1,16 +1,13 @@
-import {createElement} from '../utils.js';
-import {createStatisticTemplate} from './template.js';
+import {createElement} from '../../utils.js';
+import {createFilmsTemplate} from './films-tpl.js';
 
-
-export default class Statistic {
-  constructor(length) {
-    this._length = length;
+export default class Films {
+  constructor() {
     this._element = null;
   }
 
   getTemplate() {
-
-    return createStatisticTemplate(this._length);
+    return createFilmsTemplate();
   }
 
   getElement() {

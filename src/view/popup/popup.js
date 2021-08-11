@@ -1,13 +1,14 @@
-import {createElement} from '../utils.js';
-import {createShowMoreButtonTemplate} from './template.js';
+import {createElement} from '../../utils.js';
+import {createPopupTemplate} from './popup-tpl.js';
 
-export default class ShowMoreButton {
-  constructor() {
+export default class Popup {
+  constructor(film) {
+    this._film = film;
     this._element = null;
   }
 
   getTemplate() {
-    return createShowMoreButtonTemplate();
+    return createPopupTemplate(this._film);
   }
 
   getElement() {

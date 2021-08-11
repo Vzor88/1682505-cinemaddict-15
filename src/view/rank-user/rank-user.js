@@ -1,14 +1,15 @@
-import {createElement} from '../utils.js';
-import {createPopupTemplate} from './template.js';
+import {createElement} from '../../utils.js';
+import {createRankUserTemplate} from './rank-user-tpl.js';
 
-export default class Popup {
-  constructor(film) {
-    this._film = film;
+
+export default class RankUser {
+  constructor(filter) {
+    this._filter = filter;
     this._element = null;
   }
 
   getTemplate() {
-    return createPopupTemplate(this._film);
+    return createRankUserTemplate(this._filter);
   }
 
   getElement() {
@@ -23,3 +24,4 @@ export default class Popup {
     this._element = null;
   }
 }
+
