@@ -1,5 +1,5 @@
 import {RANK} from '../../mock/data.js';
-import {ucFirstName} from '../../utils.js';
+import {ucFirstName} from '../../utils/card-film.js';
 
 const isNameRank = (count) => {
   let nameRank = 'novice';

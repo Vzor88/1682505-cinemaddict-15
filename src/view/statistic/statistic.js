@@ -1,26 +1,13 @@
-import {createElement} from '../../utils.js';
+import AbstractView from '../abstract.js';
 import {createStatisticTemplate} from './statistic-tpl.js';
 
-export default class Statistic {
+export default class Statistic extends AbstractView {
   constructor(length) {
+    super();
     this._length = length;
-    this._element = null;
   }
 
   getTemplate() {
-
     return createStatisticTemplate(this._length);
-  }
-
-  getElement() {
-    if (!this._element) {
-      this._element = createElement(this.getTemplate());
-    }
-
-    return this._element;
-  }
-
-  removeElement() {
-    this._element = null;
   }
 }

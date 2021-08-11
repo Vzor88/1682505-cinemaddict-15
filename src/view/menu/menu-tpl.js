@@ -1,4 +1,4 @@
-import {ucFirstName} from '../../utils.js';
+import {ucFirstName} from '../../utils/card-film.js';
 
 const createMenuTemplate = (filter) => {
   const {name, count} = filter;

@@ -1,4 +1,4 @@
-import {isClassNamePopup} from '../../utils.js';
+import {isClassNamePopup} from '../../utils/card-film.js';
 import dayjs from 'dayjs';
 import relativeTime from 'dayjs/plugin/relativeTime.js';
 

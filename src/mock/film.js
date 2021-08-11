@@ -1,4 +1,5 @@
-import {getRandomArray, getRandomInteger, getRandomIntegerFloat} from '../utils.js';
+import {getRandomArray} from '../utils/card-film.js';
+import {getRandomInteger, getRandomIntegerFloat} from '../utils/common.js';
 import {DESCRIPTIONS, GENRES, POSTERS, SMILES, TITLES, ALTERNATIVE_TITLES, DIRECTORS, INDEX_COMMENT, WRITERS, ACTORS, RATING, COUNTRIES, AUTHORS_COMMENT, COUNT, DURATION, COUNT_RANDOM_DATE} from './data.js';
 import dayjs from 'dayjs';
 

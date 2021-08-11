@@ -1,26 +1,45 @@
-import {createElement} from '../../utils.js';
+import AbstractView from '../abstract.js';
 import {createCardFilmTemplate} from './card-film-tpl';
 
-export default class CardFilm {
+export default class CardFilm extends AbstractView {
   constructor(film) {
+    super();
     this._film = film;
-    this._element = null;
+
+    this._editClickPosterHandler = this._editClickPosterHandler.bind(this);
+    this._editClickCommentsHandler = this._editClickCommentsHandler.bind(this);
+    this._editClickTitleHandler = this._editClickTitleHandler.bind(this);
   }
 
   getTemplate() {
-
     return createCardFilmTemplate(this._film);
   }
 
-  getElement() {
-    if (!this._element) {
-      this._element = createElement(this.getTemplate());
-    }
-
-    return this._element;
+  _editClickPosterHandler() {
+    this._callback.editClickPoster();
   }
 
-  removeElement() {
-    this._element = null;
+  setEditClickPosterHandler(callback) {
+    this._callback.editClickPoster = callback;
+    this.getElement().querySelector('.film-card__poster').addEventListener('click', this._editClickPosterHandler);
+  }
+
+  _editClickCommentsHandler() {
+    this._callback.editClickComments();
+  }
+
+  setEditClickCommentsHandler(callback) {
+    this._callback.editClickComments = callback;
+    this.getElement().querySelector('.film-card__comments').addEventListener('click', this._editClickCommentsHandler);
+  }
+
+
+  _editClickTitleHandler() {
+    this._callback.editClickTitle();
+  }
+
+  setEditClickTitleHandler(callback) {
+    this._callback.editClickTitle = callback;
+    this.getElement().querySelector('.film-card__title').addEventListener('click', this._editClickTitleHandler);
   }
 }
