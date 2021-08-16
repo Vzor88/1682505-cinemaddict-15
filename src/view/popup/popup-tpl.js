@@ -130,6 +130,7 @@ export const createPopupTemplate = (card) => {
 
 export const generateCommentsList = (comments = {}) => {
   const commentsList = document.querySelector('.film-details__comments-list');
+  commentsList.innerHTML = ' ';
   for (const commentary of comments) {
     const {author, comment, date, emotion} = commentary;
 

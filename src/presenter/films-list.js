@@ -1,17 +1,13 @@
-import {render, onEscKeyDown, remove} from '../utils/render.js';
+import {render, remove} from '../utils/render.js';
 import {COUNT} from '../mock/data.js';
 import RankUserView from '../view/rank-user/rank-user.js';
 import MenuView from '../view/menu/menu.js';
 import SortView from '../view/sort/sort.js';
 import FilmsView from '../view/films/films.js';
-import CardFilmView from '../view/card-film/card-film.js';
 import ShowMoreButtonView from '../view/show-more-button/show-more-button.js';
 import StatisticView from '../view/statistic/statistic.js';
-import PopupView  from '../view/popup/popup.js';
-import {generateCommentsList} from '../view/popup/popup-tpl.js';
 import NoFilmsView from '../view/no-films/no-films.js';
-import {siteBodyElement} from '../main.js';
-
+import FilmPresenter from './film.js';
 
 export default class FilmsList {
   constructor(filmListHeaderContainer, filmListMainContainer, filmListFooterContainer) {
@@ -25,6 +21,10 @@ export default class FilmsList {
 
     this._filmsList = this._filmsComponent.getElement().querySelector('.films-list');
     this._filmsContainer = this._filmsList.querySelector('.films-list__container');
+
+    this._handleShowMoreButtonClick = this._handleShowMoreButtonClick.bind(this);
+
+    this._renderedTaskCount = COUNT.FILMS_PER_STEP;
   }
 
   init (cardsFilm, films, filters) {
@@ -55,21 +55,8 @@ export default class FilmsList {
   }
 
   _renderFilm(film, container) {
-    const filmComponent = new CardFilmView(film);
-
-    filmComponent.setEditClickPosterHandler(() => {
-      this._renderPopup(film);
-    });
-
-    filmComponent.setEditClickCommentsHandler(() => {
-      this._renderPopup(film);
-    });
-
-    filmComponent.setEditClickTitleHandler(() => {
-      this._renderPopup(film);
-    });
-
-    render(container, filmComponent);
+    const filmPresenter = new FilmPresenter(container);
+    filmPresenter.init(film);
   }
 
   _renderFilms(array, from, to, container) {
@@ -109,44 +96,19 @@ export default class FilmsList {
     render(this._filmListMainContainer, this._noFilmsComponent);
   }
 
-  _renderShowMoreButton() {
-    let renderedTaskCount = COUNT.FILMS_PER_STEP;
+  _handleShowMoreButtonClick() {
+    this._renderFilms(this._cardsFilm, this._renderedTaskCount, this._renderedTaskCount + COUNT.FILMS_PER_STEP, this._filmsContainer);
 
-    render(this._filmsList, this._showMoreButtonComponent);
+    this._renderedTaskCount += COUNT.FILMS_PER_STEP;
 
-    this._showMoreButtonComponent.setEditClickMoreButtonHandler(() => {
-      this._cardsFilm
-        .slice(renderedTaskCount, renderedTaskCount + COUNT.FILMS_PER_STEP)
-        .forEach((cardFilm) => {
-          this._renderFilm(cardFilm, this._filmsContainer);
-        });
-
-      renderedTaskCount += COUNT.FILMS_PER_STEP;
-
-      if (renderedTaskCount >= this._films.length) {
-        remove(this._showMoreButtonComponent);
-      }
-    });
+    if (this._renderedTaskCount >= this._films.length) {
+      remove(this._showMoreButtonComponent);
+    }
   }
 
-  _renderPopup(film) {
-    const popupComponent = new PopupView(film);
-    const filmDetails = document.querySelector('.film-details');
-
-    if (filmDetails) {
-      filmDetails.remove();
-    }
-
-    render(siteBodyElement, popupComponent);
-    generateCommentsList(film.comments);
-    siteBodyElement.classList.add('hide-overflow');
-    document.addEventListener('keydown', onEscKeyDown);
-
-
-    popupComponent.setEditClickPopupHandler(() => {
-      remove(popupComponent);
-      siteBodyElement.classList.remove('hide-overflow');
-    });
+  _renderShowMoreButton() {
+    render(this._filmsList, this._showMoreButtonComponent);
+    this._showMoreButtonComponent.setEditClickMoreButtonHandler(this._handleShowMoreButtonClick);
   }
 
   _renderPage() {
@@ -154,6 +116,7 @@ export default class FilmsList {
       this._renderNoFilms();
       return;
     }
+
     this._renderRank();
     this._renderSort();
     render(this._filmListMainContainer, this._filmsComponent);
