@@ -23,13 +23,3 @@ export default class Popup extends AbstractView {
   }
 }
 
-
-// _editClickPosterHandler() {
-//   this._callback.editClickPoster();
-// }
-//
-// setEditClickPosterHandler(callback) {
-//   this._callback.editClickPoster = callback;
-//   this.getElement().querySelector('.film-card__poster').addEventListener('click', this._editClickPosterHandler);
-// }
-

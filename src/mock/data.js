@@ -14,10 +14,13 @@ export const RANK = {
 };
 
 export const COUNT = {
+  SORT_FILMS: {
+    MIN: 0,
+    MAX: 2,
+  },
   FILMS: 5,
-  SORT_FILMS: 2,
   MAX_COMMENTS_FILMS: 5,
-  GENERATE_FILMS: 6,
+  GENERATE_FILMS: 100,
   FILMS_PER_STEP: 5,
 };
 

@@ -8,16 +8,25 @@ const RenderPosition = {
   BEFOREEND: 'beforeend',
 };
 
-const renderElement = (container, element, place) => {
+export const renderElement = (container, child, place) => {
+  if (container instanceof Abstract) {
+    container = container.getElement();
+  }
+
+  if (child instanceof Abstract) {
+    child = child.getElement();
+  }
+
   switch (place) {
     case RenderPosition.AFTERBEGIN:
-      container.prepend(element);
+      container.prepend(child);
       break;
     case RenderPosition.BEFOREEND:
-      container.append(element);
+      container.append(child);
       break;
   }
 };
+
 export const render = (container, element) => {
   renderElement(container, element.getElement(), RenderPosition.BEFOREEND);
 };
