@@ -6,6 +6,8 @@ export default class CardFilm extends AbstractView {
     super();
     this._film = film;
 
+    this._favoriteClickHandler = this._favoriteClickHandler.bind(this);
+
     this._editClickPosterHandler = this._editClickPosterHandler.bind(this);
     this._editClickCommentsHandler = this._editClickCommentsHandler.bind(this);
     this._editClickTitleHandler = this._editClickTitleHandler.bind(this);
@@ -41,5 +43,15 @@ export default class CardFilm extends AbstractView {
   setEditClickTitleHandler(callback) {
     this._callback.editClickTitle = callback;
     this.getElement().querySelector('.film-card__title').addEventListener('click', this._editClickTitleHandler);
+  }
+
+  _favoriteClickHandler(evt) {
+    evt.preventDefault();
+    this._callback.favoriteClick();
+  }
+
+  setFavoriteClickHandler(callback) {
+    this._callback.favoriteClick = callback;
+    this.getElement().querySelector('.film-card__controls-item--favorite').addEventListener('click', this._favoriteClickHandler);
   }
 }
