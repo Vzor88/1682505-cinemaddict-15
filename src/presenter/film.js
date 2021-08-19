@@ -2,7 +2,6 @@ import {render} from '../utils/render.js';
 import CardFilmView from '../view/card-film/card-film.js';
 import PopupView from '../view/popup/popup.js';
 import {siteBodyElement} from '../main.js';
-import {generateCommentsList} from '../view/popup/popup-tpl.js';
 import {onEscKeyDown, remove, replace} from '../utils/render.js';
 
 export default class Film {
@@ -42,7 +41,7 @@ export default class Film {
     this._filmComponent.setWatchListClickHandler(this._handleWatchListClick);
     this._filmComponent.setAlreadyWatchedClickHandler(this._handleAlreadyWatchedClick);
 
-    this._filmComponent.setEditClickCardFilmHandler(() => this._handleCardFilmClick(this._film));
+    this._filmComponent.setEditClickCardFilmHandler(this._handleCardFilmClick);
 
     this._hangingEventPopup();
 
@@ -54,24 +53,20 @@ export default class Film {
     replace(this._filmComponent, prevFilmComponent);
     replace(this._popupComponent, prevPopupComponent);
 
-    if (this.filmDetails){
-      generateCommentsList(this._film.comments);
-    }
-
     remove(prevFilmComponent);
     remove(prevPopupComponent);
   }
 
-  _handleCardFilmClick(film){
-    this._renderPopup(film);
+  _handleCardFilmClick(){
+    this._renderPopup();
   }
 
-  _renderPopup(film) {
+  _renderPopup() {
     const filmDetails = document.querySelector('.film-details');
 
     this._handleAvailability(filmDetails);
 
-    this._openedPopup(film);
+    this._openedPopup();
 
     this._hangingEventPopup();
   }
@@ -82,9 +77,8 @@ export default class Film {
     }
   }
 
-  _openedPopup(film){
+  _openedPopup(){
     render(siteBodyElement, this._popupComponent);
-    generateCommentsList(film.comments);
     siteBodyElement.classList.add('hide-overflow');
     document.addEventListener('keydown', onEscKeyDown);
   }

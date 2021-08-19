@@ -6,12 +6,35 @@ dayjs.extend(relativeTime);
 
 const isGenre = (array) => array.length > 1 ? 'Genres' : 'Genre';
 
+const generateCommentsList = (commentary = {}) => {
+  const {author, comment, date, emotion} = commentary;
+
+  const timePassed = dayjs(date).fromNow();
+
+  return `
+    <li class="film-details__comment">
+      <span class="film-details__comment-emoji">
+        <img src="./images/emoji/${emotion}.png" width="55" height="55" alt="emoji-smile">
+      </span>
+      <div>
+        <p class="film-details__comment-text">${comment}</p>
+        <p class="film-details__comment-info">
+          <span class="film-details__comment-author">${author}</span>
+          <span class="film-details__comment-day">${timePassed}</span>
+          <button class="film-details__comment-delete">Delete</button>
+        </p>
+      </div>
+    </li>`;
+};
+
 export const createPopupTemplate = (card) => {
-  const {film} = card;
-  const {filmInfo, userDetails, comments} = film;
+  const {film, comments} = card;
+  const {filmInfo, userDetails} = film;
   const {title, totalRating, releaseFilm, genre, poster, description, ageRating, alternativeTitle, writers, director, actors, runtime} = filmInfo;
   const {date, releaseCountry} = releaseFilm;
   const {watchList, alreadyWatched, favorite} = userDetails;
+
+  const renderTemplateComment = comments.map((comment) => generateCommentsList(comment)).join('');
 
   return `<section class="film-details">
     <form class="film-details__inner" action="" method="get">
@@ -90,7 +113,7 @@ export const createPopupTemplate = (card) => {
       </h3>
 
       <ul class="film-details__comments-list">
-
+            ${renderTemplateComment}
       </ul>
 
       <div class="film-details__new-comment">
@@ -128,28 +151,4 @@ export const createPopupTemplate = (card) => {
   </section>`;
 };
 
-export const generateCommentsList = (comments = {}) => {
-  const commentsList = document.querySelector('.film-details__comments-list');
-  commentsList.innerHTML = ' ';
-  for (const commentary of comments) {
-    const {author, comment, date, emotion} = commentary;
 
-    const timePassed = dayjs(date).fromNow();
-
-    const elementList = `
-    <li class="film-details__comment">
-      <span class="film-details__comment-emoji">
-        <img src="./images/emoji/${emotion}.png" width="55" height="55" alt="emoji-smile">
-      </span>
-      <div>
-        <p class="film-details__comment-text">${comment}</p>
-        <p class="film-details__comment-info">
-          <span class="film-details__comment-author">${author}</span>
-          <span class="film-details__comment-day">${timePassed}</span>
-          <button class="film-details__comment-delete">Delete</button>
-        </p>
-      </div>
-    </li>`;
-    commentsList.insertAdjacentHTML('beforeEnd', elementList);
-  }
-};
