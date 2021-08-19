@@ -7,43 +7,35 @@ export default class CardFilm extends AbstractView {
     this._film = film;
 
     this._favoriteClickHandler = this._favoriteClickHandler.bind(this);
+    this._watchListClickHandler = this._watchListClickHandler.bind(this);
+    this._alreadyWatchedClickHandler = this._alreadyWatchedClickHandler.bind(this);
 
-    this._editClickPosterHandler = this._editClickPosterHandler.bind(this);
-    this._editClickCommentsHandler = this._editClickCommentsHandler.bind(this);
-    this._editClickTitleHandler = this._editClickTitleHandler.bind(this);
+    this._editClickOpenPopupHandler = this._editClickOpenPopupHandler.bind(this);
   }
 
   getTemplate() {
     return createCardFilmTemplate(this._film);
   }
 
-  _editClickPosterHandler() {
-    this._callback.editClickPoster();
+  _editClickOpenPopupHandler() {
+    this._callback.editClickOpenPopup();
   }
 
-  setEditClickPosterHandler(callback) {
-    this._callback.editClickPoster = callback;
-    this.getElement().querySelector('.film-card__poster').addEventListener('click', this._editClickPosterHandler);
+  setEditClickCardFilmHandler(callback) {
+    this._callback.editClickOpenPopup = callback;
+    this.getElement().querySelector('.film-card__poster').addEventListener('click', this._editClickOpenPopupHandler);
+    this.getElement().querySelector('.film-card__comments').addEventListener('click', this._editClickOpenPopupHandler);
+    this.getElement().querySelector('.film-card__title').addEventListener('click', this._editClickOpenPopupHandler);
   }
 
-  _editClickCommentsHandler() {
-    this._callback.editClickComments();
-  }
-
-  setEditClickCommentsHandler(callback) {
-    this._callback.editClickComments = callback;
-    this.getElement().querySelector('.film-card__comments').addEventListener('click', this._editClickCommentsHandler);
-  }
-
-
-  _editClickTitleHandler() {
-    this._callback.editClickTitle();
-  }
-
-  setEditClickTitleHandler(callback) {
-    this._callback.editClickTitle = callback;
-    this.getElement().querySelector('.film-card__title').addEventListener('click', this._editClickTitleHandler);
-  }
+  // setEditClickCommentsHandler(callback) {
+  //   this._callback.editClickOpenPopup = callback;
+  //
+  // }
+  //
+  // setEditClickTitleHandler(callback) {
+  //   this._callback.editClickOpenPopup = callback;
+  // }
 
   _favoriteClickHandler(evt) {
     evt.preventDefault();
@@ -53,5 +45,25 @@ export default class CardFilm extends AbstractView {
   setFavoriteClickHandler(callback) {
     this._callback.favoriteClick = callback;
     this.getElement().querySelector('.film-card__controls-item--favorite').addEventListener('click', this._favoriteClickHandler);
+  }
+
+  _watchListClickHandler(evt) {
+    evt.preventDefault();
+    this._callback.watchListClick();
+  }
+
+  setWatchListClickHandler(callback) {
+    this._callback.watchListClick = callback;
+    this.getElement().querySelector('.film-card__controls-item--add-to-watchlist').addEventListener('click', this._watchListClickHandler);
+  }
+
+  _alreadyWatchedClickHandler(evt) {
+    evt.preventDefault();
+    this._callback.alreadyWatchedClick();
+  }
+
+  setAlreadyWatchedClickHandler(callback) {
+    this._callback.alreadyWatchedClick = callback;
+    this.getElement().querySelector('.film-card__controls-item--mark-as-watched').addEventListener('click', this._alreadyWatchedClickHandler);
   }
 }

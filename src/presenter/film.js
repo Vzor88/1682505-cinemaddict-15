@@ -13,10 +13,11 @@ export default class Film {
     this._popupComponent = null;
 
     this._handleFavoriteClick = this._handleFavoriteClick.bind(this);
+    this._handleWatchListClick = this._handleWatchListClick.bind(this);
+    this._handleAlreadyWatchedClick = this._handleAlreadyWatchedClick.bind(this);
 
-    this._handlePosterClick = this._handlePosterClick.bind(this);
-    this._handleTitleClick = this._handleTitleClick.bind(this);
-    this._handleCommentsClick = this._handleCommentsClick.bind(this);
+    this._handleCardFilmClick = this._handleCardFilmClick.bind(this);
+
     this._handleClosedPopupButtonClick = this._handleClosedPopupButtonClick.bind(this);
   }
 
@@ -29,19 +30,21 @@ export default class Film {
     this._film = film;
     this._container = container;
 
-
     const prevFilmComponent = this._filmComponent;
     const prevPopupComponent = this._popupComponent;
 
     this._filmComponent = new CardFilmView(this._film);
     this._popupComponent = new PopupView(this._film);
 
+    this.filmDetails = document.querySelector('.film-details');
+
     this._filmComponent.setFavoriteClickHandler(this._handleFavoriteClick);
+    this._filmComponent.setWatchListClickHandler(this._handleWatchListClick);
+    this._filmComponent.setAlreadyWatchedClickHandler(this._handleAlreadyWatchedClick);
 
-    this._filmComponent.setEditClickPosterHandler(() => this._handlePosterClick(this._film));
-    this._filmComponent.setEditClickTitleHandler(() => this._handleTitleClick(this._film));
-    this._filmComponent.setEditClickCommentsHandler(() => this._handleCommentsClick(this._film));
+    this._filmComponent.setEditClickCardFilmHandler(() => this._handleCardFilmClick(this._film));
 
+    this._hangingEventPopup();
 
     if (prevFilmComponent === null || prevPopupComponent === null) {
       render(this._container, this._filmComponent);
@@ -49,21 +52,17 @@ export default class Film {
     }
 
     replace(this._filmComponent, prevFilmComponent);
+    replace(this._popupComponent, prevPopupComponent);
 
+    if (this.filmDetails){
+      generateCommentsList(this._film.comments);
+    }
 
     remove(prevFilmComponent);
     remove(prevPopupComponent);
   }
 
-  _handlePosterClick(film){
-    this._renderPopup(film);
-  }
-
-  _handleTitleClick(film){
-    this._renderPopup(film);
-  }
-
-  _handleCommentsClick(film){
+  _handleCardFilmClick(film){
     this._renderPopup(film);
   }
 
@@ -74,7 +73,7 @@ export default class Film {
 
     this._openedPopup(film);
 
-    this._closedPopup();
+    this._hangingEventPopup();
   }
 
   _handleAvailability(popup){
@@ -90,8 +89,11 @@ export default class Film {
     document.addEventListener('keydown', onEscKeyDown);
   }
 
-  _closedPopup(){
+  _hangingEventPopup(){
     this._popupComponent.setEditClickPopupHandler(this._handleClosedPopupButtonClick);
+    this._popupComponent.setFavoritePopupClickHandler(this._handleFavoriteClick);
+    this._popupComponent.setWatchListPopupClickHandler(this._handleWatchListClick);
+    this._popupComponent.setAlreadyWatchedPopupClickHandler(this._handleAlreadyWatchedClick);
   }
 
   _handleClosedPopupButtonClick(){
@@ -104,6 +106,26 @@ export default class Film {
       film: Object.assign( {}, this._film.film, {
         userDetails: Object.assign({}, this._film.film.userDetails, {
           favorite: !this._film.film.userDetails.favorite,
+        }),
+      }),
+    }));
+  }
+
+  _handleWatchListClick() {
+    this._changeData(Object.assign({}, this._film, {
+      film: Object.assign( {}, this._film.film, {
+        userDetails: Object.assign({}, this._film.film.userDetails, {
+          watchList: !this._film.film.userDetails.watchList,
+        }),
+      }),
+    }));
+  }
+
+  _handleAlreadyWatchedClick() {
+    this._changeData(Object.assign({}, this._film, {
+      film: Object.assign( {}, this._film.film, {
+        userDetails: Object.assign({}, this._film.film.userDetails, {
+          alreadyWatched: !this._film.film.userDetails.alreadyWatched,
         }),
       }),
     }));

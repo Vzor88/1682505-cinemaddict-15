@@ -24,8 +24,8 @@ export const createCardFilmTemplate = (card) => {
     <p class="film-card__description">${descriptionShort(description)}</p>
     <a class="film-card__comments">${comments.length} comments</a>
     <div class="film-card__controls">
-      <button class="film-card__controls-item film-card__controls-item--add-to-watchlist ${isClassName(alreadyWatched)}" type="button">Add to watchlist</button>
-      <button class="film-card__controls-item film-card__controls-item--mark-as-watched ${isClassName(watchList)}" type="button">Mark as watched</button>
+      <button class="film-card__controls-item film-card__controls-item--add-to-watchlist ${isClassName(watchList)}" type="button">Add to watchlist</button>
+      <button class="film-card__controls-item film-card__controls-item--mark-as-watched ${isClassName(alreadyWatched)}" type="button">Mark as watched</button>
       <button class="film-card__controls-item film-card__controls-item--favorite ${isClassName(favorite)}" type="button">Mark as favorite</button>
     </div>
   </article>`;

@@ -3,7 +3,7 @@ import Abstract from '../view/abstract.js';
 
 export const isEscEvent = (evt) => evt.key === 'Escape' || evt.key === 'Esc';
 
-const RenderPosition = {
+export const RenderPosition = {
   AFTERBEGIN: 'afterbegin',
   BEFOREEND: 'beforeend',
 };
