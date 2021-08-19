@@ -35,8 +35,6 @@ export default class Film {
     this._filmComponent = new CardFilmView(this._film);
     this._popupComponent = new PopupView(this._film);
 
-    this.filmDetails = document.querySelector('.film-details');
-
     this._filmComponent.setFavoriteClickHandler(this._handleFavoriteClick);
     this._filmComponent.setWatchListClickHandler(this._handleWatchListClick);
     this._filmComponent.setAlreadyWatchedClickHandler(this._handleAlreadyWatchedClick);
