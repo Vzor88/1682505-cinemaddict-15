@@ -3,21 +3,30 @@ import Abstract from '../view/abstract.js';
 
 export const isEscEvent = (evt) => evt.key === 'Escape' || evt.key === 'Esc';
 
-const RenderPosition = {
+export const RenderPosition = {
   AFTERBEGIN: 'afterbegin',
   BEFOREEND: 'beforeend',
 };
 
-const renderElement = (container, element, place) => {
+export const renderElement = (container, child, place) => {
+  if (container instanceof Abstract) {
+    container = container.getElement();
+  }
+
+  if (child instanceof Abstract) {
+    child = child.getElement();
+  }
+
   switch (place) {
     case RenderPosition.AFTERBEGIN:
-      container.prepend(element);
+      container.prepend(child);
       break;
     case RenderPosition.BEFOREEND:
-      container.append(element);
+      container.append(child);
       break;
   }
 };
+
 export const render = (container, element) => {
   renderElement(container, element.getElement(), RenderPosition.BEFOREEND);
 };
@@ -46,4 +55,18 @@ export const remove = (component) => {
 
   component.getElement().remove();
   component.removeElement();
+};
+
+export const replace = (newChild, oldChild) => {
+  if (oldChild instanceof Abstract) {
+    oldChild = oldChild.getElement();
+  }
+
+  if (newChild instanceof Abstract) {
+    newChild = newChild.getElement();
+  }
+
+  const parent = oldChild.parentElement;
+
+  parent.replaceChild(newChild, oldChild);
 };
