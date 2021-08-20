@@ -93,34 +93,22 @@ export default class Film {
     siteBodyElement.classList.remove('hide-overflow');
   }
 
-  _handleFavoriteClick() {
-    this._changeData(Object.assign({}, this._film, {
-      film: Object.assign( {}, this._film.film, {
-        userDetails: Object.assign({}, this._film.film.userDetails, {
-          favorite: !this._film.film.userDetails.favorite,
-        }),
-      }),
-    }));
-  }
-
   _handleWatchListClick() {
-    this._changeData(Object.assign({}, this._film, {
-      film: Object.assign( {}, this._film.film, {
-        userDetails: Object.assign({}, this._film.film.userDetails, {
-          watchList: !this._film.film.userDetails.watchList,
-        }),
-      }),
-    }));
+    const copyFilm = {...this._film};
+    copyFilm.film.userDetails.watchList = !this._film.film.userDetails.watchList;
+    return this._changeData(copyFilm);
   }
 
   _handleAlreadyWatchedClick() {
-    this._changeData(Object.assign({}, this._film, {
-      film: Object.assign( {}, this._film.film, {
-        userDetails: Object.assign({}, this._film.film.userDetails, {
-          alreadyWatched: !this._film.film.userDetails.alreadyWatched,
-        }),
-      }),
-    }));
+    const copyFilm = {...this._film};
+    copyFilm.film.userDetails.alreadyWatched = !this._film.film.userDetails.alreadyWatched;
+    return this._changeData(copyFilm);
+  }
+
+  _handleFavoriteClick() {
+    const copyFilm = {...this._film};
+    copyFilm.film.userDetails.favorite = !this._film.film.userDetails.favorite;
+    return this._changeData(copyFilm);
   }
 }
 

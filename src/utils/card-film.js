@@ -38,12 +38,12 @@ export const sortFilmDate = (filmA, filmB) => {
   return dayjs(filmB.film.filmInfo.releaseFilm.date).diff(dayjs(filmA.film.filmInfo.releaseFilm.date));
 };
 
-export const sortTaskDown = (taskA, taskB) => {
-  const weight = getWeightForNullDate(taskA.dueDate, taskB.dueDate);
+export const sortFilmRating = (taskA, taskB) => {
+  const weight = getWeightForNullDate(taskA.film.filmInfo.totalRating, taskB.film.filmInfo.totalRating);
 
   if (weight !== null) {
     return weight;
   }
 
-  return dayjs(taskB.dueDate).diff(dayjs(taskA.dueDate));
+  return taskB.film.filmInfo.totalRating - taskA.film.filmInfo.totalRating;
 };

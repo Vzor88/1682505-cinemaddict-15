@@ -10,8 +10,7 @@ import NoFilmsView from '../view/no-films/no-films.js';
 import FilmPresenter from './film.js';
 import {updateItem} from '../utils/common.js';
 import {generateFilter} from '../mock/filters.js';
-import {sortFilmDate} from '../utils/card-film.js';
-
+import {sortFilmDate, sortFilmRating} from '../utils/card-film.js';
 
 export default class FilmsList {
   constructor(filmListHeaderContainer, filmListMainContainer, filmListFooterContainer) {
@@ -59,7 +58,7 @@ export default class FilmsList {
 
   _handleTaskChange(updatedTask) {
     this._cardsFilm = updateItem(this._cardsFilm, updatedTask);
-    this._sourcedCardsTasks = updateItem(this._sourcedCardsTasks, updatedTask);
+    this._sourcedCardsFilm = updateItem(this._sourcedCardsFilm, updatedTask);
     this._topRatingFilms = updateItem(this._topRatingFilms, updatedTask);
     this._topCommentFilms = updateItem(this._topCommentFilms, updatedTask);
 
@@ -99,19 +98,14 @@ export default class FilmsList {
   }
 
   _sortTasks(sortType) {
-    // 2. Этот исходный массив задач необходим,
-    // потому что для сортировки мы будем мутировать
-    // массив в свойстве _boardTasks
     switch (sortType) {
       case SortType.DATE:
         this._cardsFilm.sort(sortFilmDate);
         break;
-      // case SortType.DATE_DOWN:
-      //   this._boardTasks.sort(sortTaskDown);
-      //   break;
+      case SortType.RATING:
+        this._cardsFilm.sort(sortFilmRating);
+        break;
       default:
-        // 3. А когда пользователь захочет "вернуть всё, как было",
-        // мы просто запишем в _boardTasks исходный массив
         this._cardsFilm = this._sourcedCardsFilm.slice();
     }
 
@@ -137,14 +131,16 @@ export default class FilmsList {
   _renderFilm (array, film, container) {
     const filmPresenter = new FilmPresenter(this._handleTaskChange);
     filmPresenter.init(film, container);
-    if(array === this._cardsFilm){
-      this._filmPresenter.set(film.film.id, filmPresenter);
-    }
-    if(array === this._topRatingFilms){
-      this._filmPresenterTop.set(film.film.id, filmPresenter);
-    }
-    if(array === this._topCommentFilms){
-      this._filmPresenterComment.set(film.film.id, filmPresenter);
+    switch (array) {
+      case this._cardsFilm:
+        this._filmPresenter.set(film.film.id, filmPresenter);
+        break;
+      case this._topRatingFilms:
+        this._filmPresenterTop.set(film.film.id, filmPresenter);
+        break;
+      case this._topCommentFilms:
+        this._filmPresenterComment.set(film.film.id, filmPresenter);
+        break;
     }
   }
 
