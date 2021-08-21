@@ -1,5 +1,7 @@
 import AbstractView from '../abstract.js';
 import {createPopupTemplate} from './popup-tpl.js';
+import {isEnterEvent} from '../../utils/render.js';
+import {generateComment} from '../../mock/film.js';
 
 export default class Popup extends AbstractView {
   constructor(film) {
@@ -13,12 +15,30 @@ export default class Popup extends AbstractView {
     this._alreadyWatchedClickPopupHandler = this._alreadyWatchedClickPopupHandler.bind(this);
 
     this._emojiListHandler = this._emojiListHandler.bind(this);
+    this._createCommentHandler = this._createCommentHandler.bind(this);
 
-    this.getElement().querySelector('.film-details__emoji-list').addEventListener('click', this._emojiListHandler);
+    this.restoreHandlers();
   }
 
   getTemplate() {
     return createPopupTemplate(this._film);
+  }
+
+  updateElement() {
+    const prevElement = this.getElement();
+    const parent = prevElement.parentElement;
+    this.removeElement();
+
+    const newElement = this.getElement();
+
+    parent.replaceChild(newElement, prevElement);
+
+    this.restoreHandlers();
+  }
+
+  restoreHandlers(){
+    this.getElement().querySelector('.film-details__emoji-list').addEventListener('click', this._emojiListHandler);
+    this.getElement().addEventListener('keydown', this._createCommentHandler);
   }
 
   _editClickPopupHandler() {
@@ -73,5 +93,13 @@ export default class Popup extends AbstractView {
     emodjiElement.style.height = '55px';
     emodjiElement.style.width = '55px';
     this._containerEmodji.appendChild(emodjiElement);
+  }
+
+  _createCommentHandler(evt) {
+    if(isEnterEvent(evt)){
+      this._film.comments.push(generateComment());
+
+      this.updateElement();
+    }
   }
 }

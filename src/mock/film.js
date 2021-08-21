@@ -28,7 +28,7 @@ const generateDate = () => {
   return `${randYear}-${randMonth}-${randDay}`;
 };
 
-const generateComment = () => {
+export const generateComment = () => {
   const maxGap = DURATION.GAP;
   const gap = getRandomInteger(0, maxGap);
 

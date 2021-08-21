@@ -3,6 +3,7 @@ import {RenderPosition} from '../mock/data.js';
 import Abstract from '../view/abstract.js';
 
 export const isEscEvent = (evt) => evt.key === 'Escape' || evt.key === 'Esc';
+export const isEnterEvent = (evt) => evt.key === 'Enter';
 
 export const renderElement = (container, child, place) => {
   if (container instanceof Abstract) {
