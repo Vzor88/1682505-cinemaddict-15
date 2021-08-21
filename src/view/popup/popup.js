@@ -11,6 +11,10 @@ export default class Popup extends AbstractView {
     this._favoriteClickPopupHandler = this._favoriteClickPopupHandler.bind(this);
     this._watchListClickPopupHandler = this._watchListClickPopupHandler.bind(this);
     this._alreadyWatchedClickPopupHandler = this._alreadyWatchedClickPopupHandler.bind(this);
+
+    this._emojiListHandler = this._emojiListHandler.bind(this);
+
+    this.getElement().querySelector('.film-details__emoji-list').addEventListener('click', this._emojiListHandler);
   }
 
   getTemplate() {
@@ -54,5 +58,20 @@ export default class Popup extends AbstractView {
   setAlreadyWatchedPopupClickHandler(callback) {
     this._callback.alreadyWatchedClickPopup = callback;
     this.getElement().querySelector('.film-details__control-button--watched').addEventListener('click', this._alreadyWatchedClickPopupHandler);
+  }
+
+  _emojiListHandler(evt) {
+    if (evt.target.tagName !== 'IMG') {
+      return;
+    }
+    if(this._containerEmodji){
+      this._containerEmodji.innerHTML = ' ';
+    }
+
+    this._containerEmodji = this.getElement().querySelector('.film-details__add-emoji-label');
+    const emodjiElement = evt.target.cloneNode();
+    emodjiElement.style.height = '55px';
+    emodjiElement.style.width = '55px';
+    this._containerEmodji.appendChild(emodjiElement);
   }
 }
