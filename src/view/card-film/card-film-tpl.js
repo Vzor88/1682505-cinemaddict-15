@@ -1,5 +1,5 @@
 import dayjs from 'dayjs';
-import {LENGTH_STRING} from '../../mock/data.js';
+import {LENGTH_STRING} from '../../const.js';
 import {isClassName} from '../../utils/card-film.js';
 
 export const createCardFilmTemplate = (card) => {

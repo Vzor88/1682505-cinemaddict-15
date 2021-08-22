@@ -1,4 +1,4 @@
-import {COUNT} from './mock/data.js';
+import {COUNT} from './const.js';
 import {generateCardFilmTemplate} from './mock/film.js';
 import FilmsList from './presenter/films-list.js';
 

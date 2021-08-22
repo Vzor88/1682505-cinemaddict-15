@@ -1,5 +1,5 @@
 import {render, remove, renderElement} from '../utils/render.js';
-import {COUNT, RenderPosition, SortType} from '../mock/data.js';
+import {COUNT, RenderPosition, SortType} from '../const.js';
 import RankUserView from '../view/rank-user/rank-user.js';
 import MenuView from '../view/menu/menu.js';
 import SortView from '../view/sort/sort.js';
@@ -51,7 +51,7 @@ export default class FilmsList {
     this._filters = this._renderFilters(this._cardsFilm);
 
     this._renderMenu(this._filters);
-    this._renderStatistic(cardsFilm.length);
+    this._renderStatistic(this._cardsFilm.length);
 
     this._renderPage();
   }
@@ -119,7 +119,7 @@ export default class FilmsList {
 
     this._sortTasks(sortType);
     this._clearTaskList();
-    this._renderFilmsList();
+    this._renderAllFilmsList();
     this._renderCategoryFilms();
   }
 
@@ -132,15 +132,14 @@ export default class FilmsList {
     const filmPresenter = new FilmPresenter(this._handleTaskChange);
     filmPresenter.init(film, container);
     switch (array) {
-      case this._cardsFilm:
-        this._filmPresenter.set(film.film.id, filmPresenter);
-        break;
       case this._topRatingFilms:
         this._filmPresenterTop.set(film.film.id, filmPresenter);
         break;
       case this._topCommentFilms:
         this._filmPresenterComment.set(film.film.id, filmPresenter);
         break;
+      default:
+        this._filmPresenter.set(film.film.id, filmPresenter);
     }
   }
 
@@ -150,7 +149,7 @@ export default class FilmsList {
       .forEach((cardFilm) => this._renderFilm(array, cardFilm, container));
   }
 
-  _renderFilmsList () {
+  _renderAllFilmsList () {
     this._renderFilms(this._cardsFilm,0, Math.min(this._cardsFilm.length, COUNT.FILMS_PER_STEP), this._filmsContainer);
 
     if (this._cardsFilm.length > COUNT.FILMS_PER_STEP) {
@@ -170,6 +169,10 @@ export default class FilmsList {
 
     this._renderedFilmCount = COUNT.FILMS_PER_STEP;
     remove(this._showMoreButtonComponent);
+  }
+
+  _renderMarkupFilmLists() {
+    render (this._filmListMainContainer, this._filmsComponent);
   }
 
   _renderCategoryFilms () {
@@ -212,9 +215,9 @@ export default class FilmsList {
 
     this._renderRank ();
     this._renderSort ();
-    render (this._filmListMainContainer, this._filmsComponent);
 
-    this._renderFilmsList ();
+    this._renderMarkupFilmLists();
+    this._renderAllFilmsList ();
     this._renderCategoryFilms();
   }
 }
