@@ -1,11 +1,12 @@
 import {getRandomArray} from '../utils/card-film.js';
 import {getRandomInteger, getRandomIntegerFloat} from '../utils/common.js';
-import {DESCRIPTIONS, GENRES, POSTERS, SMILES, TITLES, ALTERNATIVE_TITLES, DIRECTORS, INDEX_COMMENT, WRITERS, ACTORS, RATING, COUNTRIES, AUTHORS_COMMENT, COUNT, DURATION, COUNT_RANDOM_DATE} from './data.js';
+import {DESCRIPTIONS, GENRES, POSTERS, SMILES, TITLES, ALTERNATIVE_TITLES, DIRECTORS, WRITERS, ACTORS, RATING, COUNTRIES, AUTHORS_COMMENT, DURATION, COUNT_RANDOM_DATE} from './data.js';
+import {INDEX_COMMENT, COUNT} from '../const.js';
 import dayjs from 'dayjs';
 
 let index = 0;
 
-const generateData = (array) => {
+export const generateData = (array) => {
   const randomIndex = getRandomInteger(0, array.length - 1);
 
   return array[randomIndex];

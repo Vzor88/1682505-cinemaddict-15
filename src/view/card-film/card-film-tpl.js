@@ -1,5 +1,5 @@
 import dayjs from 'dayjs';
-import {LENGTH_STRING} from '../../mock/data.js';
+import {LENGTH_STRING_DESCRIPTION} from '../../const.js';
 import {isClassName} from '../../utils/card-film.js';
 
 export const createCardFilmTemplate = (card) => {
@@ -10,7 +10,7 @@ export const createCardFilmTemplate = (card) => {
   const {watchList, alreadyWatched, favorite} = userDetails;
 
   const dateYear = dayjs(date).format('YYYY');
-  const descriptionShort = (text) => text.length >= LENGTH_STRING ? `${text.substr(0, LENGTH_STRING)} <span class='more'>...</span>` : text;
+  const descriptionShort = (text) => text.length >= LENGTH_STRING_DESCRIPTION ? `${text.substr(0, LENGTH_STRING_DESCRIPTION)} <span class='more'>...</span>` : text;
 
   return `<article class="film-card">
     <h3 class="film-card__title">${title}</h3>

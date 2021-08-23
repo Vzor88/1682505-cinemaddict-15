@@ -1,9 +1,17 @@
-import AbstractView from '../abstract.js';
+import SmartView from '../smart.js';
 import {createPopupTemplate} from './popup-tpl.js';
-import {isEnterEvent} from '../../utils/render.js';
-import {generateComment} from '../../mock/film.js';
+import {isCtrlEnterEvent} from '../../utils/render.js';
+import dayjs from 'dayjs';
+import relativeTime from 'dayjs/plugin/relativeTime.js';
+import {AUTHORS_COMMENT} from '../../mock/data.js';
+import {getRandomInteger} from '../../utils/common.js';
+import {INDEX_COMMENT} from '../../const.js';
+import {generateData} from '../../mock/film.js';
 
-export default class Popup extends AbstractView {
+
+dayjs.extend(relativeTime);
+
+export default class Popup extends SmartView {
   constructor(film) {
     super();
     this._film = film;
@@ -15,7 +23,9 @@ export default class Popup extends AbstractView {
     this._alreadyWatchedClickPopupHandler = this._alreadyWatchedClickPopupHandler.bind(this);
 
     this._emojiListHandler = this._emojiListHandler.bind(this);
+    this._textCommentInputHandler = this._textCommentInputHandler.bind(this);
     this._createCommentHandler = this._createCommentHandler.bind(this);
+    this._deleteCommentClickHandler = this._deleteCommentClickHandler.bind(this);
 
     this.restoreHandlers();
   }
@@ -24,21 +34,26 @@ export default class Popup extends AbstractView {
     return createPopupTemplate(this._film);
   }
 
-  updateElement() {
-    const prevElement = this.getElement();
-    const parent = prevElement.parentElement;
-    this.removeElement();
-
-    const newElement = this.getElement();
-
-    parent.replaceChild(newElement, prevElement);
-
-    this.restoreHandlers();
-  }
-
   restoreHandlers(){
+    this.getElement().querySelector('.film-details__comment-input').addEventListener('input', this._textCommentInputHandler);
     this.getElement().querySelector('.film-details__emoji-list').addEventListener('click', this._emojiListHandler);
     this.getElement().addEventListener('keydown', this._createCommentHandler);
+    this._buttonDelete = this.getElement().querySelectorAll('.film-details__comment-delete');
+    this._buttonDelete.forEach((item) => item.addEventListener('click', this._deleteCommentClickHandler));
+
+    this.getElement().querySelector('.film-details__close-btn').addEventListener('click', this._editClickPopupHandler);
+    this.getElement().querySelector('.film-details__control-button--favorite').addEventListener('click', this._favoriteClickPopupHandler);
+    this.getElement().querySelector('.film-details__control-button--watchlist').addEventListener('click', this._watchListClickPopupHandler);
+    this.getElement().querySelector('.film-details__control-button--watched').addEventListener('click', this._alreadyWatchedClickPopupHandler);
+  }
+
+  reset() {
+    if(this._containerEmodji){
+      this._containerEmodji.innerHTML = ' ';
+    }
+    if(this._textComment){
+      this._textComment = ' ';
+    }
   }
 
   _editClickPopupHandler() {
@@ -47,7 +62,6 @@ export default class Popup extends AbstractView {
 
   setEditClickPopupHandler(callback) {
     this._callback.editClickPopup = callback;
-    this.getElement().querySelector('.film-details__close-btn').addEventListener('click', this._editClickPopupHandler);
   }
 
   _favoriteClickPopupHandler(evt) {
@@ -57,7 +71,6 @@ export default class Popup extends AbstractView {
 
   setFavoritePopupClickHandler(callback) {
     this._callback.favoriteClickPopup = callback;
-    this.getElement().querySelector('.film-details__control-button--favorite').addEventListener('click', this._favoriteClickPopupHandler);
   }
 
   _watchListClickPopupHandler(evt) {
@@ -67,7 +80,6 @@ export default class Popup extends AbstractView {
 
   setWatchListPopupClickHandler(callback) {
     this._callback.watchListClickPopup = callback;
-    this.getElement().querySelector('.film-details__control-button--watchlist').addEventListener('click', this._watchListClickPopupHandler);
   }
 
   _alreadyWatchedClickPopupHandler(evt) {
@@ -77,11 +89,16 @@ export default class Popup extends AbstractView {
 
   setAlreadyWatchedPopupClickHandler(callback) {
     this._callback.alreadyWatchedClickPopup = callback;
-    this.getElement().querySelector('.film-details__control-button--watched').addEventListener('click', this._alreadyWatchedClickPopupHandler);
+  }
+
+  _textCommentInputHandler(evt){
+    evt.preventDefault();
+    this._textComment = evt.target.value;
   }
 
   _emojiListHandler(evt) {
-    if (evt.target.tagName !== 'IMG') {
+    evt.preventDefault();
+    if (evt.target.alt !== 'emoji') {
       return;
     }
     if(this._containerEmodji){
@@ -93,13 +110,36 @@ export default class Popup extends AbstractView {
     emodjiElement.style.height = '55px';
     emodjiElement.style.width = '55px';
     this._containerEmodji.appendChild(emodjiElement);
+
+    return emodjiElement.className;
   }
 
   _createCommentHandler(evt) {
-    if(isEnterEvent(evt)){
-      this._film.comments.push(generateComment());
-
-      this.updateElement();
+    if(isCtrlEnterEvent(evt)){
+      this._film.comments.push(this._createComment());
+      evt.preventDefault();
+      this.updateElement(true);
     }
+  }
+
+  _createComment() {
+    return {
+      id: getRandomInteger(INDEX_COMMENT.MIN, INDEX_COMMENT.MAX),
+      author: generateData(AUTHORS_COMMENT),
+      comment: this._textComment,
+      date: dayjs(),
+      emotion: this._containerEmodji.firstElementChild.id,
+    };
+  }
+
+  _deleteCommentClickHandler(evt){
+    evt.preventDefault();
+    this._film.comments.forEach((item, index) => {
+      if(evt.target.parentElement.parentElement.textContent.includes(item.comment) && evt.target.parentElement.parentElement.textContent.includes(item.author)){
+        this._film.comments.splice(index, 1);
+      }
+    });
+
+    this.updateElement(true);
   }
 }

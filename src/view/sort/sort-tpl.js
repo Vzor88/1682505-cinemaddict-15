@@ -1,4 +1,4 @@
-import {SortType} from '../../mock/data.js';
+import {SortType} from '../../const.js';
 
 export const createSortTemplate = () => (
   `<ul class="sort">

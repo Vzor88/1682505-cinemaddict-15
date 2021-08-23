@@ -1,8 +1,7 @@
-import {render} from '../utils/render.js';
 import CardFilmView from '../view/card-film/card-film.js';
 import PopupView from '../view/popup/popup.js';
 import {siteBodyElement} from '../main.js';
-import {onEscKeyDown, remove, replace} from '../utils/render.js';
+import {remove, replace, isEscEvent, render} from '../utils/render.js';
 
 export default class Film {
   constructor(changeData) {
@@ -11,12 +10,11 @@ export default class Film {
     this._filmComponent = null;
     this._popupComponent = null;
 
+    this._onEscKeyDown = this._onEscKeyDown.bind(this);
     this._handleFavoriteClick = this._handleFavoriteClick.bind(this);
     this._handleWatchListClick = this._handleWatchListClick.bind(this);
     this._handleAlreadyWatchedClick = this._handleAlreadyWatchedClick.bind(this);
-
     this._handleCardFilmClick = this._handleCardFilmClick.bind(this);
-
     this._handleClosedPopupButtonClick = this._handleClosedPopupButtonClick.bind(this);
   }
 
@@ -55,6 +53,15 @@ export default class Film {
     remove(prevPopupComponent);
   }
 
+  _hangingEventPopup(){
+    this._popupComponent.setEditClickPopupHandler(this._handleClosedPopupButtonClick);
+    this._popupComponent.setFavoritePopupClickHandler(this._handleFavoriteClick);
+    this._popupComponent.setWatchListPopupClickHandler(this._handleWatchListClick);
+    this._popupComponent.setAlreadyWatchedPopupClickHandler(this._handleAlreadyWatchedClick);
+
+    this._popupComponent.restoreHandlers();
+  }
+
   _handleCardFilmClick(){
     this._renderPopup();
   }
@@ -78,14 +85,7 @@ export default class Film {
   _openedPopup(){
     render(siteBodyElement, this._popupComponent);
     siteBodyElement.classList.add('hide-overflow');
-    document.addEventListener('keydown', onEscKeyDown);
-  }
-
-  _hangingEventPopup(){
-    this._popupComponent.setEditClickPopupHandler(this._handleClosedPopupButtonClick);
-    this._popupComponent.setFavoritePopupClickHandler(this._handleFavoriteClick);
-    this._popupComponent.setWatchListPopupClickHandler(this._handleWatchListClick);
-    this._popupComponent.setAlreadyWatchedPopupClickHandler(this._handleAlreadyWatchedClick);
+    document.addEventListener('keydown', this._onEscKeyDown);
   }
 
   _handleClosedPopupButtonClick(){
@@ -109,6 +109,16 @@ export default class Film {
     const copyFilm = {...this._film};
     copyFilm.film.userDetails.favorite = !this._film.film.userDetails.favorite;
     return this._changeData(copyFilm);
+  }
+
+  _onEscKeyDown(evt) {
+    if (isEscEvent(evt)) {
+      evt.preventDefault();
+      this._popupComponent.reset();
+      remove(this._popupComponent);
+      siteBodyElement.classList.remove('hide-overflow');
+      document.removeEventListener('keydown', this._onEscKeyDown);
+    }
   }
 }
 

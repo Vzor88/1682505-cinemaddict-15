@@ -1,9 +1,8 @@
-import {siteBodyElement} from '../main.js';
-import {RenderPosition} from '../mock/data.js';
+import {RenderPosition} from '../const.js';
 import Abstract from '../view/abstract.js';
 
 export const isEscEvent = (evt) => evt.key === 'Escape' || evt.key === 'Esc';
-export const isEnterEvent = (evt) => evt.key === 'Enter';
+export const isCtrlEnterEvent = (evt) => evt.ctrlKey && 'Enter'.includes(evt.key);
 
 export const renderElement = (container, child, place) => {
   if (container instanceof Abstract) {
@@ -18,9 +17,8 @@ export const renderElement = (container, child, place) => {
     case RenderPosition.AFTERBEGIN:
       container.prepend(child);
       break;
-    case RenderPosition.BEFOREEND:
+    default:
       container.append(child);
-      break;
   }
 };
 
@@ -32,17 +30,6 @@ export const createElement = (template) => {
   const newElement = document.createElement('div'); // 1
   newElement.innerHTML = template;
   return newElement.firstChild;
-};
-
-
-export const onEscKeyDown = (evt) => {
-  if (isEscEvent(evt)) {
-    const popup = document.querySelector('.film-details');
-    evt.preventDefault();
-    popup.remove();
-    siteBodyElement.classList.remove('hide-overflow');
-    document.removeEventListener('keydown', onEscKeyDown);
-  }
 };
 
 export const remove = (component) => {

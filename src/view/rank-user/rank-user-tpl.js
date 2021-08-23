@@ -1,4 +1,4 @@
-import {RANK} from '../../mock/data.js';
+import {RANK} from '../../const.js';
 import {ucFirstName} from '../../utils/card-film.js';
 
 const isNameRank = (count) => {
