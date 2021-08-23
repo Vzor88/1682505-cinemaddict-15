@@ -1,4 +1,4 @@
-import {RenderPosition} from '../const.js';
+import {RenderPosition} from '../consts.js';
 import Abstract from '../view/abstract.js';
 
 export const isEscEvent = (evt) => evt.key === 'Escape' || evt.key === 'Esc';

@@ -1,7 +1,7 @@
 import {getRandomArray} from '../utils/card-film.js';
 import {getRandomInteger, getRandomIntegerFloat} from '../utils/common.js';
 import {DESCRIPTIONS, GENRES, POSTERS, SMILES, TITLES, ALTERNATIVE_TITLES, DIRECTORS, WRITERS, ACTORS, RATING, COUNTRIES, AUTHORS_COMMENT, DURATION, COUNT_RANDOM_DATE} from './data.js';
-import {INDEX_COMMENT, COUNT} from '../const.js';
+import {INDEX_COMMENT, COUNTS} from '../consts.js';
 import dayjs from 'dayjs';
 
 let index = 0;
@@ -95,7 +95,7 @@ const generateFilm = (commentsId) => {
 };
 
 export const generateCardFilmTemplate = () => {
-  const comments = new Array(getRandomInteger(1, COUNT.MAX_COMMENTS_FILMS)).fill(null).map(generateComment);
+  const comments = new Array(getRandomInteger(1, COUNTS.MAX_COMMENTS_FILMS)).fill(null).map(generateComment);
   const commentsId = comments.map((item) => item.id);
   const film = generateFilm(commentsId);
   return {film, comments};
