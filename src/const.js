@@ -33,4 +33,4 @@ export const COUNT = {
   FILMS_PER_STEP: 5,
 };
 
-export const LENGTH_STRING = 139;
+export const LENGTH_STRING_DESCRIPTION = 139;

@@ -6,7 +6,7 @@ import dayjs from 'dayjs';
 
 let index = 0;
 
-const generateData = (array) => {
+export const generateData = (array) => {
   const randomIndex = getRandomInteger(0, array.length - 1);
 
   return array[randomIndex];

@@ -7,12 +7,10 @@ export default class Smart extends Abstract {
 
   updateElement(scrollDown) {
     const prevElement = this.getElement();
-    console.log(prevElement);
     const parent = prevElement.parentElement;
     this.removeElement();
 
     const newElement = this.getElement();
-    console.log(newElement);
     parent.replaceChild(newElement, prevElement);
 
     if(scrollDown){

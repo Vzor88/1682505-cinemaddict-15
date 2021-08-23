@@ -1,9 +1,12 @@
 import SmartView from '../smart.js';
 import {createPopupTemplate} from './popup-tpl.js';
 import {isCtrlEnterEvent} from '../../utils/render.js';
-import {generateComment} from '../../mock/film.js';
 import dayjs from 'dayjs';
 import relativeTime from 'dayjs/plugin/relativeTime.js';
+import {AUTHORS_COMMENT} from '../../mock/data.js';
+import {getRandomInteger} from '../../utils/common.js';
+import {INDEX_COMMENT} from '../../const.js';
+import {generateData} from '../../mock/film.js';
 
 
 dayjs.extend(relativeTime);
@@ -120,11 +123,13 @@ export default class Popup extends SmartView {
   }
 
   _createComment() {
-    const comment = generateComment();
-    comment.emotion = this._containerEmodji.firstElementChild.id;
-    comment.comment = this._textComment;
-    comment.date = dayjs();
-    return comment;
+    return {
+      id: getRandomInteger(INDEX_COMMENT.MIN, INDEX_COMMENT.MAX),
+      author: generateData(AUTHORS_COMMENT),
+      comment: this._textComment,
+      date: dayjs(),
+      emotion: this._containerEmodji.firstElementChild.id,
+    };
   }
 
   _deleteCommentClickHandler(evt){
@@ -133,7 +138,6 @@ export default class Popup extends SmartView {
       if(evt.target.parentElement.parentElement.textContent.includes(item.comment) && evt.target.parentElement.parentElement.textContent.includes(item.author)){
         this._film.comments.splice(index, 1);
       }
-      // evt.target.parentElement.parentElement.parentElement.remove();
     });
 
     this.updateElement(true);
