@@ -1,5 +1,5 @@
 import dayjs from 'dayjs';
-import {LENGTH_STRING_DESCRIPTION} from '../../const.js';
+import {LENGTH_STRING_DESCRIPTION} from '../../consts.js';
 import {isClassName} from '../../utils/card-film.js';
 
 export const createCardFilmTemplate = (card) => {

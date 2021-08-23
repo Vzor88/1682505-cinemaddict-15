@@ -1,4 +1,4 @@
-import {SortType} from '../../const.js';
+import {SortType} from '../../consts.js';
 
 export const createSortTemplate = () => (
   `<ul class="sort">

@@ -5,7 +5,7 @@ import dayjs from 'dayjs';
 import relativeTime from 'dayjs/plugin/relativeTime.js';
 import {AUTHORS_COMMENT} from '../../mock/data.js';
 import {getRandomInteger} from '../../utils/common.js';
-import {INDEX_COMMENT} from '../../const.js';
+import {INDEX_COMMENT, SIZES} from '../../consts.js';
 import {generateData} from '../../mock/film.js';
 
 
@@ -38,8 +38,9 @@ export default class Popup extends SmartView {
     this.getElement().querySelector('.film-details__comment-input').addEventListener('input', this._textCommentInputHandler);
     this.getElement().querySelector('.film-details__emoji-list').addEventListener('click', this._emojiListHandler);
     this.getElement().addEventListener('keydown', this._createCommentHandler);
-    this._buttonDelete = this.getElement().querySelectorAll('.film-details__comment-delete');
-    this._buttonDelete.forEach((item) => item.addEventListener('click', this._deleteCommentClickHandler));
+
+    this._buttonsDeleteComment = this.getElement().querySelectorAll('.film-details__comment-delete');
+    this._buttonsDeleteComment.forEach((item) => item.addEventListener('click', this._deleteCommentClickHandler));
 
     this.getElement().querySelector('.film-details__close-btn').addEventListener('click', this._editClickPopupHandler);
     this.getElement().querySelector('.film-details__control-button--favorite').addEventListener('click', this._favoriteClickPopupHandler);
@@ -48,6 +49,7 @@ export default class Popup extends SmartView {
   }
 
   reset() {
+    this.updateElement(true);
     if(this._containerEmodji){
       this._containerEmodji.innerHTML = ' ';
     }
@@ -102,23 +104,23 @@ export default class Popup extends SmartView {
       return;
     }
     if(this._containerEmodji){
-      this._containerEmodji.innerHTML = ' ';
+      this._containerEmodji.innerHTML = '';
     }
 
-    this._containerEmodji = this.getElement().querySelector('.film-details__add-emoji-label');
     const emodjiElement = evt.target.cloneNode();
-    emodjiElement.style.height = '55px';
-    emodjiElement.style.width = '55px';
+    emodjiElement.style.height = SIZES.EMODJI.HEIGHT;
+    emodjiElement.style.width = SIZES.EMODJI.WIDTH;
     this._containerEmodji.appendChild(emodjiElement);
-
-    return emodjiElement.className;
+    return emodjiElement.id;
   }
 
   _createCommentHandler(evt) {
-    if(isCtrlEnterEvent(evt)){
-      this._film.comments.push(this._createComment());
+    this._containerEmodji = this.getElement().querySelector('.film-details__add-emoji-label');
+    if(isCtrlEnterEvent(evt) && this._containerEmodji.firstChild && this._textComment){
       evt.preventDefault();
-      this.updateElement(true);
+      this._film.comments.push(this._createComment());
+
+      this.reset();
     }
   }
 
@@ -134,12 +136,13 @@ export default class Popup extends SmartView {
 
   _deleteCommentClickHandler(evt){
     evt.preventDefault();
+    const parentElement = evt.target.parentElement.parentElement;
     this._film.comments.forEach((item, index) => {
-      if(evt.target.parentElement.parentElement.textContent.includes(item.comment) && evt.target.parentElement.parentElement.textContent.includes(item.author)){
+      if(parentElement.textContent.includes(item.comment) && parentElement.textContent.includes(item.author)){
         this._film.comments.splice(index, 1);
       }
     });
 
-    this.updateElement(true);
+    this.reset();
   }
 }

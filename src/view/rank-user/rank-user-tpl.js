@@ -1,11 +1,11 @@
-import {RANK} from '../../const.js';
+import {RANKS} from '../../consts.js';
 import {ucFirstName} from '../../utils/card-film.js';
 
 const isNameRank = (count) => {
   let nameRank = 'novice';
-  if (count >= RANK.FAN.MIN && count <= RANK.FAN.MAX) {
+  if (count >= RANKS.FAN.MIN && count <= RANKS.FAN.MAX) {
     nameRank = 'fan';
-  } else if (count >= RANK.MOVIE_BUFF) {
+  } else if (count >= RANKS.MOVIE_BUFF) {
     nameRank = 'movie buff';
   }
   return ucFirstName(nameRank);

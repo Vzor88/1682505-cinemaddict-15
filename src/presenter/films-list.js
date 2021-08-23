@@ -1,5 +1,5 @@
 import {render, remove, renderElement} from '../utils/render.js';
-import {COUNT, RenderPosition, SortType} from '../const.js';
+import {COUNTS, RenderPosition, SortType} from '../consts.js';
 import RankUserView from '../view/rank-user/rank-user.js';
 import MenuView from '../view/menu/menu.js';
 import SortView from '../view/sort/sort.js';
@@ -35,7 +35,7 @@ export default class FilmsList {
     this._handleShowMoreButtonClick = this._handleShowMoreButtonClick.bind(this);
     this._handleSortTypeChange = this._handleSortTypeChange.bind(this);
 
-    this._renderedFilmCount = COUNT.FILMS_PER_STEP;
+    this._renderedFilmCount = COUNTS.FILMS_PER_STEP;
   }
 
   init (cardsFilm) {
@@ -150,9 +150,9 @@ export default class FilmsList {
   }
 
   _renderAllFilmsList () {
-    this._renderFilms(this._cardsFilm,0, Math.min(this._cardsFilm.length, COUNT.FILMS_PER_STEP), this._filmsContainer);
+    this._renderFilms(this._cardsFilm,0, Math.min(this._cardsFilm.length, COUNTS.FILMS_PER_STEP), this._filmsContainer);
 
-    if (this._cardsFilm.length > COUNT.FILMS_PER_STEP) {
+    if (this._cardsFilm.length > COUNTS.FILMS_PER_STEP) {
       this._renderShowMoreButton();
     }
   }
@@ -167,7 +167,7 @@ export default class FilmsList {
     this._filmPresenterComment.forEach((presenter) => presenter.destroy());
     this._filmPresenterComment.clear();
 
-    this._renderedFilmCount = COUNT.FILMS_PER_STEP;
+    this._renderedFilmCount = COUNTS.FILMS_PER_STEP;
     remove(this._showMoreButtonComponent);
   }
 
@@ -181,11 +181,11 @@ export default class FilmsList {
   }
 
   _renderFilmsListExtra () {
-    this._renderFilms(this._topRatingFilms,COUNT.SORT_FILMS.MIN, COUNT.SORT_FILMS.MAX, this._filmsListExtra);
+    this._renderFilms(this._topRatingFilms,COUNTS.SORT_FILMS.MIN, COUNTS.SORT_FILMS.MAX, this._filmsListExtra);
   }
 
   _renderFilmsListTopCommented () {
-    this._renderFilms(this._topCommentFilms,COUNT.SORT_FILMS.MIN, COUNT.SORT_FILMS.MAX, this._filmsListComment);
+    this._renderFilms(this._topCommentFilms,COUNTS.SORT_FILMS.MIN, COUNTS.SORT_FILMS.MAX, this._filmsListComment);
   }
 
   _renderNoFilms () {
@@ -193,9 +193,9 @@ export default class FilmsList {
   }
 
   _handleShowMoreButtonClick () {
-    this._renderFilms(this._cardsFilm, this._renderedFilmCount, this._renderedFilmCount + COUNT.FILMS_PER_STEP, this._filmsContainer);
+    this._renderFilms(this._cardsFilm, this._renderedFilmCount, this._renderedFilmCount + COUNTS.FILMS_PER_STEP, this._filmsContainer);
 
-    this._renderedFilmCount += COUNT.FILMS_PER_STEP;
+    this._renderedFilmCount += COUNTS.FILMS_PER_STEP;
 
     if (this._renderedFilmCount >= this._cardsFilm.length) {
       remove(this._showMoreButtonComponent);
