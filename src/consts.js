@@ -9,6 +9,18 @@ export const SortType = {
   RATING: 'rating',
 };
 
+export const UserAction = {
+  UPDATE_FILM: 'UPDATE_FILM',
+  ADD_TASK: 'ADD_TASK',
+  DELETE_TASK: 'DELETE_TASK',
+};
+
+export const UpdateType = {
+  PATCH: 'PATCH',
+  MINOR: 'MINOR',
+  MAJOR: 'MAJOR',
+};
+
 export const INDEX_COMMENT = {
   MIN: 0,
   MAX: 10000,
@@ -29,7 +41,7 @@ export const COUNTS = {
   },
   FILMS: 5,
   MAX_COMMENTS_FILMS: 5,
-  GENERATE_FILMS: 10,
+  GENERATE_FILMS: 100,
   FILMS_PER_STEP: 5,
 };
 

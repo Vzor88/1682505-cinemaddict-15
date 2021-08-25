@@ -2,25 +2,21 @@ import AbstractView from '../abstract.js';
 import {createSortTemplate} from './sort-tpl.js';
 
 export default class Sort extends AbstractView {
-  constructor() {
+  constructor(currentSortType) {
     super();
+    this._currentSortType = currentSortType;
 
     this._sortTypeChangeHandler = this._sortTypeChangeHandler.bind(this);
   }
 
   getTemplate() {
-    return createSortTemplate();
+    return createSortTemplate(this._currentSortType);
   }
 
   _sortTypeChangeHandler(evt) {
-    if (evt.target.tagName !== 'A') {
+    if (evt.target.className !== 'sort__button') {
       return;
     }
-
-    this.getElement().querySelectorAll('.sort__button')
-      .forEach((item) => item.classList.remove('sort__button--active'));
-
-    evt.target.classList.add('sort__button--active');
     evt.preventDefault();
     this._callback.sortTypeChange(evt.target.dataset.sortType);
   }

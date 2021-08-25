@@ -2,6 +2,7 @@ import CardFilmView from '../view/card-film/card-film.js';
 import PopupView from '../view/popup/popup.js';
 import {siteBodyElement} from '../main.js';
 import {remove, replace, isEscEvent, render} from '../utils/render.js';
+import {UserAction, UpdateType} from '../consts.js';
 
 export default class Film {
   constructor(changeData) {
@@ -96,19 +97,19 @@ export default class Film {
   _handleWatchListClick() {
     const copyFilm = {...this._film};
     copyFilm.film.userDetails.watchList = !this._film.film.userDetails.watchList;
-    return this._changeData(copyFilm);
+    return this._changeData(UserAction.UPDATE_FILM, UpdateType.PATCH, copyFilm);
   }
 
   _handleAlreadyWatchedClick() {
     const copyFilm = {...this._film};
     copyFilm.film.userDetails.alreadyWatched = !this._film.film.userDetails.alreadyWatched;
-    return this._changeData(copyFilm);
+    return this._changeData(UserAction.UPDATE_FILM, UpdateType.PATCH, copyFilm);
   }
 
   _handleFavoriteClick() {
     const copyFilm = {...this._film};
     copyFilm.film.userDetails.favorite = !this._film.film.userDetails.favorite;
-    return this._changeData(copyFilm);
+    return this._changeData(UserAction.UPDATE_FILM, UpdateType.PATCH, copyFilm);
   }
 
   _onEscKeyDown(evt) {
