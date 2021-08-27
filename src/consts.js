@@ -46,7 +46,7 @@ export const COUNTS = {
   },
   FILMS: 5,
   MAX_COMMENTS_FILMS: 5,
-  GENERATE_FILMS: 1,
+  GENERATE_FILMS: 10,
   FILMS_PER_STEP: 5,
 };
 

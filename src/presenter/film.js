@@ -2,7 +2,7 @@ import CardFilmView from '../view/card-film/card-film.js';
 import PopupView from '../view/popup/popup.js';
 import {siteBodyElement} from '../main.js';
 import {remove, replace, isEscEvent, render} from '../utils/render.js';
-import {UserAction, UpdateType} from '../consts.js';
+import {UserAction, UpdateType, FilterType} from '../consts.js';
 
 export default class Film {
   constructor(changeData) {
@@ -26,9 +26,10 @@ export default class Film {
     remove(this._popupComponent);
   }
 
-  init (film, container) {
+  init (film, container, filterType) {
     this._film = film;
     this._container = container;
+    this._filterType = filterType;
 
     const prevFilmComponent = this._filmComponent;
     const prevPopupComponent = this._popupComponent;
@@ -101,19 +102,19 @@ export default class Film {
   _handleWatchListClick() {
     const copyFilm = {...this._film};
     copyFilm.film.userDetails.watchList = !this._film.film.userDetails.watchList;
-    return this._changeData(UserAction.UPDATE_FILM, UpdateType.PATCH, copyFilm);
+    FilterType.ALL_MOVIES === this._filterType ? this._changeData(UserAction.UPDATE_FILM, UpdateType.PATCH, copyFilm) : this._changeData(UserAction.UPDATE_FILM, UpdateType.MINOR, copyFilm);
   }
 
   _handleAlreadyWatchedClick() {
     const copyFilm = {...this._film};
     copyFilm.film.userDetails.alreadyWatched = !this._film.film.userDetails.alreadyWatched;
-    return this._changeData(UserAction.UPDATE_FILM, UpdateType.PATCH, copyFilm);
+    FilterType.ALL_MOVIES === this._filterType ? this._changeData(UserAction.UPDATE_FILM, UpdateType.PATCH, copyFilm) : this._changeData(UserAction.UPDATE_FILM, UpdateType.MINOR, copyFilm);
   }
 
   _handleFavoriteClick() {
     const copyFilm = {...this._film};
     copyFilm.film.userDetails.favorite = !this._film.film.userDetails.favorite;
-    return this._changeData(UserAction.UPDATE_FILM, UpdateType.PATCH, copyFilm);
+    FilterType.ALL_MOVIES === this._filterType ? this._changeData(UserAction.UPDATE_FILM, UpdateType.PATCH, copyFilm) : this._changeData(UserAction.UPDATE_FILM, UpdateType.MINOR, copyFilm);
   }
 
   _handleDeleteCommentClick() {

@@ -9,6 +9,7 @@ import NoFilmsView from '../view/no-films/no-films.js';
 import FilmPresenter from './film.js';
 import {sortFilmDate, sortFilmRating} from '../utils/card-film.js';
 import {filter} from '../utils/filters.js';
+import {siteBodyElement} from '../main.js';
 
 export default class FilmsList {
   constructor(filmListHeaderContainer, filmListMainContainer, filmListFooterContainer, filmsModel, filtersModel) {
@@ -19,15 +20,16 @@ export default class FilmsList {
     this._filmListFooterContainer = filmListFooterContainer;
 
     this._filmsComponent = new FilmsView();
-    this._noFilmsComponent = new NoFilmsView();
 
     this._showMoreButtonComponent = null;
     this._sortComponent = null;
+    this._noFilmsComponent = null;
 
     this._filmPresenter = new Map();
     this._filmPresenterTop = new Map();
     this._filmPresenterComment = new Map();
 
+    this._filterType = FilterType.ALL_MOVIES;
     this._currentSortType = SortType.DEFAULT;
 
     this._filmsList = this._filmsComponent.getElement().querySelector('.films-list--all');
@@ -57,9 +59,9 @@ export default class FilmsList {
   }
 
   _getFilms() {
-    const filterType = this._filtersModel.getFilter();
+    this._filterType = this._filtersModel.getFilter();
     const films = this._filmsModel.getFilms();
-    const filteredFilms = filter[filterType](films);
+    const filteredFilms = filter[this._filterType](films);
 
     switch (this._currentSortType) {
       case SortType.DATE:
@@ -81,15 +83,15 @@ export default class FilmsList {
     switch (updateType) {
       case UpdateType.PATCH:
         if (this._filmPresenter.has(update.film.id)) {
-          this._filmPresenter.get(update.film.id).init(update, this._filmsContainer);
+          this._filmPresenter.get(update.film.id).init(update, this._filmsContainer, this._filterType);
         }
 
         if (this._filmPresenterTop.has(update.film.id)) {
-          this._filmPresenterTop.get(update.film.id).init(update, this._filmsListExtra);
+          this._filmPresenterTop.get(update.film.id).init(update, this._filmsListExtra, this._filterType);
         }
 
         if (this._filmPresenterComment.has(update.film.id)) {
-          this._filmPresenterComment.get(update.film.id).init(update, this._filmsListComment);
+          this._filmPresenterComment.get(update.film.id).init(update, this._filmsListComment, this._filterType);
         }
         break;
       case UpdateType.MINOR:
@@ -104,7 +106,7 @@ export default class FilmsList {
   }
 
   _renderRank() {
-    const watchListFilms = filter[FilterType.WATCHLIST](this._filmsModel.getFilms());
+    const watchListFilms = filter[FilterType.HISTORY](this._filmsModel.getFilms());
 
     this._rankComponent = new RankUserView(watchListFilms);
     render(this._filmListHeaderContainer, this._rankComponent);
@@ -137,7 +139,7 @@ export default class FilmsList {
 
   _renderFilm (films, film, container) {
     const filmPresenter = new FilmPresenter(this._handleViewAction);
-    filmPresenter.init(film, container);
+    filmPresenter.init(film, container, this._filterType);
 
     switch (films) {
       case this._topRatingFilms:
@@ -190,6 +192,10 @@ export default class FilmsList {
     if (resetSortType) {
       this._currentSortType = SortType.DEFAULT;
     }
+
+    if (this._noFilmsComponent) {
+      remove(this._noFilmsComponent);
+    }
   }
 
   _renderMarkupFilmLists() {
@@ -212,6 +218,7 @@ export default class FilmsList {
   }
 
   _renderNoFilms () {
+    this._noFilmsComponent = new NoFilmsView(this._filterType);
     render(this._filmListMainContainer, this._noFilmsComponent);
   }
 
@@ -241,6 +248,7 @@ export default class FilmsList {
   }
 
   _renderPage () {
+    siteBodyElement.classList.remove('hide-overflow');
     if(this._getFilms().length === 0) {
       this._renderNoFilms ();
       return;
