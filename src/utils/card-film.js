@@ -9,6 +9,7 @@ export const getRandomArray = (minLength, maxLength, array) => {
 export const isClassName = (boolean) =>  boolean ? 'film-card__controls-item--active' : '';
 
 export const isClassNamePopup = (boolean) =>  boolean ? 'film-details__control-button--active' : '';
+export const isFilterActive = (boolean) =>  boolean ? 'main-navigation__item--active' : '';
 
 export const ucFirstName = (name) => name[0].toUpperCase() + name.substr(1).toLowerCase();
 

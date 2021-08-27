@@ -118,9 +118,11 @@ export default class Popup extends SmartView {
     this._containerEmodji = this.getElement().querySelector('.film-details__add-emoji-label');
     if(isCtrlEnterEvent(evt) && this._containerEmodji.firstChild && this._textComment){
       evt.preventDefault();
-      this._film.comments.push(this._createComment());
-
+      const newComment = this._createComment();
+      this._film.comments.push(newComment);
+      this._film.film.comments.push(newComment.id);
       this.reset();
+      this._callback.createCommentClick();
     }
   }
 
@@ -134,15 +136,25 @@ export default class Popup extends SmartView {
     };
   }
 
+  setDeleteCommentClickHandler(callback) {
+    this._callback.deleteCommentClick = callback;
+  }
+
+  setCreateCommentClickHandler(callback) {
+    this._callback.createCommentClick = callback;
+  }
+
   _deleteCommentClickHandler(evt){
     evt.preventDefault();
     const parentElement = evt.target.parentElement.parentElement;
     this._film.comments.forEach((item, index) => {
       if(parentElement.textContent.includes(item.comment) && parentElement.textContent.includes(item.author)){
         this._film.comments.splice(index, 1);
+        this._film.film.comments.splice(index, 1);
       }
     });
 
     this.reset();
+    this._callback.deleteCommentClick();
   }
 }

@@ -14,6 +14,8 @@ export default class Film {
     this._onEscKeyDown = this._onEscKeyDown.bind(this);
     this._handleFavoriteClick = this._handleFavoriteClick.bind(this);
     this._handleWatchListClick = this._handleWatchListClick.bind(this);
+    this._handleDeleteCommentClick = this._handleDeleteCommentClick.bind(this);
+    this._handleCreateCommentClick = this._handleCreateCommentClick.bind(this);
     this._handleAlreadyWatchedClick = this._handleAlreadyWatchedClick.bind(this);
     this._handleCardFilmClick = this._handleCardFilmClick.bind(this);
     this._handleClosedPopupButtonClick = this._handleClosedPopupButtonClick.bind(this);
@@ -59,6 +61,8 @@ export default class Film {
     this._popupComponent.setFavoritePopupClickHandler(this._handleFavoriteClick);
     this._popupComponent.setWatchListPopupClickHandler(this._handleWatchListClick);
     this._popupComponent.setAlreadyWatchedPopupClickHandler(this._handleAlreadyWatchedClick);
+    this._popupComponent.setDeleteCommentClickHandler(this._handleDeleteCommentClick);
+    this._popupComponent.setCreateCommentClickHandler(this._handleCreateCommentClick);
 
     this._popupComponent.restoreHandlers();
   }
@@ -110,6 +114,14 @@ export default class Film {
     const copyFilm = {...this._film};
     copyFilm.film.userDetails.favorite = !this._film.film.userDetails.favorite;
     return this._changeData(UserAction.UPDATE_FILM, UpdateType.PATCH, copyFilm);
+  }
+
+  _handleDeleteCommentClick() {
+    return this._changeData(UserAction.UPDATE_FILM, UpdateType.PATCH, this._film);
+  }
+
+  _handleCreateCommentClick() {
+    return this._changeData(UserAction.UPDATE_FILM, UpdateType.PATCH, this._film);
   }
 
   _onEscKeyDown(evt) {

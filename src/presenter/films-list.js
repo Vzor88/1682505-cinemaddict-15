@@ -1,22 +1,23 @@
-import {render, remove, renderElement} from '../utils/render.js';
-import {COUNTS, RenderPosition, SortType, UpdateType, UserAction} from '../consts.js';
+import {render, remove} from '../utils/render.js';
+import {COUNTS,  SortType, UpdateType, FilterType, UserAction} from '../consts.js';
 import RankUserView from '../view/rank-user/rank-user.js';
-import MenuView from '../view/menu/menu.js';
 import SortView from '../view/sort/sort.js';
 import FilmsView from '../view/films/films.js';
 import ShowMoreButtonView from '../view/show-more-button/show-more-button.js';
 import StatisticView from '../view/statistic/statistic.js';
 import NoFilmsView from '../view/no-films/no-films.js';
 import FilmPresenter from './film.js';
-import {generateFilter} from '../mock/filters.js';
 import {sortFilmDate, sortFilmRating} from '../utils/card-film.js';
+import {filter} from '../utils/filters.js';
 
 export default class FilmsList {
-  constructor(filmListHeaderContainer, filmListMainContainer, filmListFooterContainer, filmsModel) {
+  constructor(filmListHeaderContainer, filmListMainContainer, filmListFooterContainer, filmsModel, filtersModel) {
     this._filmsModel = filmsModel;
+    this._filtersModel = filtersModel;
     this._filmListHeaderContainer = filmListHeaderContainer;
     this._filmListMainContainer = filmListMainContainer;
     this._filmListFooterContainer = filmListFooterContainer;
+
     this._filmsComponent = new FilmsView();
     this._noFilmsComponent = new NoFilmsView();
 
@@ -31,16 +32,16 @@ export default class FilmsList {
 
     this._filmsList = this._filmsComponent.getElement().querySelector('.films-list--all');
     this._filmsContainer = this._filmsList.querySelector('.films-list__container');
+    this._renderedFilmCount = COUNTS.FILMS_PER_STEP;
 
     this._handleShowMoreButtonClick = this._handleShowMoreButtonClick.bind(this);
     this._handleSortTypeChange = this._handleSortTypeChange.bind(this);
-
-    this._renderedFilmCount = COUNTS.FILMS_PER_STEP;
 
     this._handleViewAction = this._handleViewAction.bind(this);
     this._handleModelEvent = this._handleModelEvent.bind(this);
 
     this._filmsModel.addObserver(this._handleModelEvent);
+    this._filtersModel.addObserver(this._handleModelEvent);
   }
 
   init () {
@@ -50,34 +51,29 @@ export default class FilmsList {
     this._filmsListComment = this._filmsComponent.getElement().querySelector('.films-list--most-commented').querySelector('.films-list__container');
     this._topCommentFilms = this._getFilms().slice().sort((prev, next) => next.comments.length - prev.comments.length);
 
-    this._renderMenu();
     this._renderStatistic(this._getFilms().length);
 
     this._renderPage();
   }
 
   _getFilms() {
+    const filterType = this._filtersModel.getFilter();
+    const films = this._filmsModel.getFilms();
+    const filteredFilms = filter[filterType](films);
+
     switch (this._currentSortType) {
       case SortType.DATE:
-        return this._filmsModel.getFilms().slice().sort(sortFilmDate);
+        return filteredFilms.sort(sortFilmDate);
       case SortType.RATING:
-        return this._filmsModel.getFilms().slice().sort(sortFilmRating);
+        return filteredFilms.sort(sortFilmRating);
     }
 
-    return this._filmsModel.getFilms();
+    return filteredFilms;
   }
 
   _handleViewAction(actionType, updateType, update) {
-    switch (actionType) {
-      case UserAction.UPDATE_FILM:
-        this._filmsModel.updateFilm(updateType, update);
-        break;
-      // case UserAction.ADD_TASK:
-      //   this._tasksModel.addTask(updateType, update);
-      //   break;
-      // case UserAction.DELETE_TASK:
-      //   this._tasksModel.deleteTask(updateType, update);
-      //   break;
+    if(actionType === UserAction.UPDATE_FILM){
+      this._filmsModel.updateFilm(updateType, update);
     }
   }
 
@@ -95,8 +91,6 @@ export default class FilmsList {
         if (this._filmPresenterComment.has(update.film.id)) {
           this._filmPresenterComment.get(update.film.id).init(update, this._filmsListComment);
         }
-
-        this._renderMenu();
         break;
       case UpdateType.MINOR:
         this._clearPage();
@@ -109,22 +103,11 @@ export default class FilmsList {
     }
   }
 
-  _renderFilters(films){
-    return generateFilter(films.map((item) => (item.film)));
-  }
-
   _renderRank() {
-    this._rankComponent = new RankUserView(this._filters);
+    const watchListFilms = filter[FilterType.WATCHLIST](this._filmsModel.getFilms());
+
+    this._rankComponent = new RankUserView(watchListFilms);
     render(this._filmListHeaderContainer, this._rankComponent);
-  }
-
-  _renderMenu() {
-    if(document.querySelector('.main-navigation')){
-      document.querySelector('.main-navigation').remove();
-    }
-
-    this._filters = this._renderFilters(this._getFilms());
-    renderElement(this._filmListMainContainer, new MenuView(this._filters), RenderPosition.AFTERBEGIN);
   }
 
   _renderStatistic() {
