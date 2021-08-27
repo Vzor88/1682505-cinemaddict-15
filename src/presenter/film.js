@@ -2,7 +2,7 @@ import CardFilmView from '../view/card-film/card-film.js';
 import PopupView from '../view/popup/popup.js';
 import {siteBodyElement} from '../main.js';
 import {remove, replace, isEscEvent, render} from '../utils/render.js';
-import {UserAction, UpdateType, FilterType} from '../consts.js';
+import {UserAction, UpdateType, FilterType, EventType} from '../consts.js';
 
 export default class Film {
   constructor(changeData) {
@@ -100,25 +100,33 @@ export default class Film {
   }
 
   _handleWatchListClick() {
-    const scrollY = this._saveScroll();
-    const copyFilm = {...this._film};
-    copyFilm.film.userDetails.watchList = !this._film.film.userDetails.watchList;
-    this._isFilterType(copyFilm);
-    this._loadScroll(scrollY);
+    this._changeEventButtons(EventType.WATCHLIST);
   }
 
   _handleAlreadyWatchedClick() {
-    const scrollY = this._saveScroll();
-    const copyFilm = {...this._film};
-    copyFilm.film.userDetails.alreadyWatched = !this._film.film.userDetails.alreadyWatched;
-    this._isFilterType(copyFilm);
-    this._loadScroll(scrollY);
+    this._changeEventButtons(EventType.HISTORY);
   }
 
   _handleFavoriteClick() {
+    this._changeEventButtons(EventType.FAVORITE);
+  }
+
+  _changeEventButtons(eventType) {
     const scrollY = this._saveScroll();
     const copyFilm = {...this._film};
-    copyFilm.film.userDetails.favorite = !this._film.film.userDetails.favorite;
+    switch (eventType) {
+      case 'Favorite':
+        copyFilm.film.userDetails.favorite = !this._film.film.userDetails.favorite;
+        break;
+      case 'WatchList':
+        copyFilm.film.userDetails.watchList = !this._film.film.userDetails.watchList;
+        break;
+      case 'History':
+        copyFilm.film.userDetails.alreadyWatched = !this._film.film.userDetails.alreadyWatched;
+        break;
+      default:
+        return;
+    }
     this._isFilterType(copyFilm);
     this._loadScroll(scrollY);
   }

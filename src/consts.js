@@ -13,6 +13,12 @@ export const UserAction = {
   UPDATE_FILM: 'UPDATE_FILM',
 };
 
+export const EventType = {
+  FAVORITE: 'Favorite',
+  HISTORY: 'History',
+  WATCHLIST: 'WatchList',
+};
+
 export const UpdateType = {
   PATCH: 'PATCH',
   MINOR: 'MINOR',

@@ -68,9 +68,9 @@ export default class FilmsList {
         return filteredFilms.sort(sortFilmDate);
       case SortType.RATING:
         return filteredFilms.sort(sortFilmRating);
+      default:
+        return filteredFilms;
     }
-
-    return filteredFilms;
   }
 
   _handleViewAction(actionType, updateType, update) {
@@ -183,11 +183,7 @@ export default class FilmsList {
     remove(this._sortComponent);
     remove(this._rankComponent);
 
-    if (resetRenderedFilmCount) {
-      this._renderedTaskCount = COUNTS.FILMS_PER_STEP;
-    } else {
-      this._renderedTaskCount = Math.min(this._getFilms().length, this._renderedTaskCount);
-    }
+    resetRenderedFilmCount ? this._renderedTaskCount = COUNTS.FILMS_PER_STEP : this._renderedTaskCount = Math.min(this._getFilms().length, this._renderedTaskCount);
 
     if (resetSortType) {
       this._currentSortType = SortType.DEFAULT;

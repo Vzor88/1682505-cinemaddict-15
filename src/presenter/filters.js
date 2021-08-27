@@ -1,4 +1,4 @@
-import MenuView from '../view/menu/menu.js';
+import MenuView from '../view/filters.js/filters.js';
 import {render, replace, remove} from '../utils/render.js';
 import {filter} from '../utils/filters.js';
 import {FilterType, UpdateType} from '../consts.js';
@@ -53,7 +53,6 @@ export default class Filter {
       {
         type: FilterType.ALL_MOVIES,
         name: 'All movies',
-        count: films.length,
       },
       {
         type: FilterType.WATCHLIST,
