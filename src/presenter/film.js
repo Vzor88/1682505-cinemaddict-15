@@ -100,21 +100,44 @@ export default class Film {
   }
 
   _handleWatchListClick() {
+    const scrollY = this._saveScroll();
     const copyFilm = {...this._film};
     copyFilm.film.userDetails.watchList = !this._film.film.userDetails.watchList;
-    FilterType.ALL_MOVIES === this._filterType ? this._changeData(UserAction.UPDATE_FILM, UpdateType.PATCH, copyFilm) : this._changeData(UserAction.UPDATE_FILM, UpdateType.MINOR, copyFilm);
+    this._isFilterType(copyFilm);
+    this._loadScroll(scrollY);
   }
 
   _handleAlreadyWatchedClick() {
+    const scrollY = this._saveScroll();
     const copyFilm = {...this._film};
     copyFilm.film.userDetails.alreadyWatched = !this._film.film.userDetails.alreadyWatched;
-    FilterType.ALL_MOVIES === this._filterType ? this._changeData(UserAction.UPDATE_FILM, UpdateType.PATCH, copyFilm) : this._changeData(UserAction.UPDATE_FILM, UpdateType.MINOR, copyFilm);
+    this._isFilterType(copyFilm);
+    this._loadScroll(scrollY);
   }
 
   _handleFavoriteClick() {
+    const scrollY = this._saveScroll();
     const copyFilm = {...this._film};
     copyFilm.film.userDetails.favorite = !this._film.film.userDetails.favorite;
-    FilterType.ALL_MOVIES === this._filterType ? this._changeData(UserAction.UPDATE_FILM, UpdateType.PATCH, copyFilm) : this._changeData(UserAction.UPDATE_FILM, UpdateType.MINOR, copyFilm);
+    this._isFilterType(copyFilm);
+    this._loadScroll(scrollY);
+  }
+
+  _saveScroll(){
+    if(document.querySelector('.film-details')){
+      return document.querySelector('.film-details').scrollTop;
+    }
+  }
+
+  _loadScroll(heigth){
+    if(document.querySelector('.film-details')){
+      return  document.querySelector('.film-details').scrollTo(0, heigth);
+    }
+  }
+
+  _isFilterType(film){
+    return  FilterType.ALL_MOVIES === this._filterType ? this._changeData(UserAction.UPDATE_FILM, UpdateType.PATCH, film) : this._changeData(UserAction.UPDATE_FILM, UpdateType.MINOR, film);
+
   }
 
   _handleDeleteCommentClick() {

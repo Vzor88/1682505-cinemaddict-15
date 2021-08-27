@@ -17,4 +17,4 @@ export const createNoFilmTemplate = (filterType) => {
       </h2>
     </section>
   </section>`;
-}
+};

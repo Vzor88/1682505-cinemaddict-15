@@ -28,22 +28,12 @@ const generateCommentsList = (commentary = {}) => {
 };
 const renderTemplateComment =(comments) => comments.map((comment) => generateCommentsList(comment)).join('');
 
-const isComment = (comments) => comments.length === 0 ? ' ' : `<h3 class="film-details__comments-title">
-        Comments
-        <span class="film-details__comments-count">${comments.length}</span>
-      </h3>
-
-      <ul class="film-details__comments-list">
-            ${renderTemplateComment(comments)}
-      </ul>`;
-
 export const createPopupTemplate = (card) => {
   const {film, comments} = card;
   const {filmInfo, userDetails} = film;
   const {title, totalRating, releaseFilm, genre, poster, description, ageRating, alternativeTitle, writers, director, actors, runtime} = filmInfo;
   const {date, releaseCountry} = releaseFilm;
   const {watchList, alreadyWatched, favorite} = userDetails;
-
 
   return `<section class="film-details">
     <form class="film-details__inner" action="" method="get">
@@ -116,9 +106,15 @@ export const createPopupTemplate = (card) => {
 
     <div class="film-details__bottom-container">
     <section class="film-details__comments-wrap">
+        <h3 class="film-details__comments-title">
+        Comments
+        <span class="film-details__comments-count">${comments.length}</span>
+      </h3>
+      <ul class="film-details__comments-list">
 
-        ${isComment(comments)}
+            ${renderTemplateComment(comments)}
 
+      </ul>
       <div class="film-details__new-comment">
         <div class="film-details__add-emoji-label"></div>
 
