@@ -1,6 +1,6 @@
 import {getRandomArray} from '../utils/card-film.js';
 import {getRandomInteger, getRandomIntegerFloat} from '../utils/common.js';
-import {DESCRIPTIONS, GENRES, POSTERS, SMILES, TITLES, ALTERNATIVE_TITLES, DIRECTORS, WRITERS, ACTORS, RATING, COUNTRIES, AUTHORS_COMMENT, DURATION, COUNT_RANDOM_DATE} from './data.js';
+import {DESCRIPTIONS, GENRES, POSTERS, SMILES, TITLES, ALTERNATIVE_TITLES, DIRECTORS, WRITERS, ACTORS, RATING, COUNTRIES, AUTHORS_COMMENT, DURATION, COUNT_RANDOM_DATE, COUNT_RANDOM_DATE_WATCHING} from './data.js';
 import {INDEX_COMMENT, COUNTS} from '../consts.js';
 import dayjs from 'dayjs';
 
@@ -29,6 +29,14 @@ const generateDate = () => {
   return `${randYear}-${randMonth}-${randDay}`;
 };
 
+const generateDateWatching = () => {
+  const randYear = getRandomInteger(COUNT_RANDOM_DATE_WATCHING.YEAR.MIN, COUNT_RANDOM_DATE_WATCHING.YEAR.MAX);
+  const randMonth = getRandomInteger(COUNT_RANDOM_DATE_WATCHING.MONTH.MIN, COUNT_RANDOM_DATE_WATCHING.MONTH.MAX);
+  const randDay = getRandomInteger(COUNT_RANDOM_DATE_WATCHING.DAY.MIN, COUNT_RANDOM_DATE_WATCHING.DAY.MAX);
+
+  return `${randYear}-${randMonth}-${randDay}`;
+};
+
 export const generateComment = () => {
   const maxGap = DURATION.GAP;
   const gap = getRandomInteger(0, maxGap);
@@ -49,7 +57,7 @@ export const generateComment = () => {
 const generateUserDetails = () => ({
   watchList: Boolean(getRandomInteger(0, 1)),
   alreadyWatched: Boolean(getRandomInteger(0, 1)),
-  watchingDate: generateDate(),
+  watchingDate: generateDateWatching(),
   favorite: Boolean(getRandomInteger(0, 1)),
 });
 

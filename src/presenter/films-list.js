@@ -4,7 +4,7 @@ import RankUserView from '../view/rank-user/rank-user.js';
 import SortView from '../view/sort/sort.js';
 import FilmsView from '../view/films/films.js';
 import ShowMoreButtonView from '../view/show-more-button/show-more-button.js';
-import StatisticView from '../view/statistic/statistic.js';
+import StatsFooterView from '../view/stats-footer/stats-footer.js';
 import NoFilmsView from '../view/no-films/no-films.js';
 import FilmPresenter from './film.js';
 import {sortFilmDate, sortFilmRating} from '../utils/card-film.js';
@@ -113,7 +113,7 @@ export default class FilmsList {
   }
 
   _renderStatistic() {
-    render(this._filmListFooterContainer, new StatisticView(this._getFilms().length));
+    render(this._filmListFooterContainer, new StatsFooterView(this._getFilms().length));
   }
 
   _handleSortTypeChange(sortType) {

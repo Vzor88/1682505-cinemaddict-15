@@ -28,6 +28,7 @@ export default class Film {
 
   init (film, container, filterType) {
     this._film = film;
+    console.log(this._film);
     this._container = container;
     this._filterType = filterType;
 

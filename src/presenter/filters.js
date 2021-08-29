@@ -1,14 +1,15 @@
-import MenuView from '../view/filters.js/filters.js';
+import FilterView from '../view/filters.js/filters.js';
 import {render, replace, remove} from '../utils/render.js';
 import {filter} from '../utils/filters.js';
 import {FilterType, UpdateType} from '../consts.js';
+import StatisticView from '../view/statistic/statistic.js';
 
 export default class Filter {
   constructor(filterContainer, filterModel, filmsModel) {
     this._filterContainer = filterContainer;
     this._filterModel = filterModel;
     this._filmsModel = filmsModel;
-
+    this._statisticComponent = new StatisticView();
     this._filterComponent = null;
 
     this._handleModelEvent = this._handleModelEvent.bind(this);
@@ -22,16 +23,23 @@ export default class Filter {
     const filters = this._getFilters();
     const prevFilterComponent = this._filterComponent;
 
-    this._filterComponent = new MenuView(filters, this._filterModel.getFilter());
+    this._filterComponent = new FilterView(filters, this._filterModel.getFilter());
     this._filterComponent.setFilterTypeChangeHandler(this._handleFilterTypeChange);
 
     if (prevFilterComponent === null) {
       render(this._filterContainer, this._filterComponent);
+      this._navContainer = document.querySelector('.main-navigation');
+      render(this._navContainer, this._statisticComponent);
       return;
     }
 
     replace(this._filterComponent, prevFilterComponent);
+    this._navContainer = document.querySelector('.main-navigation');
+
+    render(this._navContainer, this._statisticComponent);
+
     remove(prevFilterComponent);
+
   }
 
   _handleModelEvent() {

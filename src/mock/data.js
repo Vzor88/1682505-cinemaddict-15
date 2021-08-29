@@ -13,6 +13,21 @@ export const COUNT_RANDOM_DATE = {
   },
 };
 
+export const COUNT_RANDOM_DATE_WATCHING = {
+  YEAR: {
+    MIN: 2019,
+    MAX: 2020,
+  },
+  MONTH: {
+    MIN: 1,
+    MAX: 12,
+  },
+  DAY: {
+    MIN: 1,
+    MAX: 30,
+  },
+};
+
 export const DURATION = {
   FILM: {
     MIN: 1,
