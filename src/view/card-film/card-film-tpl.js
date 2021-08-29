@@ -3,8 +3,8 @@ import {LENGTH_STRING_DESCRIPTION} from '../../consts.js';
 import {isClassName} from '../../utils/card-film.js';
 
 export const createCardFilmTemplate = (card) => {
-  const {film} = card;
-  const {filmInfo, comments, userDetails} = film;
+  const {film, comments} = card;
+  const {filmInfo, userDetails} = film;
   const {title, totalRating, releaseFilm, runtime, genre, poster, description} = filmInfo;
   const {date} = releaseFilm;
   const {watchList, alreadyWatched, favorite} = userDetails;

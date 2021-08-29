@@ -9,6 +9,29 @@ export const SortType = {
   RATING: 'rating',
 };
 
+export const UserAction = {
+  UPDATE_FILM: 'UPDATE_FILM',
+};
+
+export const EventType = {
+  FAVORITE: 'Favorite',
+  HISTORY: 'History',
+  WATCHLIST: 'WatchList',
+};
+
+export const UpdateType = {
+  PATCH: 'PATCH',
+  MINOR: 'MINOR',
+  MAJOR: 'MAJOR',
+};
+
+export const FilterType = {
+  ALL_MOVIES: 'All movies',
+  WATCHLIST: 'Watchlist',
+  HISTORY: 'History',
+  FAVORITES: 'Favorites',
+};
+
 export const INDEX_COMMENT = {
   MIN: 0,
   MAX: 10000,

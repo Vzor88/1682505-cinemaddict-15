@@ -2,6 +2,7 @@ import SmartView from '../smart.js';
 import {createPopupTemplate} from './popup-tpl.js';
 import {isCtrlEnterEvent} from '../../utils/render.js';
 import dayjs from 'dayjs';
+import he from 'he';
 import relativeTime from 'dayjs/plugin/relativeTime.js';
 import {AUTHORS_COMMENT} from '../../mock/data.js';
 import {getRandomInteger} from '../../utils/common.js';
@@ -95,7 +96,7 @@ export default class Popup extends SmartView {
 
   _textCommentInputHandler(evt){
     evt.preventDefault();
-    this._textComment = evt.target.value;
+    this._textComment = he.encode(evt.target.value);
   }
 
   _emojiListHandler(evt) {
@@ -115,13 +116,17 @@ export default class Popup extends SmartView {
   }
 
   _createCommentHandler(evt) {
+    const scrollY = document.querySelector('.film-details').scrollTop;
     this._containerEmodji = this.getElement().querySelector('.film-details__add-emoji-label');
     if(isCtrlEnterEvent(evt) && this._containerEmodji.firstChild && this._textComment){
       evt.preventDefault();
-      this._film.comments.push(this._createComment());
-
+      const newComment = this._createComment();
+      this._film.comments.push(newComment);
+      this._film.film.comments.push(newComment.id);
       this.reset();
+      this._callback.createCommentClick();
     }
+    document.querySelector('.film-details').scrollTo(0, scrollY);
   }
 
   _createComment() {
@@ -134,15 +139,27 @@ export default class Popup extends SmartView {
     };
   }
 
+  setDeleteCommentClickHandler(callback) {
+    this._callback.deleteCommentClick = callback;
+  }
+
+  setCreateCommentClickHandler(callback) {
+    this._callback.createCommentClick = callback;
+  }
+
   _deleteCommentClickHandler(evt){
     evt.preventDefault();
+    const scrollY = document.querySelector('.film-details').scrollTop;
     const parentElement = evt.target.parentElement.parentElement;
     this._film.comments.forEach((item, index) => {
       if(parentElement.textContent.includes(item.comment) && parentElement.textContent.includes(item.author)){
         this._film.comments.splice(index, 1);
+        this._film.film.comments.splice(index, 1);
       }
     });
 
     this.reset();
+    this._callback.deleteCommentClick();
+    document.querySelector('.film-details').scrollTo(0, scrollY);
   }
 }
