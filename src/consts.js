@@ -14,15 +14,16 @@ export const UserAction = {
 };
 
 export const EventType = {
-  FAVORITE: 'Favorite',
+  FAVORITE: 'Favorites',
   HISTORY: 'History',
-  WATCHLIST: 'WatchList',
+  WATCHLIST: 'Watchlist',
 };
 
 export const UpdateType = {
   PATCH: 'PATCH',
   MINOR: 'MINOR',
   MAJOR: 'MAJOR',
+  STATS: 'STATS',
 };
 
 export const FilterType = {
@@ -52,7 +53,7 @@ export const COUNTS = {
   },
   FILMS: 5,
   MAX_COMMENTS_FILMS: 5,
-  GENERATE_FILMS: 10,
+  GENERATE_FILMS: 100,
   FILMS_PER_STEP: 5,
 };
 

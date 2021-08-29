@@ -17,6 +17,8 @@ export default class Popup extends SmartView {
     super();
     this._film = film;
 
+    this._containerEmodji = this.getElement().querySelector('.film-details__add-emoji-label');
+
     this._editClickPopupHandler = this._editClickPopupHandler.bind(this);
 
     this._favoriteClickPopupHandler = this._favoriteClickPopupHandler.bind(this);
@@ -25,7 +27,7 @@ export default class Popup extends SmartView {
 
     this._emojiListHandler = this._emojiListHandler.bind(this);
     this._textCommentInputHandler = this._textCommentInputHandler.bind(this);
-    this._createCommentHandler = this._createCommentHandler.bind(this);
+    // this._createCommentHandler = this._createCommentHandler.bind(this);
     this._deleteCommentClickHandler = this._deleteCommentClickHandler.bind(this);
 
     this.restoreHandlers();
@@ -38,7 +40,6 @@ export default class Popup extends SmartView {
   restoreHandlers(){
     this.getElement().querySelector('.film-details__comment-input').addEventListener('input', this._textCommentInputHandler);
     this.getElement().querySelector('.film-details__emoji-list').addEventListener('click', this._emojiListHandler);
-    this.getElement().addEventListener('keydown', this._createCommentHandler);
 
     this._buttonsDeleteComment = this.getElement().querySelectorAll('.film-details__comment-delete');
     this._buttonsDeleteComment.forEach((item) => item.addEventListener('click', this._deleteCommentClickHandler));
@@ -115,9 +116,9 @@ export default class Popup extends SmartView {
     return emodjiElement.id;
   }
 
-  _createCommentHandler(evt) {
+  createCommentHandler(evt) {
+    this._containerEmodji = document.querySelector('.film-details__add-emoji-label');
     const scrollY = document.querySelector('.film-details').scrollTop;
-    this._containerEmodji = this.getElement().querySelector('.film-details__add-emoji-label');
     if(isCtrlEnterEvent(evt) && this._containerEmodji.firstChild && this._textComment){
       evt.preventDefault();
       const newComment = this._createComment();
@@ -127,6 +128,7 @@ export default class Popup extends SmartView {
       this._callback.createCommentClick();
     }
     document.querySelector('.film-details').scrollTo(0, scrollY);
+    document.removeEventListener('keydown', this.createCommentHandler);
   }
 
   _createComment() {
@@ -152,7 +154,7 @@ export default class Popup extends SmartView {
     const scrollY = document.querySelector('.film-details').scrollTop;
     const parentElement = evt.target.parentElement.parentElement;
     this._film.comments.forEach((item, index) => {
-      if(parentElement.textContent.includes(item.comment) && parentElement.textContent.includes(item.author)){
+      if(parentElement.textContent.includes(he.decode(item.comment)) && parentElement.textContent.includes(item.author)){
         this._film.comments.splice(index, 1);
         this._film.film.comments.splice(index, 1);
       }

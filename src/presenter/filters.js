@@ -9,11 +9,14 @@ export default class Filter {
     this._filterContainer = filterContainer;
     this._filterModel = filterModel;
     this._filmsModel = filmsModel;
+
     this._statisticComponent = new StatisticView();
+
     this._filterComponent = null;
 
     this._handleModelEvent = this._handleModelEvent.bind(this);
     this._handleFilterTypeChange = this._handleFilterTypeChange.bind(this);
+    this._handleStatistic = this._handleStatistic.bind(this);
 
     this._filmsModel.addObserver(this._handleModelEvent);
     this._filterModel.addObserver(this._handleModelEvent);
@@ -24,7 +27,9 @@ export default class Filter {
     const prevFilterComponent = this._filterComponent;
 
     this._filterComponent = new FilterView(filters, this._filterModel.getFilter());
+
     this._filterComponent.setFilterTypeChangeHandler(this._handleFilterTypeChange);
+    this._statisticComponent.setStatisticHandler(this._handleStatistic);
 
     if (prevFilterComponent === null) {
       render(this._filterContainer, this._filterComponent);
@@ -35,11 +40,9 @@ export default class Filter {
 
     replace(this._filterComponent, prevFilterComponent);
     this._navContainer = document.querySelector('.main-navigation');
-
     render(this._navContainer, this._statisticComponent);
 
     remove(prevFilterComponent);
-
   }
 
   _handleModelEvent() {
@@ -47,11 +50,22 @@ export default class Filter {
   }
 
   _handleFilterTypeChange(filterType) {
-    if (this._filterModel.getFilter() === filterType) {
-      return;
+    const statsMenuItem = document.querySelector('.main-navigation__additional--active');
+
+    if(statsMenuItem) {
+      statsMenuItem.classList.remove('main-navigation__additional--active');
     }
 
+    if (this._filterModel.getFilter() === filterType || 'Stats' === filterType) {
+      return;
+    }
     this._filterModel.setFilter(UpdateType.MAJOR, filterType);
+  }
+
+  _handleStatistic() {
+    const filterMenuItems = document.querySelectorAll('.main-navigation__item');
+    filterMenuItems.forEach((item)=> item.classList.remove('main-navigation__item--active'));
+    this._filterModel.setFilter(UpdateType.STATS);
   }
 
   _getFilters() {

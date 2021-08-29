@@ -28,7 +28,7 @@ export default class Film {
 
   init (film, container, filterType) {
     this._film = film;
-    console.log(this._film);
+
     this._container = container;
     this._filterType = filterType;
 
@@ -52,6 +52,7 @@ export default class Film {
     }
 
     replace(this._filmComponent, prevFilmComponent);
+
     replace(this._popupComponent, prevPopupComponent);
 
     remove(prevFilmComponent);
@@ -92,6 +93,7 @@ export default class Film {
   _openedPopup(){
     render(siteBodyElement, this._popupComponent);
     siteBodyElement.classList.add('hide-overflow');
+    document.addEventListener('keydown', this._popupComponent.createCommentHandler);
     document.addEventListener('keydown', this._onEscKeyDown);
   }
 
@@ -116,10 +118,10 @@ export default class Film {
     const scrollY = this._saveScroll();
     const copyFilm = {...this._film};
     switch (eventType) {
-      case 'Favorite':
+      case 'Favorites':
         copyFilm.film.userDetails.favorite = !this._film.film.userDetails.favorite;
         break;
-      case 'WatchList':
+      case 'Watchlist':
         copyFilm.film.userDetails.watchList = !this._film.film.userDetails.watchList;
         break;
       case 'History':
@@ -128,7 +130,12 @@ export default class Film {
       default:
         return;
     }
+
     this._isFilterType(copyFilm);
+    if(this._filterType === eventType){
+
+      this._changeData(UserAction.UPDATE_FILM, UpdateType.MINOR, copyFilm);
+    }
     this._loadScroll(scrollY);
   }
 
@@ -145,7 +152,7 @@ export default class Film {
   }
 
   _isFilterType(film){
-    return  FilterType.ALL_MOVIES === this._filterType ? this._changeData(UserAction.UPDATE_FILM, UpdateType.PATCH, film) : this._changeData(UserAction.UPDATE_FILM, UpdateType.MINOR, film);
+    return  FilterType.ALL_MOVIES === this._filterType ? this._changeData(UserAction.UPDATE_FILM, UpdateType.PATCH, film) : this._changeData(UserAction.UPDATE_FILM, UpdateType.PATCH, film);
 
   }
 
