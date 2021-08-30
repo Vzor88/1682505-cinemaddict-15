@@ -12,14 +12,14 @@ export const generateData = (array) => {
   return array[randomIndex];
 };
 
-const generateDuration = (minutes) => {
-  let hour = 0;
-  while (minutes > 60) {
-    hour += 1;
-    minutes -= 60;
-  }
-  return hour === 0 ? `${minutes}m` : `${hour}h ${minutes}m`;
-};
+// const generateDuration = (minutes) => {
+//   let hour = 0;
+//   while (minutes > 60) {
+//     hour += 1;
+//     minutes -= 60;
+//   }
+//   return hour === 0 ? `${minutes}m` : `${hour}h ${minutes}m`;
+// };
 
 const generateDate = () => {
   const randYear = getRandomInteger(COUNT_RANDOM_DATE.YEAR.MIN, COUNT_RANDOM_DATE.YEAR.MAX);
@@ -83,7 +83,7 @@ const generateFIlmInfo = () => {
     writers: getRandomArray(1, 3, WRITERS),
     actors: getRandomArray(1, 3, ACTORS),
     releaseFilm,
-    runtime: generateDuration(getRandomInteger(DURATION.FILM.MIN,DURATION.FILM.MAX)),
+    runtime: getRandomInteger(DURATION.FILM.MIN,DURATION.FILM.MAX),
     genre: getRandomArray(1, 2, GENRES),
     description: String(getRandomArray(1, 5, DESCRIPTIONS)),
   };

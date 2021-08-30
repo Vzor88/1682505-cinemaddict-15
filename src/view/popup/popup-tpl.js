@@ -1,4 +1,4 @@
-import {isClassNamePopup} from '../../utils/card-film.js';
+import {isClassNamePopup, generateDuration} from '../../utils/card-film.js';
 import dayjs from 'dayjs';
 import relativeTime from 'dayjs/plugin/relativeTime.js';
 
@@ -79,7 +79,7 @@ export const createPopupTemplate = (card) => {
             </tr>
             <tr class="film-details__row">
               <td class="film-details__term">Runtime</td>
-              <td class="film-details__cell">${runtime}</td>
+              <td class="film-details__cell">${generateDuration(runtime)}</td>
             </tr>
             <tr class="film-details__row">
               <td class="film-details__term">Country</td>

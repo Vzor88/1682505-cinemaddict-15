@@ -2,7 +2,7 @@ import FilterView from '../view/filters.js/filters.js';
 import {render, replace, remove} from '../utils/render.js';
 import {filter} from '../utils/filters.js';
 import {FilterType, UpdateType} from '../consts.js';
-import StatisticView from '../view/statistic/statistic.js';
+import StatisticView from '../view/statistic/stats-item-menu.js';
 
 export default class Filter {
   constructor(filterContainer, filterModel, filmsModel) {
@@ -29,7 +29,7 @@ export default class Filter {
     this._filterComponent = new FilterView(filters, this._filterModel.getFilter());
 
     this._filterComponent.setFilterTypeChangeHandler(this._handleFilterTypeChange);
-    this._statisticComponent.setStatisticHandler(this._handleStatistic);
+    this._statisticComponent.setStatsItemMenuHandler(this._handleStatistic);
 
     if (prevFilterComponent === null) {
       render(this._filterContainer, this._filterComponent);
@@ -52,7 +52,7 @@ export default class Filter {
   _handleFilterTypeChange(filterType) {
     const statsMenuItem = document.querySelector('.main-navigation__additional--active');
 
-    if(statsMenuItem) {
+    if (statsMenuItem) {
       statsMenuItem.classList.remove('main-navigation__additional--active');
     }
 

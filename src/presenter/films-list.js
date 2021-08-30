@@ -7,6 +7,7 @@ import ShowMoreButtonView from '../view/show-more-button/show-more-button.js';
 import StatsFooterView from '../view/stats-footer/stats-footer.js';
 import NoFilmsView from '../view/no-films/no-films.js';
 import FilmPresenter from './film.js';
+import Stats from '../view/statistic/stats.js';
 import {sortFilmDate, sortFilmRating} from '../utils/card-film.js';
 import {filter} from '../utils/filters.js';
 import {siteBodyElement} from '../main.js';
@@ -23,6 +24,7 @@ export default class FilmsList {
     this._showMoreButtonComponent = null;
     this._sortComponent = null;
     this._noFilmsComponent = null;
+    this._statsComponent = null;
 
     this._filmPresenter = new Map();
     this._filmPresenterTop = new Map();
@@ -44,7 +46,7 @@ export default class FilmsList {
   }
 
   init () {
-    this._renderStatistic(this._getFilms().length);
+    this._renderStatisticFooter(this._getFilms().length);
     this._renderedFilmCount = COUNTS.FILMS_PER_STEP;
     this._renderPage();
   }
@@ -92,10 +94,13 @@ export default class FilmsList {
       case UpdateType.MAJOR:
         this._clearPage({resetRenderedFilmCount: true, resetSortType: true});
         this._renderPage();
+        this._filmsModel.addObserver(this._handleModelEvent);
         break;
       case UpdateType.STATS:
         this._clearPage({resetRenderedFilmCount: true, resetSortType: true});
         this._renderRank();
+        this._renderStats();
+        this._filmsModel.removeObserver(this._handleModelEvent);
         break;
     }
   }
@@ -107,7 +112,12 @@ export default class FilmsList {
     render(this._filmListHeaderContainer, this._rankComponent);
   }
 
-  _renderStatistic() {
+  _renderStats(){
+    this._statsComponent = new Stats(filter[FilterType.HISTORY](this._filmsModel.getFilms()));////
+    render(this._filmListMainContainer, this._statsComponent);
+  }
+
+  _renderStatisticFooter() {
     render(this._filmListFooterContainer, new StatsFooterView(this._getFilms().length));
   }
 
@@ -175,8 +185,11 @@ export default class FilmsList {
 
     remove(this._showMoreButtonComponent);
     remove(this._sortComponent);
-    remove(this._rankComponent);
+    if(this._rankComponent){
+      remove(this._rankComponent);
+    }
     remove(this._filmsComponent);
+    remove(this._statsComponent);
 
 
     resetRenderedFilmCount ? this._renderedFilmCount = COUNTS.FILMS_PER_STEP : this._renderedFilmCount = Math.min(this._getFilms().length, this._renderedFilmCount);

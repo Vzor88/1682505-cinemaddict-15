@@ -2,7 +2,7 @@ import CardFilmView from '../view/card-film/card-film.js';
 import PopupView from '../view/popup/popup.js';
 import {siteBodyElement} from '../main.js';
 import {remove, replace, isEscEvent, render} from '../utils/render.js';
-import {UserAction, UpdateType, FilterType, EventType} from '../consts.js';
+import {UserAction, UpdateType, EventType} from '../consts.js';
 
 export default class Film {
   constructor(changeData) {
@@ -131,11 +131,8 @@ export default class Film {
         return;
     }
 
-    this._isFilterType(copyFilm);
-    if(this._filterType === eventType){
+    this._filterType === eventType ? this._changeData(UserAction.UPDATE_FILM, UpdateType.MINOR, copyFilm) : this._changeData(UserAction.UPDATE_FILM, UpdateType.PATCH,  copyFilm);
 
-      this._changeData(UserAction.UPDATE_FILM, UpdateType.MINOR, copyFilm);
-    }
     this._loadScroll(scrollY);
   }
 
@@ -151,11 +148,6 @@ export default class Film {
     }
   }
 
-  _isFilterType(film){
-    return  FilterType.ALL_MOVIES === this._filterType ? this._changeData(UserAction.UPDATE_FILM, UpdateType.PATCH, film) : this._changeData(UserAction.UPDATE_FILM, UpdateType.PATCH, film);
-
-  }
-
   _handleDeleteCommentClick() {
     return this._changeData(UserAction.UPDATE_FILM, UpdateType.PATCH, this._film);
   }
@@ -167,7 +159,7 @@ export default class Film {
   _onEscKeyDown(evt) {
     if (isEscEvent(evt)) {
       evt.preventDefault();
-      this._popupComponent.reset();
+      this._popupComponent._reset();
       remove(this._popupComponent);
       siteBodyElement.classList.remove('hide-overflow');
       document.removeEventListener('keydown', this._onEscKeyDown);

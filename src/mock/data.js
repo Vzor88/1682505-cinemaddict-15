@@ -55,12 +55,12 @@ export const SMILES = [
 ];
 
 export const GENRES = [
-  ' Musical',
-  ' Western',
-  ' Drama',
-  ' Comedy',
-  ' Cartoon',
-  ' Mystery',
+  'Musical',
+  'Western',
+  'Drama',
+  'Comedy',
+  'Cartoon',
+  'Mystery',
 ];
 
 export const DESCRIPTIONS = [

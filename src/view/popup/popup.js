@@ -38,7 +38,6 @@ export default class Popup extends SmartView {
 
   restoreHandlers(){
     this.getElement().querySelector('.film-details__emoji-list').addEventListener('click', this._emojiListHandler);
-    // window.addEventListener('keydown', this._createCommentHandler);
 
     this._buttonsDeleteComment = this.getElement().querySelectorAll('.film-details__comment-delete');
     this._buttonsDeleteComment.forEach((item) => item.addEventListener('click', this._deleteCommentClickHandler));
@@ -49,7 +48,7 @@ export default class Popup extends SmartView {
     this.getElement().querySelector('.film-details__control-button--watched').addEventListener('click', this._alreadyWatchedClickPopupHandler);
   }
 
-  reset() {
+  _reset() {
     this.updateElement(true);
     if(this._containerEmodji){
       this._containerEmodji.innerHTML = ' ';
@@ -115,17 +114,17 @@ export default class Popup extends SmartView {
   }
 
   _createCommentHandler(evt) {
-    this._containerEmodji = document.querySelector('.film-details__add-emoji-label');
-    const scrollY = document.querySelector('.film-details').scrollTop;
     if(isCtrlEnterEvent(evt) && this._containerEmodji.firstChild && this._textCommentInput()){
+      this._containerEmodji = document.querySelector('.film-details__add-emoji-label');
+      const scrollY = document.querySelector('.film-details').scrollTop;
       evt.preventDefault();
       const newComment = this._createComment();
       this._film.comments.push(newComment);
       this._film.film.comments.push(newComment.id);
-      this.reset();
+      this._reset();
       this._callback.createCommentClick();
+      document.querySelector('.film-details').scrollTo(0, scrollY);
     }
-    document.querySelector('.film-details').scrollTo(0, scrollY);
   }
 
   onCtrlEnterKeyDown(){
@@ -162,7 +161,7 @@ export default class Popup extends SmartView {
       }
     });
 
-    this.reset();
+    this._reset();
     this._callback.deleteCommentClick();
     document.querySelector('.film-details').scrollTo(0, scrollY);
   }
