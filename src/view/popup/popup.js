@@ -26,8 +26,7 @@ export default class Popup extends SmartView {
     this._alreadyWatchedClickPopupHandler = this._alreadyWatchedClickPopupHandler.bind(this);
 
     this._emojiListHandler = this._emojiListHandler.bind(this);
-    this._textCommentInputHandler = this._textCommentInputHandler.bind(this);
-    // this._createCommentHandler = this._createCommentHandler.bind(this);
+    this._createCommentHandler = this._createCommentHandler.bind(this);
     this._deleteCommentClickHandler = this._deleteCommentClickHandler.bind(this);
 
     this.restoreHandlers();
@@ -38,8 +37,8 @@ export default class Popup extends SmartView {
   }
 
   restoreHandlers(){
-    this.getElement().querySelector('.film-details__comment-input').addEventListener('input', this._textCommentInputHandler);
     this.getElement().querySelector('.film-details__emoji-list').addEventListener('click', this._emojiListHandler);
+    // window.addEventListener('keydown', this._createCommentHandler);
 
     this._buttonsDeleteComment = this.getElement().querySelectorAll('.film-details__comment-delete');
     this._buttonsDeleteComment.forEach((item) => item.addEventListener('click', this._deleteCommentClickHandler));
@@ -95,9 +94,8 @@ export default class Popup extends SmartView {
     this._callback.alreadyWatchedClickPopup = callback;
   }
 
-  _textCommentInputHandler(evt){
-    evt.preventDefault();
-    this._textComment = he.encode(evt.target.value);
+  _textCommentInput(){
+    return he.encode(document.querySelector('.film-details__comment-input').value);
   }
 
   _emojiListHandler(evt) {
@@ -116,10 +114,10 @@ export default class Popup extends SmartView {
     return emodjiElement.id;
   }
 
-  createCommentHandler(evt) {
+  _createCommentHandler(evt) {
     this._containerEmodji = document.querySelector('.film-details__add-emoji-label');
     const scrollY = document.querySelector('.film-details').scrollTop;
-    if(isCtrlEnterEvent(evt) && this._containerEmodji.firstChild && this._textComment){
+    if(isCtrlEnterEvent(evt) && this._containerEmodji.firstChild && this._textCommentInput()){
       evt.preventDefault();
       const newComment = this._createComment();
       this._film.comments.push(newComment);
@@ -128,14 +126,18 @@ export default class Popup extends SmartView {
       this._callback.createCommentClick();
     }
     document.querySelector('.film-details').scrollTo(0, scrollY);
-    document.removeEventListener('keydown', this.createCommentHandler);
+  }
+
+  onCtrlEnterKeyDown(){
+    window.addEventListener('keydown', this._createCommentHandler);
   }
 
   _createComment() {
+    this._textCommentInput();
     return {
       id: getRandomInteger(INDEX_COMMENT.MIN, INDEX_COMMENT.MAX),
       author: generateData(AUTHORS_COMMENT),
-      comment: this._textComment,
+      comment: this._textCommentInput(),
       date: dayjs(),
       emotion: this._containerEmodji.firstElementChild.id,
     };

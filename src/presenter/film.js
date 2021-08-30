@@ -93,8 +93,8 @@ export default class Film {
   _openedPopup(){
     render(siteBodyElement, this._popupComponent);
     siteBodyElement.classList.add('hide-overflow');
-    document.addEventListener('keydown', this._popupComponent.createCommentHandler);
     document.addEventListener('keydown', this._onEscKeyDown);
+    this._popupComponent.onCtrlEnterKeyDown();
   }
 
   _handleClosedPopupButtonClick(){
