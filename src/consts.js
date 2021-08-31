@@ -19,6 +19,14 @@ export const EventType = {
   WATCHLIST: 'Watchlist',
 };
 
+export const RadioButtonType = {
+  ALL_TIME: 'all-time',
+  TODAY: 'today',
+  WEEK: 'week',
+  MOUNT: 'month',
+  YEAR: 'year',
+};
+
 export const UpdateType = {
   PATCH: 'PATCH',
   MINOR: 'MINOR',
@@ -55,6 +63,7 @@ export const COUNTS = {
   MAX_COMMENTS_FILMS: 5,
   GENERATE_FILMS: 100,
   FILMS_PER_STEP: 5,
+  BAR_HEIGHT: 50,
 };
 
 export const SIZES = {

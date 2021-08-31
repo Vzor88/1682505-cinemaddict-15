@@ -1,32 +1,78 @@
 import {isNameRank} from '../../utils/statistic.js';
 import {generateDuration} from '../../utils/card-film.js';
+import {COUNTS} from '../../consts.js';
+import Chart from 'chart.js';
+import ChartDataLabels from 'chartjs-plugin-datalabels';
+import {getWatchedFilmList} from '../../utils/statistic.js';
+import dayjs from "dayjs";
 
-const isTopGenreFilm = (films) => {
-  if(films.length === 0) {
-    return ' ';
-  } else {
-    let topGenre = ' ';
-    const watchedFilmGenres = {};
-    films.forEach((film) => {
-      for (const item of film.film.filmInfo.genre){
-        item in watchedFilmGenres ? watchedFilmGenres[item]++ :  watchedFilmGenres[item] = 1;
-      }
-    });
+export const createChartTemplate = (films, dayTo = dayjs(), dayFrom = dayjs().subtract(200, 'year')) => {
+  const statsCtx = document.querySelector('.statistic__chart');
 
-    const topCountFilm = Object.values(watchedFilmGenres).sort((a, b) =>  b - a);
-    Object.entries(watchedFilmGenres).forEach((item) => {
-      if(item[1] === topCountFilm[0]){
-        topGenre = item[0];
-      }
-    });
-    return topGenre;
-  }
+  return new Chart(statsCtx,  {
+    plugins: [ChartDataLabels],
+    type: 'horizontalBar',
+    data: {
+      labels: getWatchedFilmList(films).genreList,
+      datasets: [{
+        data: getWatchedFilmList(films).countList,
+        backgroundColor: '#ffe800',
+        hoverBackgroundColor: '#ffe800',
+        anchor: 'start',
+      }],
+    },
+    options: {
+      plugins: {
+        datalabels: {
+          font: {
+            size: 20,
+          },
+          color: '#ffffff',
+          anchor: 'start',
+          align: 'start',
+          offset: 40,
+        },
+      },
+      scales: {
+        yAxes: [{
+          ticks: {
+            fontColor: '#ffffff',
+            padding: 100,
+            fontSize: 20,
+          },
+          gridLines: {
+            display: false,
+            drawBorder: false,
+          },
+          barThickness: 24,
+        }],
+        xAxes: [{
+          ticks: {
+            display: false,
+            beginAtZero: true,
+          },
+          gridLines: {
+            display: false,
+            drawBorder: false,
+          },
+        }],
+      },
+      legend: {
+        display: false,
+      },
+      tooltips: {
+        enabled: false,
+      },
+    },
+  });
 };
+
 
 export const createStatsTemplate = (films) => {
   const initialValue = 0;
   let totalDuration = films.reduce( (accumulator, currentValue) => accumulator + currentValue.film.filmInfo.runtime, initialValue);
   totalDuration = generateDuration(totalDuration, true);
+  const statsCtxHeight = COUNTS.BAR_HEIGHT * getWatchedFilmList(films).genreList.length;
 
   const watchedFilmCount = films.length;
 
@@ -40,7 +86,7 @@ export const createStatsTemplate = (films) => {
      <form action="https://echo.htmlacademy.ru/" method="get" class="statistic__filters">
        <p class="statistic__filters-description">Show stats:</p>
 
-       <input type="radio" class="statistic__filters-input visually-hidden" name="statistic-filter" id="statistic-all-time" value="all-time" checked>
+       <input type="radio" class="statistic__filters-input visually-hidden" name="statistic-filter" id="statistic-all-time" value="all-time" checked="true">
        <label for="statistic-all-time" class="statistic__filters-label">All time</label>
 
        <input type="radio" class="statistic__filters-input visually-hidden" name="statistic-filter" id="statistic-today" value="today">
@@ -67,12 +113,14 @@ export const createStatsTemplate = (films) => {
        </li>
        <li class="statistic__text-item">
          <h4 class="statistic__item-title">Top genre</h4>
-         <p class="statistic__item-text">${isTopGenreFilm(films)}</p>
+         <p class="statistic__item-text">${getWatchedFilmList(films).genreList[0]}</p>
        </li>
      </ul>
 
      <div class="statistic__chart-wrap">
-  <canvas class="statistic__chart" width="1000"></canvas>
+  <canvas class="statistic__chart" width="1000" height="${statsCtxHeight}">
+
+  </canvas>
   </div>
 
   </section>`;

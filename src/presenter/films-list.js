@@ -7,7 +7,7 @@ import ShowMoreButtonView from '../view/show-more-button/show-more-button.js';
 import StatsFooterView from '../view/stats-footer/stats-footer.js';
 import NoFilmsView from '../view/no-films/no-films.js';
 import FilmPresenter from './film.js';
-import Stats from '../view/statistic/stats.js';
+import StatsView from '../view/statistic/stats.js';
 import {sortFilmDate, sortFilmRating} from '../utils/card-film.js';
 import {filter} from '../utils/filters.js';
 import {siteBodyElement} from '../main.js';
@@ -34,7 +34,7 @@ export default class FilmsList {
     this._currentSortType = SortType.DEFAULT;
     this._renderedFilmCount = 0;
 
-
+    this._handleRadioButtonClick = this._handleRadioButtonClick.bind(this);
     this._handleShowMoreButtonClick = this._handleShowMoreButtonClick.bind(this);
     this._handleSortTypeChange = this._handleSortTypeChange.bind(this);
 
@@ -113,8 +113,10 @@ export default class FilmsList {
   }
 
   _renderStats(){
-    this._statsComponent = new Stats(filter[FilterType.HISTORY](this._filmsModel.getFilms()));////
+    this._statsComponent = new StatsView(filter[FilterType.HISTORY](this._filmsModel.getFilms()));
     render(this._filmListMainContainer, this._statsComponent);
+    this._statsComponent.getTemplateChart(this._filmsModel.getFilms());
+    this._statsComponent.setStatsClickRadioButtonHandler(this._handleRadioButtonClick);
   }
 
   _renderStatisticFooter() {
@@ -250,6 +252,10 @@ export default class FilmsList {
     if (this._renderedFilmCount >= filmCount) {
       remove(this._showMoreButtonComponent);
     }
+  }
+
+  _handleRadioButtonClick(valueRadioButton) {
+    console.log(valueRadioButton);
   }
 
   _renderShowMoreButton () {
