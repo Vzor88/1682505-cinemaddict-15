@@ -1,5 +1,5 @@
 import {render, remove} from '../utils/render.js';
-import {COUNTS,  SortType, UpdateType, FilterType, UserAction} from '../consts.js';
+import {COUNTS,  SortType, UpdateType, FilterType, UserAction, RadioButtonType} from '../consts.js';
 import RankUserView from '../view/rank-user/rank-user.js';
 import SortView from '../view/sort/sort.js';
 import FilmsView from '../view/films/films.js';
@@ -11,6 +11,7 @@ import StatsView from '../view/statistic/stats.js';
 import {sortFilmDate, sortFilmRating} from '../utils/card-film.js';
 import {filter} from '../utils/filters.js';
 import {siteBodyElement} from '../main.js';
+import dayjs from 'dayjs';
 
 export default class FilmsList {
   constructor(filmListHeaderContainer, filmListMainContainer, filmListFooterContainer, filmsModel, filtersModel) {
@@ -33,6 +34,7 @@ export default class FilmsList {
     this._filterType = FilterType.ALL_MOVIES;
     this._currentSortType = SortType.DEFAULT;
     this._renderedFilmCount = 0;
+    this._filterHistoryFilms = filter[FilterType.HISTORY](this._filmsModel.getFilms());
 
     this._handleRadioButtonClick = this._handleRadioButtonClick.bind(this);
     this._handleShowMoreButtonClick = this._handleShowMoreButtonClick.bind(this);
@@ -99,7 +101,7 @@ export default class FilmsList {
       case UpdateType.STATS:
         this._clearPage({resetRenderedFilmCount: true, resetSortType: true});
         this._renderRank();
-        this._renderStats();
+        this._renderStats(this._filterHistoryFilms);
         this._filmsModel.removeObserver(this._handleModelEvent);
         break;
     }
@@ -112,10 +114,10 @@ export default class FilmsList {
     render(this._filmListHeaderContainer, this._rankComponent);
   }
 
-  _renderStats(){
-    this._statsComponent = new StatsView(filter[FilterType.HISTORY](this._filmsModel.getFilms()));
+  _renderStats(films, dateFrom, dateTo, radioButton = 'all time'){
+    this._statsComponent = new StatsView(films, dateFrom, dateTo, radioButton);
     render(this._filmListMainContainer, this._statsComponent);
-    this._statsComponent.getTemplateChart(this._filmsModel.getFilms());
+    this._statsComponent.getTemplateChart(films, dateFrom, dateTo);
     this._statsComponent.setStatsClickRadioButtonHandler(this._handleRadioButtonClick);
   }
 
@@ -254,8 +256,25 @@ export default class FilmsList {
     }
   }
 
-  _handleRadioButtonClick(valueRadioButton) {
-    console.log(valueRadioButton);
+  _handleRadioButtonClick(radioButton) {
+    remove(this._statsComponent);
+    switch (radioButton) {
+      case RadioButtonType.TODAY:
+        this._renderStats(this._filterHistoryFilms, dayjs(), dayjs(), radioButton);
+        break;
+      case RadioButtonType.WEEK:
+        this._renderStats(this._filterHistoryFilms, dayjs(), dayjs().subtract(7, 'day'), radioButton);
+        break;
+      case RadioButtonType.MONTH:
+        this._renderStats(this._filterHistoryFilms, dayjs(), dayjs().subtract(1, 'month'), radioButton);
+        break;
+      case RadioButtonType.YEAR:
+        this._renderStats(this._filterHistoryFilms, dayjs(), dayjs().subtract(1, 'year'), radioButton);
+        break;
+      default:
+        this._renderStats(this._filterHistoryFilms, dayjs(), dayjs().subtract(200, 'year'), radioButton);
+        break;
+    }
   }
 
   _renderShowMoreButton () {

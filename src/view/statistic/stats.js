@@ -1,18 +1,20 @@
 import SmartView from '../smart.js';
 import {createStatsTemplate, createChartTemplate} from './stats-tpl.js';
-import {RadioButtonType} from '../../consts.js';
-// import dayjs from "dayjs";
+
 
 export default class Stats extends SmartView {
-  constructor(films) {
+  constructor(films, dateFrom, dateTo, radioButton) {
     super();
     this._films = films;
+    this._dateFrom = dateFrom;
+    this._dateTo = dateTo;
+    this._radioButton = radioButton;
 
     this._statsClickRadioButtonHandler = this._statsClickRadioButtonHandler.bind(this);
   }
 
   getTemplate() {
-    return createStatsTemplate(this._films);
+    return createStatsTemplate(this._films, this._dateFrom, this._dateTo, this._radioButton);
   }
 
   getTemplateChart(films, dateFrom, dateTo) {
@@ -20,9 +22,8 @@ export default class Stats extends SmartView {
   }
 
   _statsClickRadioButtonHandler(evt){
-    this._callback.statistic(evt.target.value);
-    if(evt.target.value === RadioButtonType.WEEK){
-      // this.getTemplateChart(this._films, dayjs(), dayjs().subtract(200, 'day'));
+    if(evt.target.type === 'radio'){
+      this._callback.statistic(evt.target.value);
     }
   }
 

@@ -26,6 +26,14 @@ export const isTopWatchingGenre = (films) => {
   return watchedFilmGenres;
 };
 
+export const isWatchedList = (films) => {
+  if(films.length > 0){
+    return films;
+  } else {
+    return ' ';
+  }
+};
+
 export const getWatchedFilmList = (films) => {
   const genreList = [];
   const countList = [];
@@ -40,9 +48,13 @@ export const getWatchedFilmList = (films) => {
 };
 
 
-// export const countWatchedFilmsInDateRange = (films, dateFrom, dateTo) => {
-//   console.log(dayjs(films[1].film.userDetails.watchingDate).isBetween(dateTo, dateFrom));
-//   const rr = films.filter((film) => dayjs(film.film.userDetails.watchingDate).isSame(dateFrom) || dayjs(film.film.userDetails.watchingDate).isBetween(dateTo, dateFrom) || dayjs(film.film.userDetails.watchingDate).isSame(dateTo));
-//   console.log(rr);
-// };
+export const countWatchedFilmsInDateRange = (films, dateFrom, dateTo) => {
+  const array = [];
+  films.slice().forEach((film) => {
+    if(dayjs(film.film.userDetails.watchingDate).isSame(dateFrom, 'day') || dayjs(film.film.userDetails.watchingDate).isBetween(dateFrom, dateTo) || dayjs(film.film.userDetails.watchingDate).isSame(dateTo, 'day')){
+      array.push(film);
+    }
+  });
+  return array;
+};
 

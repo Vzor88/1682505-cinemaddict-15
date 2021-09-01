@@ -12,15 +12,6 @@ export const generateData = (array) => {
   return array[randomIndex];
 };
 
-// const generateDuration = (minutes) => {
-//   let hour = 0;
-//   while (minutes > 60) {
-//     hour += 1;
-//     minutes -= 60;
-//   }
-//   return hour === 0 ? `${minutes}m` : `${hour}h ${minutes}m`;
-// };
-
 const generateDate = () => {
   const randYear = getRandomInteger(COUNT_RANDOM_DATE.YEAR.MIN, COUNT_RANDOM_DATE.YEAR.MAX);
   const randMonth = getRandomInteger(COUNT_RANDOM_DATE.MONTH.MIN, COUNT_RANDOM_DATE.MONTH.MAX);

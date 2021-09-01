@@ -20,10 +20,10 @@ export const EventType = {
 };
 
 export const RadioButtonType = {
-  ALL_TIME: 'all-time',
+  ALL_TIME: 'all time',
   TODAY: 'today',
   WEEK: 'week',
-  MOUNT: 'month',
+  MONTH: 'month',
   YEAR: 'year',
 };
 
@@ -61,7 +61,7 @@ export const COUNTS = {
   },
   FILMS: 5,
   MAX_COMMENTS_FILMS: 5,
-  GENERATE_FILMS: 100,
+  GENERATE_FILMS: 3,
   FILMS_PER_STEP: 5,
   BAR_HEIGHT: 50,
 };

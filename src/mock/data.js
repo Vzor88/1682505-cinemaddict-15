@@ -15,16 +15,16 @@ export const COUNT_RANDOM_DATE = {
 
 export const COUNT_RANDOM_DATE_WATCHING = {
   YEAR: {
-    MIN: 2019,
-    MAX: 2020,
+    MIN: 2021,
+    MAX: 2021,
   },
   MONTH: {
-    MIN: 1,
-    MAX: 12,
+    MIN: 9,
+    MAX: 9,
   },
   DAY: {
     MIN: 1,
-    MAX: 30,
+    MAX: 1,
   },
 };
 
