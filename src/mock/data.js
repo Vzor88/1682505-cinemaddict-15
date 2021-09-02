@@ -19,12 +19,12 @@ export const COUNT_RANDOM_DATE_WATCHING = {
     MAX: 2021,
   },
   MONTH: {
-    MIN: 9,
-    MAX: 9,
+    MIN: 1,
+    MAX: 8,
   },
   DAY: {
     MIN: 1,
-    MAX: 1,
+    MAX: 30,
   },
 };
 

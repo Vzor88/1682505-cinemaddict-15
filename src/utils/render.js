@@ -4,6 +4,12 @@ import Abstract from '../view/abstract.js';
 export const isEscEvent = (evt) => evt.key === 'Escape' || evt.key === 'Esc';
 export const isCtrlEnterEvent = (evt) => evt.ctrlKey && 'Enter'.includes(evt.key);
 
+export const isAvailability = (element) => {
+  if (element && !(element instanceof Abstract)) {
+    element.remove();
+  }
+};
+
 export const renderElement = (container, child, place) => {
   if (container instanceof Abstract) {
     container = container.getElement();

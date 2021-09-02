@@ -1,7 +1,7 @@
 import CardFilmView from '../view/card-film/card-film.js';
 import PopupView from '../view/popup/popup.js';
 import {siteBodyElement} from '../main.js';
-import {remove, replace, isEscEvent, render} from '../utils/render.js';
+import {remove, replace, isEscEvent, isAvailability, render} from '../utils/render.js';
 import {UserAction, UpdateType, EventType} from '../consts.js';
 
 export default class Film {
@@ -77,17 +77,11 @@ export default class Film {
   _renderPopup() {
     const filmDetails = document.querySelector('.film-details');
 
-    this._handleAvailability(filmDetails);
+    isAvailability(filmDetails);
 
     this._openedPopup();
 
     this._hangingEventPopup();
-  }
-
-  _handleAvailability(popup){
-    if (popup) {
-      popup.remove();
-    }
   }
 
   _openedPopup(){
@@ -103,18 +97,18 @@ export default class Film {
   }
 
   _handleWatchListClick() {
-    this._changeEventButtons(EventType.WATCHLIST);
+    this._handleChangeEventButtons(EventType.WATCHLIST);
   }
 
   _handleAlreadyWatchedClick() {
-    this._changeEventButtons(EventType.HISTORY);
+    this._handleChangeEventButtons(EventType.HISTORY);
   }
 
   _handleFavoriteClick() {
-    this._changeEventButtons(EventType.FAVORITE);
+    this._handleChangeEventButtons(EventType.FAVORITE);
   }
 
-  _changeEventButtons(eventType) {
+  _handleChangeEventButtons(eventType) {
     const scrollY = this._saveScroll();
     const copyFilm = {...this._film};
     switch (eventType) {

@@ -1,15 +1,13 @@
 import SmartView from '../smart.js';
 import {createPopupTemplate} from './popup-tpl.js';
 import {isCtrlEnterEvent} from '../../utils/render.js';
-import dayjs from 'dayjs';
-import he from 'he';
-import relativeTime from 'dayjs/plugin/relativeTime.js';
 import {AUTHORS_COMMENT} from '../../mock/data.js';
 import {getRandomInteger} from '../../utils/common.js';
 import {INDEX_COMMENT, SIZES} from '../../consts.js';
 import {generateData} from '../../mock/film.js';
-
-
+import dayjs from 'dayjs';
+import he from 'he';
+import relativeTime from 'dayjs/plugin/relativeTime.js';
 dayjs.extend(relativeTime);
 
 export default class Popup extends SmartView {
@@ -48,6 +46,34 @@ export default class Popup extends SmartView {
     this.getElement().querySelector('.film-details__control-button--watched').addEventListener('click', this._alreadyWatchedClickPopupHandler);
   }
 
+  setEditClickPopupHandler(callback) {
+    this._callback.editClickPopup = callback;
+  }
+
+  setFavoritePopupClickHandler(callback) {
+    this._callback.favoriteClickPopup = callback;
+  }
+
+  setWatchListPopupClickHandler(callback) {
+    this._callback.watchListClickPopup = callback;
+  }
+
+  setAlreadyWatchedPopupClickHandler(callback) {
+    this._callback.alreadyWatchedClickPopup = callback;
+  }
+
+  onCtrlEnterKeyDown(){
+    window.addEventListener('keydown', this._createCommentHandler);
+  }
+
+  setDeleteCommentClickHandler(callback) {
+    this._callback.deleteCommentClick = callback;
+  }
+
+  setCreateCommentClickHandler(callback) {
+    this._callback.createCommentClick = callback;
+  }
+
   _reset() {
     this.updateElement(true);
     if(this._containerEmodji){
@@ -62,17 +88,9 @@ export default class Popup extends SmartView {
     this._callback.editClickPopup();
   }
 
-  setEditClickPopupHandler(callback) {
-    this._callback.editClickPopup = callback;
-  }
-
   _favoriteClickPopupHandler(evt) {
     evt.preventDefault();
     this._callback.favoriteClickPopup();
-  }
-
-  setFavoritePopupClickHandler(callback) {
-    this._callback.favoriteClickPopup = callback;
   }
 
   _watchListClickPopupHandler(evt) {
@@ -80,17 +98,9 @@ export default class Popup extends SmartView {
     this._callback.watchListClickPopup();
   }
 
-  setWatchListPopupClickHandler(callback) {
-    this._callback.watchListClickPopup = callback;
-  }
-
   _alreadyWatchedClickPopupHandler(evt) {
     evt.preventDefault();
     this._callback.alreadyWatchedClickPopup();
-  }
-
-  setAlreadyWatchedPopupClickHandler(callback) {
-    this._callback.alreadyWatchedClickPopup = callback;
   }
 
   _textCommentInput(){
@@ -127,12 +137,7 @@ export default class Popup extends SmartView {
     }
   }
 
-  onCtrlEnterKeyDown(){
-    window.addEventListener('keydown', this._createCommentHandler);
-  }
-
   _createComment() {
-    this._textCommentInput();
     return {
       id: getRandomInteger(INDEX_COMMENT.MIN, INDEX_COMMENT.MAX),
       author: generateData(AUTHORS_COMMENT),
@@ -142,18 +147,11 @@ export default class Popup extends SmartView {
     };
   }
 
-  setDeleteCommentClickHandler(callback) {
-    this._callback.deleteCommentClick = callback;
-  }
-
-  setCreateCommentClickHandler(callback) {
-    this._callback.createCommentClick = callback;
-  }
-
   _deleteCommentClickHandler(evt){
     evt.preventDefault();
     const scrollY = document.querySelector('.film-details').scrollTop;
     const parentElement = evt.target.parentElement.parentElement;
+
     this._film.comments.forEach((item, index) => {
       if(parentElement.textContent.includes(he.decode(item.comment)) && parentElement.textContent.includes(item.author)){
         this._film.comments.splice(index, 1);

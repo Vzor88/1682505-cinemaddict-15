@@ -1,3 +1,5 @@
+import dayjs from 'dayjs';
+
 export const RenderPosition = {
   AFTERBEGIN: 'afterbegin',
   BEFOREEND: 'beforeend',
@@ -10,7 +12,7 @@ export const SortType = {
 };
 
 export const UserAction = {
-  UPDATE_FILM: 'UPDATE_FILM',
+  UPDATE_FILM: 'UPDATE_FILM',/////
 };
 
 export const EventType = {
@@ -20,11 +22,19 @@ export const EventType = {
 };
 
 export const RadioButtonType = {
-  ALL_TIME: 'all time',
-  TODAY: 'today',
-  WEEK: 'week',
-  MONTH: 'month',
-  YEAR: 'year',
+  ALL_TIME: 'All time',
+  TODAY: 'Today',
+  WEEK: 'Week',
+  MONTH: 'Month',
+  YEAR: 'Year',
+};
+
+export const DateRangeTime = {
+  ALL_TIME: dayjs().subtract(200, 'year'),
+  TODAY: dayjs(),
+  WEEK: dayjs().subtract(7, 'day'),
+  MONTH: dayjs().subtract(1, 'month'),
+  YEAR: dayjs().subtract(1, 'year'),
 };
 
 export const UpdateType = {
@@ -39,6 +49,13 @@ export const FilterType = {
   WATCHLIST: 'Watchlist',
   HISTORY: 'History',
   FAVORITES: 'Favorites',
+};
+
+export const NoFilmsTextType = {
+  [FilterType.ALL_MOVIES]: 'There are no movies in our database',
+  [FilterType.WATCHLIST]:'There are no movies to watch now',
+  [FilterType.HISTORY]: 'There are no watched movies now',
+  [FilterType.FAVORITES]: 'There are no favorite movies now',
 };
 
 export const INDEX_COMMENT = {
@@ -61,9 +78,9 @@ export const COUNTS = {
   },
   FILMS: 5,
   MAX_COMMENTS_FILMS: 5,
-  GENERATE_FILMS: 3,
+  GENERATE_FILMS: 6,
   FILMS_PER_STEP: 5,
-  BAR_HEIGHT: 50,
+  BAR_HEIGHT: 50,/////
 };
 
 export const SIZES = {

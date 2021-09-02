@@ -3,18 +3,18 @@ import {createStatsTemplate, createChartTemplate} from './stats-tpl.js';
 
 
 export default class Stats extends SmartView {
-  constructor(films, dateFrom, dateTo, radioButton) {
+  constructor(films, dateFrom, dateTo, activeRadioButton) {
     super();
     this._films = films;
     this._dateFrom = dateFrom;
     this._dateTo = dateTo;
-    this._radioButton = radioButton;
+    this._activeRadioButton = activeRadioButton;
 
     this._statsClickRadioButtonHandler = this._statsClickRadioButtonHandler.bind(this);
   }
 
   getTemplate() {
-    return createStatsTemplate(this._films, this._dateFrom, this._dateTo, this._radioButton);
+    return createStatsTemplate(this._films, this._dateFrom, this._dateTo, this._activeRadioButton);
   }
 
   getTemplateChart(films, dateFrom, dateTo) {

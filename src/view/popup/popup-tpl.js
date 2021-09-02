@@ -4,7 +4,7 @@ import relativeTime from 'dayjs/plugin/relativeTime.js';
 
 dayjs.extend(relativeTime);
 
-const isGenre = (array) => array.length > 1 ? 'Genres' : 'Genre';
+const isGenre = (genres) => genres.length > 1 ? 'Genres' : 'Genre';
 
 const generateCommentsList = (commentary = {}) => {
   const {author, comment, date, emotion} = commentary;

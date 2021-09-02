@@ -20,9 +20,9 @@ export const createChartTemplate = (films, dateFrom = dayjs().subtract(2, 'year'
     plugins: [ChartDataLabels],
     type: 'horizontalBar',
     data: {
-      labels: getWatchedFilmList(countWatchedFilmsInDateRange(films, dateFrom, dateTo)).genreList,
+      labels: getWatchedFilmList(countWatchedFilmsInDateRange(films, dateFrom, dateTo)).genresList,
       datasets: [{
-        data: getWatchedFilmList(countWatchedFilmsInDateRange(films, dateFrom, dateTo)).countList,
+        data: getWatchedFilmList(countWatchedFilmsInDateRange(films, dateFrom, dateTo)).countsList,
         backgroundColor: '#ffe800',
         hoverBackgroundColor: '#ffe800',
         anchor: 'start',
@@ -74,17 +74,15 @@ export const createChartTemplate = (films, dateFrom = dayjs().subtract(2, 'year'
   });
 };
 
-
-export const createStatsTemplate = (films, dateFrom = dayjs().subtract(200, 'year'), dateTo = dayjs(), activeRadioButton = 'all time') => {
-  console.log(films);
+export const createStatsTemplate = (films, dateFrom, dateTo, activeRadioButton) => {
   const initialValue = 0;
   let totalDuration = countWatchedFilmsInDateRange(films, dateTo, dateFrom).reduce( (accumulator, currentValue) => accumulator + currentValue.film.filmInfo.runtime, initialValue);
   totalDuration = generateDuration(totalDuration, true);
-  const statsCtxHeight = COUNTS.BAR_HEIGHT * getWatchedFilmList(countWatchedFilmsInDateRange(films, dateFrom, dateTo)).genreList.length;
+  const statsCtxHeight = COUNTS.BAR_HEIGHT * getWatchedFilmList(countWatchedFilmsInDateRange(films, dateFrom, dateTo)).genresList.length;
 
   const watchedFilmCount = countWatchedFilmsInDateRange(films, dateFrom, dateTo).length;
 
-  const watchedListGenres = isWatchedList(getWatchedFilmList(countWatchedFilmsInDateRange(films, dateFrom, dateTo)).genreList);
+  const watchedListGenres = isWatchedList(getWatchedFilmList(countWatchedFilmsInDateRange(films, dateFrom, dateTo)).genresList);
 
   return `<section class="statistic">
      <p class="statistic__rank">

@@ -26,35 +26,29 @@ export const isTopWatchingGenre = (films) => {
   return watchedFilmGenres;
 };
 
-export const isWatchedList = (films) => {
-  if(films.length > 0){
-    return films;
-  } else {
-    return ' ';
-  }
-};
+export const isWatchedList = (films) => films.length > 0 ? films :  ' ';
 
 export const getWatchedFilmList = (films) => {
-  const genreList = [];
-  const countList = [];
+  const genresList = [];
+  const countsList = [];
 
   Object.entries(isTopWatchingGenre(films))
     .sort((a, b) =>  b[1] - a[1])
     .forEach((item) => {
-      genreList.push(item[0]);
-      countList.push(item[1]);
+      genresList.push(item[0]);
+      countsList.push(item[1]);
     });
-  return {genreList, countList};
+  return {genresList, countsList};
 };
 
 
 export const countWatchedFilmsInDateRange = (films, dateFrom, dateTo) => {
-  const array = [];
-  films.slice().forEach((film) => {
+  const sortFilmsInDateRange = [];
+  films.forEach((film) => {
     if(dayjs(film.film.userDetails.watchingDate).isSame(dateFrom, 'day') || dayjs(film.film.userDetails.watchingDate).isBetween(dateFrom, dateTo) || dayjs(film.film.userDetails.watchingDate).isSame(dateTo, 'day')){
-      array.push(film);
+      sortFilmsInDateRange.push(film);
     }
   });
-  return array;
+  return sortFilmsInDateRange;
 };
 
