@@ -1,5 +1,5 @@
 import {render, remove} from '../utils/render.js';
-import {COUNTS,  SortType, UpdateType, FilterType, UserAction, RadioButtonType, DateRangeTime} from '../consts.js';
+import {COUNTS, SortType, UpdateType, FilterType, UserAction, DateRangeTime} from '../consts.js';
 import RankUserView from '../view/rank-user/rank-user.js';
 import SortView from '../view/sort/sort.js';
 import FilmsView from '../view/films/films.js';
@@ -7,11 +7,10 @@ import ShowMoreButtonView from '../view/show-more-button/show-more-button.js';
 import StatsFooterView from '../view/stats-footer/stats-footer.js';
 import NoFilmsView from '../view/no-films/no-films.js';
 import FilmPresenter from './film.js';
-import StatsView from '../view/statistic/stats.js';
+import StatsPresenter from './stats.js';
 import {sortFilmDate, sortFilmRating} from '../utils/card-film.js';
 import {filter} from '../utils/filters.js';
 import {siteBodyElement} from '../main.js';
-import dayjs from 'dayjs';
 
 export default class FilmsList {
   constructor(filmListHeaderContainer, filmListMainContainer, filmListFooterContainer, filmsModel, filtersModel) {
@@ -25,7 +24,6 @@ export default class FilmsList {
     this._showMoreButtonComponent = null;
     this._sortComponent = null;
     this._noFilmsComponent = null;
-    this._statsComponent = null;
 
     this._filmPresenter = new Map();
     this._filmPresenterTop = new Map();
@@ -33,11 +31,9 @@ export default class FilmsList {
 
     this._filterType = FilterType.ALL_MOVIES;
     this._currentSortType = SortType.DEFAULT;
-    this._currentInDateRangeType = RadioButtonType.ALL_TIME;
     this._currentInDateRangeTime = DateRangeTime.ALL_TIME;
     this._renderedFilmCount = 0;
 
-    this._handleRadioButtonClick = this._handleRadioButtonClick.bind(this);
     this._handleShowMoreButtonClick = this._handleShowMoreButtonClick.bind(this);
     this._handleSortTypeChange = this._handleSortTypeChange.bind(this);
 
@@ -101,8 +97,7 @@ export default class FilmsList {
       case UpdateType.STATS:
         this._clearPage({resetRenderedFilmCount: true, resetSortType: true});
         this._renderRank();
-        this._currentInDateRangeType = RadioButtonType.ALL_TIME;
-        this._renderStats(this._currentInDateRangeTime);////
+        this._renderStats(this._currentInDateRangeTime);
         break;
     }
   }
@@ -114,11 +109,9 @@ export default class FilmsList {
     render(this._filmListHeaderContainer, this._rankComponent);
   }
 
-  _renderStats(dateTo){//////
-    this._statsComponent = new StatsView(filter[FilterType.HISTORY](this._filmsModel.getFilms()), dayjs(), dateTo, this._currentInDateRangeType);
-    render(this._filmListMainContainer, this._statsComponent);
-    this._statsComponent.getTemplateChart(filter[FilterType.HISTORY](this._filmsModel.getFilms()), dayjs(), dateTo);
-    this._statsComponent.setStatsClickRadioButtonHandler(this._handleRadioButtonClick);
+  _renderStats(dateTo){
+    this._statsPresenter = new StatsPresenter(this._filmListMainContainer, this._filmsModel.getFilms());
+    this._statsPresenter.init(dateTo);
   }
 
   _renderStatsFooter() {
@@ -200,6 +193,15 @@ export default class FilmsList {
     render(this._filmListMainContainer, this._noFilmsComponent);
   }
 
+  _renderShowMoreButton () {
+    remove(this._showMoreButtonComponent);
+
+    this._showMoreButtonComponent = new ShowMoreButtonView();
+    this._showMoreButtonComponent.setEditClickMoreButtonHandler(this._handleShowMoreButtonClick);
+
+    render(this._filmsList, this._showMoreButtonComponent);
+  }
+
   _clearPage ({resetRenderedFilmCount = false, resetSortType = false} = {}) {
     this._filmPresenter.forEach((presenter) => presenter.destroy());
     this._filmPresenter.clear();
@@ -214,15 +216,31 @@ export default class FilmsList {
     remove(this._sortComponent);
     remove(this._rankComponent);
     remove(this._filmsComponent);
-    remove(this._statsComponent);
+    remove(this._noFilmsComponent);
+
+    if(this._statsPresenter) {
+      this._statsPresenter.destroy();
+    }
 
     resetRenderedFilmCount ? this._renderedFilmCount = COUNTS.FILMS_PER_STEP : this._renderedFilmCount = Math.min(this._getFilms().length, this._renderedFilmCount);
 
     if (resetSortType) {
       this._currentSortType = SortType.DEFAULT;
     }
+  }
 
-    remove(this._noFilmsComponent);
+  _renderPage () {
+    siteBodyElement.classList.remove('hide-overflow');
+    if(this._getFilms().length === 0) {
+      this._renderNoFilms ();
+      return;
+    }
+
+    this._renderRank ();
+    this._renderSort ();
+    this._renderMarkupFilmLists();
+    this._renderAllFilmsList ();
+    this._renderCategoryFilms();
   }
 
   _handleSortTypeChange(sortType) {
@@ -247,49 +265,5 @@ export default class FilmsList {
     if (this._renderedFilmCount >= filmCount) {
       remove(this._showMoreButtonComponent);
     }
-  }
-
-  _handleRadioButtonClick(radioButton) {
-    this._currentInDateRangeType = radioButton;
-    remove(this._statsComponent);
-    switch (this._currentInDateRangeType) {
-      case RadioButtonType.TODAY:
-        this._renderStats(DateRangeTime.TODAY);
-        break;
-      case RadioButtonType.WEEK:
-        this._renderStats(DateRangeTime.WEEK);
-        break;
-      case RadioButtonType.MONTH:
-        this._renderStats(DateRangeTime.MONTH);
-        break;
-      case RadioButtonType.YEAR:
-        this._renderStats(DateRangeTime.YEAR);
-        break;
-      default:
-        this._renderStats(DateRangeTime.ALL_TIME);
-    }
-  }
-
-  _renderShowMoreButton () {
-    remove(this._showMoreButtonComponent);
-
-    this._showMoreButtonComponent = new ShowMoreButtonView();
-    this._showMoreButtonComponent.setEditClickMoreButtonHandler(this._handleShowMoreButtonClick);
-
-    render(this._filmsList, this._showMoreButtonComponent);
-  }
-
-  _renderPage () {
-    siteBodyElement.classList.remove('hide-overflow');
-    if(this._getFilms().length === 0) {
-      this._renderNoFilms ();
-      return;
-    }
-
-    this._renderRank ();
-    this._renderSort ();
-    this._renderMarkupFilmLists();
-    this._renderAllFilmsList ();
-    this._renderCategoryFilms();
   }
 }
