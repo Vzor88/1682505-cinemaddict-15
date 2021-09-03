@@ -19,7 +19,7 @@ export const COUNT_RANDOM_DATE_WATCHING = {
     MAX: 2021,
   },
   MONTH: {
-    MIN: 1,
+    MIN: 7,
     MAX: 8,
   },
   DAY: {
@@ -39,7 +39,7 @@ export const DURATION = {
 export const RATING = {
   FILM: {
     MIN: 0,
-    MAX: 0,
+    MAX: 10,
   },
   AGE: {
     MIN: 0,
