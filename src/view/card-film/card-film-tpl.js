@@ -4,7 +4,7 @@ import {isClassName, generateDuration} from '../../utils/card-film.js';
 
 export const createCardFilmTemplate = (card) => {
   const {film, comments} = card;
-  const {filmInfo, userDetails} = film;
+  const {filmInfo, userDetails, id} = film;
   const {title, totalRating, releaseFilm, runtime, genre, poster, description} = filmInfo;
   const {date} = releaseFilm;
   const {watchList, alreadyWatched, favorite} = userDetails;
@@ -20,7 +20,7 @@ export const createCardFilmTemplate = (card) => {
       <span class="film-card__duration">${generateDuration(runtime)}</span>
       <span class="film-card__genre">${genre.join(' ')}</span>
     </p>
-    <img src="${poster}" alt="" class="film-card__poster">
+    <img src="${poster}" alt="" class="film-card__poster" id="film-card__poster-${id}">
     <p class="film-card__description">${descriptionShort(description)}</p>
     <a class="film-card__comments">${comments.length} comments</a>
     <div class="film-card__controls">

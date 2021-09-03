@@ -39,7 +39,7 @@ export const DURATION = {
 export const RATING = {
   FILM: {
     MIN: 0,
-    MAX: 10,
+    MAX: 0,
   },
   AGE: {
     MIN: 0,

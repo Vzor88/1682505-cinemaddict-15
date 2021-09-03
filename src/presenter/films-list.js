@@ -242,7 +242,9 @@ export default class FilmsList {
     this._renderSort ();
     this._renderMarkupFilmLists(this._filmsModel.getFilms());
     this._renderAllFilmsList ();
-    this._renderCategoryFilms();
+    if(isTopRatedFilms(this._filmsModel.getFilms()).length > 0 || isTopCommentedFilms(this._filmsModel.getFilms()).length > 0){
+      this._renderCategoryFilms();
+    }
   }
 
   _handleSortTypeChange(sortType) {

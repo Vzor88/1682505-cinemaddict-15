@@ -78,7 +78,7 @@ export const COUNTS = {
   },
   FILMS: 5,
   MAX_COMMENTS_FILMS: 0,
-  GENERATE_FILMS: 6,
+  GENERATE_FILMS: 1,
   FILMS_PER_STEP: 5,
 };
 

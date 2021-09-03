@@ -1,7 +1,7 @@
 import CardFilmView from '../view/card-film/card-film.js';
 import PopupView from '../view/popup/popup.js';
 import {siteBodyElement} from '../main.js';
-import {remove, replace, isEscEvent, isAvailability, render} from '../utils/render.js';
+import {remove, replace, isEscEvent, render} from '../utils/render.js';
 import {UserAction, UpdateType, EventType} from '../consts.js';
 
 export default class Film {
@@ -38,7 +38,8 @@ export default class Film {
     this._filmComponent = new CardFilmView(this._film);
     this._popupComponent = new PopupView(this._film);
 
-    this._hangingEventPopup();
+    this._handingEventCardFilm();
+    this._handingEventPopup();
 
     if (prevFilmComponent === null || prevPopupComponent === null) {
       render(this._container, this._filmComponent);
@@ -46,19 +47,20 @@ export default class Film {
     }
 
     replace(this._filmComponent, prevFilmComponent);
-
     replace(this._popupComponent, prevPopupComponent);
 
     remove(prevFilmComponent);
     remove(prevPopupComponent);
   }
 
-  _hangingEventPopup(){
+  _handingEventCardFilm(){
     this._filmComponent.setFavoriteClickHandler(this._handleFavoriteClick);
     this._filmComponent.setWatchListClickHandler(this._handleWatchListClick);
     this._filmComponent.setAlreadyWatchedClickHandler(this._handleAlreadyWatchedClick);
     this._filmComponent.setEditClickCardFilmHandler(this._handleCardFilmClick);
+  }
 
+  _handingEventPopup(){
     this._popupComponent.setEditClickPopupHandler(this._handleClosedPopupButtonClick);
     this._popupComponent.setFavoritePopupClickHandler(this._handleFavoriteClick);
     this._popupComponent.setWatchListPopupClickHandler(this._handleWatchListClick);
@@ -76,11 +78,13 @@ export default class Film {
   _renderPopup() {
     const filmDetails = document.querySelector('.film-details');
 
-    isAvailability(filmDetails);
+    if(filmDetails) {
+      filmDetails.remove();
+    }
 
     this._openedPopup();
 
-    this._hangingEventPopup();
+    this._handingEventPopup();
   }
 
   _openedPopup(){
@@ -143,12 +147,12 @@ export default class Film {
 
   _handleDeleteCommentClick() {
     this._changeData(UserAction.UPDATE_FILM, UpdateType.MINOR, this._film);
-    this._renderPopup();
+    document.getElementById(`film-card__poster-${this._film.film.id}`).click();
   }
 
   _handleCreateCommentClick() {
     this._changeData(UserAction.UPDATE_FILM, UpdateType.MINOR, this._film);
-    this._renderPopup();
+    document.getElementById(`film-card__poster-${this._film.film.id}`).click();
   }
 
   _onEscKeyDown(evt) {
