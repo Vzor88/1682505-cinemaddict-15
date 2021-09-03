@@ -38,12 +38,6 @@ export default class Film {
     this._filmComponent = new CardFilmView(this._film);
     this._popupComponent = new PopupView(this._film);
 
-    this._filmComponent.setFavoriteClickHandler(this._handleFavoriteClick);
-    this._filmComponent.setWatchListClickHandler(this._handleWatchListClick);
-    this._filmComponent.setAlreadyWatchedClickHandler(this._handleAlreadyWatchedClick);
-
-    this._filmComponent.setEditClickCardFilmHandler(this._handleCardFilmClick);
-
     this._hangingEventPopup();
 
     if (prevFilmComponent === null || prevPopupComponent === null) {
@@ -60,6 +54,11 @@ export default class Film {
   }
 
   _hangingEventPopup(){
+    this._filmComponent.setFavoriteClickHandler(this._handleFavoriteClick);
+    this._filmComponent.setWatchListClickHandler(this._handleWatchListClick);
+    this._filmComponent.setAlreadyWatchedClickHandler(this._handleAlreadyWatchedClick);
+    this._filmComponent.setEditClickCardFilmHandler(this._handleCardFilmClick);
+
     this._popupComponent.setEditClickPopupHandler(this._handleClosedPopupButtonClick);
     this._popupComponent.setFavoritePopupClickHandler(this._handleFavoriteClick);
     this._popupComponent.setWatchListPopupClickHandler(this._handleWatchListClick);
@@ -143,11 +142,13 @@ export default class Film {
   }
 
   _handleDeleteCommentClick() {
-    return this._changeData(UserAction.UPDATE_FILM, UpdateType.PATCH, this._film);
+    this._changeData(UserAction.UPDATE_FILM, UpdateType.MINOR, this._film);
+    this._renderPopup();
   }
 
   _handleCreateCommentClick() {
-    return this._changeData(UserAction.UPDATE_FILM, UpdateType.PATCH, this._film);
+    this._changeData(UserAction.UPDATE_FILM, UpdateType.MINOR, this._film);
+    this._renderPopup();
   }
 
   _onEscKeyDown(evt) {

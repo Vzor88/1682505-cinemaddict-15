@@ -12,7 +12,7 @@ export const SortType = {
 };
 
 export const UserAction = {
-  UPDATE_FILM: 'UPDATE_FILM',/////
+  UPDATE_FILM: 'UPDATE_FILM',
 };
 
 export const EventType = {
@@ -77,16 +77,18 @@ export const COUNTS = {
     MAX: 2,
   },
   FILMS: 5,
-  MAX_COMMENTS_FILMS: 5,
+  MAX_COMMENTS_FILMS: 0,
   GENERATE_FILMS: 6,
   FILMS_PER_STEP: 5,
-  BAR_HEIGHT: 50,/////
 };
 
 export const SIZES = {
   EMODJI: {
     WIDTH: '55px',
     HEIGHT: '55px',
+  },
+  BAR: {
+    HEIGHT: 50,
   },
 };
 

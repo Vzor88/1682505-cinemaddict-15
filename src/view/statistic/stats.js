@@ -18,7 +18,8 @@ export default class Stats extends SmartView {
   }
 
   getTemplateChart(films, dateFrom, dateTo) {
-    return createChartTemplate(films, dateFrom, dateTo);
+    const statsCtx = this.getElement().querySelector('.statistic__chart');
+    return createChartTemplate(films, dateFrom, dateTo, statsCtx);
   }
 
   _statsClickRadioButtonHandler(evt){

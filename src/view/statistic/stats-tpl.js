@@ -1,10 +1,9 @@
 import {isNameRank} from '../../utils/statistic.js';
 import {generateDuration, ucFirstName} from '../../utils/card-film.js';
-import {COUNTS, RadioButtonType} from '../../consts.js';
+import {RadioButtonType, SIZES} from '../../consts.js';
 import Chart from 'chart.js';
 import ChartDataLabels from 'chartjs-plugin-datalabels';
 import {getWatchedFilmList, countWatchedFilmsInDateRange, isWatchedList} from '../../utils/statistic.js';
-import dayjs from 'dayjs';
 
 const generateRadioButton = (buttons, activeButton) => (
   `<input type="radio" class="statistic__filters-input visually-hidden" name="statistic-filter" id="statistic-${buttons}" value="${buttons}" ${buttons === activeButton ? 'checked' : ' '}>
@@ -13,10 +12,8 @@ const generateRadioButton = (buttons, activeButton) => (
 
 const renderRadioButtonsTemplate = (radioButtons, activeRadioButton) => radioButtons.map((radioButtonValue) => generateRadioButton(radioButtonValue, activeRadioButton)).join('');
 
-export const createChartTemplate = (films, dateFrom = dayjs().subtract(2, 'year'), dateTo = dayjs()) => {
-  const statsCtx = document.querySelector('.statistic__chart');
-
-  return new Chart(statsCtx,  {
+export const createChartTemplate = (films, dateFrom, dateTo, statsCtx) => (
+  new Chart(statsCtx,  {
     plugins: [ChartDataLabels],
     type: 'horizontalBar',
     data: {
@@ -71,14 +68,14 @@ export const createChartTemplate = (films, dateFrom = dayjs().subtract(2, 'year'
         enabled: false,
       },
     },
-  });
-};
+  })
+);
 
 export const createStatsTemplate = (films, dateFrom, dateTo, activeRadioButton) => {
   const initialValue = 0;
   let totalDuration = countWatchedFilmsInDateRange(films, dateTo, dateFrom).reduce( (accumulator, currentValue) => accumulator + currentValue.film.filmInfo.runtime, initialValue);
   totalDuration = generateDuration(totalDuration, true);
-  const statsCtxHeight = COUNTS.BAR_HEIGHT * getWatchedFilmList(countWatchedFilmsInDateRange(films, dateFrom, dateTo)).genresList.length;
+  const statsCtxHeight = SIZES.BAR.HEIGHT * getWatchedFilmList(countWatchedFilmsInDateRange(films, dateFrom, dateTo)).genresList.length;
 
   const watchedFilmCount = countWatchedFilmsInDateRange(films, dateFrom, dateTo).length;
 

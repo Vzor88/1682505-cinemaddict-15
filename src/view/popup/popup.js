@@ -108,6 +108,7 @@ export default class Popup extends SmartView {
   }
 
   _emojiListHandler(evt) {
+    this._containerEmodji = document.querySelector('.film-details__add-emoji-label');
     evt.preventDefault();
     if (evt.target.alt !== 'emoji') {
       return;
@@ -124,8 +125,7 @@ export default class Popup extends SmartView {
   }
 
   _createCommentHandler(evt) {
-    if(isCtrlEnterEvent(evt) && this._containerEmodji.firstChild && this._textCommentInput()){
-      this._containerEmodji = document.querySelector('.film-details__add-emoji-label');
+    if(isCtrlEnterEvent(evt) && document.querySelector('.film-details__add-emoji-label').firstChild && this._textCommentInput()){
       const scrollY = document.querySelector('.film-details').scrollTop;
       evt.preventDefault();
       const newComment = this._createComment();
@@ -143,7 +143,7 @@ export default class Popup extends SmartView {
       author: generateData(AUTHORS_COMMENT),
       comment: this._textCommentInput(),
       date: dayjs(),
-      emotion: this._containerEmodji.firstElementChild.id,
+      emotion: document.querySelector('.film-details__add-emoji-label').firstElementChild.id,
     };
   }
 

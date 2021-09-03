@@ -3,6 +3,8 @@ import Abstract from '../view/abstract.js';
 
 export const isEscEvent = (evt) => evt.key === 'Escape' || evt.key === 'Esc';
 export const isCtrlEnterEvent = (evt) => evt.ctrlKey && 'Enter'.includes(evt.key);
+export const isTopRatedFilms = (films) =>  films.filter((film) => film.film.filmInfo.totalRating > 0);
+export const isTopCommentedFilms = (films) =>  films.filter((film) => film.comments.length > 0);
 
 export const isAvailability = (element) => {
   if (element && !(element instanceof Abstract)) {

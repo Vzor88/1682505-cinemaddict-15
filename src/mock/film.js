@@ -94,7 +94,7 @@ const generateFilm = (commentsId) => {
 };
 
 export const generateCardFilmTemplate = () => {
-  const comments = new Array(getRandomInteger(1, COUNTS.MAX_COMMENTS_FILMS)).fill(null).map(generateComment);
+  const comments = new Array(getRandomInteger(0, COUNTS.MAX_COMMENTS_FILMS)).fill(null).map(generateComment);
   const commentsId = comments.map((item) => item.id);
   const film = generateFilm(commentsId);
   return {film, comments};

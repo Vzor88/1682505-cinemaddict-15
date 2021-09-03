@@ -1,4 +1,4 @@
-import {render, remove} from '../utils/render.js';
+import {render, remove, isTopRatedFilms, isTopCommentedFilms} from '../utils/render.js';
 import {COUNTS, SortType, UpdateType, FilterType, UserAction, DateRangeTime} from '../consts.js';
 import RankUserView from '../view/rank-user/rank-user.js';
 import SortView from '../view/sort/sort.js';
@@ -11,6 +11,7 @@ import StatsPresenter from './stats.js';
 import {sortFilmDate, sortFilmRating} from '../utils/card-film.js';
 import {filter} from '../utils/filters.js';
 import {siteBodyElement} from '../main.js';
+
 
 export default class FilmsList {
   constructor(filmListHeaderContainer, filmListMainContainer, filmListFooterContainer, filmsModel, filtersModel) {
@@ -158,8 +159,8 @@ export default class FilmsList {
     }
   }
 
-  _renderMarkupFilmLists() {
-    this._filmsComponent = new FilmsView();
+  _renderMarkupFilmLists(films) {
+    this._filmsComponent = new FilmsView(films);
 
     render (this._filmListMainContainer, this._filmsComponent);
 
@@ -168,12 +169,13 @@ export default class FilmsList {
   }
 
   _renderCategoryFilms () {
-    this._renderFilmsListExtra();
-    this._renderFilmsListTopCommented();
+    isTopRatedFilms(this._filmsModel.getFilms()).length > 0 ? this._renderFilmsListExtra() : this._filmsComponent.getElement().querySelector('.films-list--most-commented').classList.remove('films-list--extra');
+
+    isTopCommentedFilms(this._filmsModel.getFilms()).length > 0 ? this._renderFilmsListTopCommented() : this._filmsComponent.getElement().querySelector('.films-list--top-rated').classList.remove('films-list--extra');
   }
 
   _renderFilmsListExtra () {
-    this._filmsListExtra = this._filmsComponent.getElement().querySelector('.films-list--extra').querySelector('.films-list__container');
+    this._filmsListExtra = this._filmsComponent.getElement().querySelector('.films-list--top-rated').querySelector('.films-list__container');
     this._topRatingFilms = this._getFilms().slice().sort((prev, next) => next.film.filmInfo.totalRating - prev.film.filmInfo.totalRating);
 
     this._topRatingFilms = this._topRatingFilms.slice(COUNTS.SORT_FILMS.MIN, COUNTS.SORT_FILMS.MAX);
@@ -182,7 +184,7 @@ export default class FilmsList {
 
   _renderFilmsListTopCommented () {
     this._filmsListComment = this._filmsComponent.getElement().querySelector('.films-list--most-commented').querySelector('.films-list__container');
-    this._topCommentFilms = this._getFilms().slice().sort((prev, next) => next.comments.length - prev.comments.length);
+    this._topCommentFilms = isTopCommentedFilms(this._filmsModel.getFilms()).slice().sort((prev, next) => next.comments.length - prev.comments.length);
 
     this._topCommentFilms = this._topCommentFilms.slice(COUNTS.SORT_FILMS.MIN, COUNTS.SORT_FILMS.MAX);
     this._renderFilms(this._topCommentFilms, this._filmsListComment);
@@ -238,7 +240,7 @@ export default class FilmsList {
 
     this._renderRank ();
     this._renderSort ();
-    this._renderMarkupFilmLists();
+    this._renderMarkupFilmLists(this._filmsModel.getFilms());
     this._renderAllFilmsList ();
     this._renderCategoryFilms();
   }
