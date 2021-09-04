@@ -39,6 +39,7 @@ export const DateRangeTime = {
 
 export const UpdateType = {
   PATCH: 'PATCH',
+  PATCH_POPUP: 'PATCH POPUP',
   MINOR: 'MINOR',
   MAJOR: 'MAJOR',
   STATS: 'STATS',
@@ -78,7 +79,7 @@ export const COUNTS = {
   },
   FILMS: 5,
   MAX_COMMENTS_FILMS: 5,
-  GENERATE_FILMS: 1000,
+  GENERATE_FILMS: 200,
   FILMS_PER_STEP: 5,
 };
 

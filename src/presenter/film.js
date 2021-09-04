@@ -1,7 +1,7 @@
 import CardFilmView from '../view/card-film/card-film.js';
 import PopupView from '../view/popup/popup.js';
 import {siteBodyElement} from '../main.js';
-import {remove, replace, isEscEvent, render} from '../utils/render.js';
+import {remove, replace, isEscEvent, render, isAvailability} from '../utils/render.js';
 import {UserAction, UpdateType, EventType} from '../consts.js';
 
 export default class Film {
@@ -78,13 +78,10 @@ export default class Film {
   _renderPopup() {
     const filmDetails = document.querySelector('.film-details');
 
-    if(filmDetails) {
-      filmDetails.remove();
-    }
-
-    this._openedPopup();
+    isAvailability(filmDetails);
 
     this._handingEventPopup();
+    this._openedPopup();
   }
 
   _openedPopup(){
@@ -146,13 +143,11 @@ export default class Film {
   }
 
   _handleDeleteCommentClick() {
-    this._changeData(UserAction.UPDATE_FILM, UpdateType.MINOR, this._film);
-    document.getElementById(`film-card__poster-${this._film.film.id}`).click();
+    this._changeData(UserAction.UPDATE_FILM, UpdateType.PATCH_POPUP, this._film);
   }
 
   _handleCreateCommentClick() {
-    this._changeData(UserAction.UPDATE_FILM, UpdateType.MINOR, this._film);
-    document.getElementById(`film-card__poster-${this._film.film.id}`).click();
+    this._changeData(UserAction.UPDATE_FILM, UpdateType.PATCH_POPUP, this._film);
   }
 
   _onEscKeyDown(evt) {
