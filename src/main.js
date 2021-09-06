@@ -1,24 +1,26 @@
-import {COUNTS} from './consts.js';
-import {generateCardFilmTemplate} from './mock/film.js';
+import {END_POINT, AUTHORIZATION, UpdateType} from './consts.js';
 import FilmsList from './presenter/films-list.js';
 import FilmsModel from './model/films.js';
 import FiltersModel from './model/filters.js';
 import FiltersPresenter from './presenter/filters.js';
+import Api from './api.js';
 
 export const siteBodyElement = document.querySelector('.body');
 const siteMainElement = document.querySelector('.main');
 const siteHeaderElement = document.querySelector('.header');
 const siteFooterElement = document.querySelector('.footer');
 
-const cardsFilm = new Array(COUNTS.GENERATE_FILMS).fill(null).map(generateCardFilmTemplate);
+const api = new Api(END_POINT, AUTHORIZATION);
 
 const filmsModel = new FilmsModel();
 const filtersModel = new FiltersModel();
 
-filmsModel.setFilms(cardsFilm);
+api.getFilms()
+  .then((films) => filmsModel.setFilms(UpdateType.INIT, films))
+  .catch(() => filmsModel.setFilms(UpdateType.INIT, []));
 
-const filmsListPresenter = new FilmsList(siteHeaderElement, siteMainElement, siteFooterElement, filmsModel, filtersModel);
-const filtersPresenter = new FiltersPresenter(siteMainElement, filtersModel, filmsModel);
+const filmsListPresenter = new FilmsList(siteHeaderElement, siteMainElement, siteFooterElement, filmsModel, filtersModel, api);
+const filtersPresenter = new FiltersPresenter(siteMainElement, filtersModel, filmsModel, api);
 
 filtersPresenter.init();
 filmsListPresenter.init();

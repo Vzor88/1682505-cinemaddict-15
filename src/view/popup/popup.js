@@ -11,9 +11,10 @@ import relativeTime from 'dayjs/plugin/relativeTime.js';
 dayjs.extend(relativeTime);
 
 export default class Popup extends SmartView {
-  constructor(film) {
+  constructor(film, comments) {
     super();
     this._film = film;
+    this._comments = comments;
 
     this._containerEmodji = this.getElement().querySelector('.film-details__add-emoji-label');
 
@@ -31,7 +32,7 @@ export default class Popup extends SmartView {
   }
 
   getTemplate() {
-    return createPopupTemplate(this._film);
+    return createPopupTemplate(this._film, this._comments);
   }
 
   restoreHandlers(){

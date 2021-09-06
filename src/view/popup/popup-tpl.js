@@ -26,13 +26,12 @@ const generateCommentsList = (commentary = {}) => {
       </div>
     </li>`;
 };
-const renderTemplateComment =(comments) => comments.map((comment) => generateCommentsList(comment)).join('');
+const renderTemplateComment = (comments) => comments.map((comment) => generateCommentsList(comment)).join('');
 
-export const createPopupTemplate = (card) => {
-  const {film, comments} = card;
+export const createPopupTemplate = (film, comments) => {
   const {filmInfo, userDetails} = film;
-  const {title, totalRating, releaseFilm, genre, poster, description, ageRating, alternativeTitle, writers, director, actors, runtime} = filmInfo;
-  const {date, releaseCountry} = releaseFilm;
+  const {title, totalRating, release, genre, poster, description, ageRating, alternativeTitle, writers, director, actors, runtime} = filmInfo;
+  const {date, releaseCountry} = release;
   const {watchList, alreadyWatched, favorite} = userDetails;
 
   return `<section class="film-details">

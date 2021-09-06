@@ -2,11 +2,10 @@ import dayjs from 'dayjs';
 import {LENGTH_STRING_DESCRIPTION} from '../../consts.js';
 import {isClassName, generateDuration} from '../../utils/card-film.js';
 
-export const createCardFilmTemplate = (card) => {
-  const {film, comments} = card;
-  const {filmInfo, userDetails, id} = film;
-  const {title, totalRating, releaseFilm, runtime, genre, poster, description} = filmInfo;
-  const {date} = releaseFilm;
+export const createCardFilmTemplate = (film) => {
+  const {filmInfo, userDetails, id, comments} = film;
+  const {title, totalRating, release, runtime, genre, poster, description} = filmInfo;
+  const {date} = release;
   const {watchList, alreadyWatched, favorite} = userDetails;
 
   const dateYear = dayjs(date).format('YYYY');

@@ -1,14 +1,15 @@
 import FilterView from '../view/filters.js/filters.js';
-import {render, replace, remove} from '../utils/render.js';
+import {render, replace, remove, renderElement} from '../utils/render.js';
 import {filter} from '../utils/filters.js';
-import {FilterType, UpdateType} from '../consts.js';
+import {FilterType, UpdateType, RenderPosition} from '../consts.js';
 import StatisticView from '../view/statistic/stats-item-menu.js';
 
-export default class Filter {
-  constructor(filterContainer, filterModel, filmsModel) {
+export default class Filters {
+  constructor(filterContainer, filterModel, filmsModel, api) {
     this._filterContainer = filterContainer;
     this._filterModel = filterModel;
     this._filmsModel = filmsModel;
+    this._api = api;
 
     this._statisticComponent = new StatisticView();
 
@@ -32,7 +33,7 @@ export default class Filter {
     this._statisticComponent.setStatsItemMenuHandler(this._handleStatistic);
 
     if (prevFilterComponent === null) {
-      render(this._filterContainer, this._filterComponent);
+      renderElement(this._filterContainer, this._filterComponent, RenderPosition.AFTERBEGIN);
       this._navContainer = document.querySelector('.main-navigation');
       render(this._navContainer, this._statisticComponent);
       return;
@@ -64,13 +65,18 @@ export default class Filter {
 
   _handleStatistic() {
     const filterMenuItems = document.querySelectorAll('.main-navigation__item');
-    filterMenuItems.forEach((item)=> item.classList.remove('main-navigation__item--active'));
+    filterMenuItems.forEach((item) => item.classList.remove('main-navigation__item--active'));
     this._filterModel.setFilter(UpdateType.STATS);
   }
 
-  _getFilters() {
-    const films = this._filmsModel.getFilms();
+  _getFilmsFromApi() {
+    const movies = [];
+    this._api.getFilms().then((films) => films.forEach((film) => movies.push(film)));
+    return movies;
+  }
 
+  _getFilters() {
+    const films = this._getFilmsFromApi();
     return [
       {
         type: FilterType.ALL_MOVIES,
