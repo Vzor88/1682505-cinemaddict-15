@@ -1,8 +1,8 @@
 import CardFilmView from '../view/card-film/card-film.js';
 import PopupView from '../view/popup/popup.js';
 import {siteBodyElement} from '../main.js';
-import {remove, replace, isEscEvent, render} from '../utils/render.js';
-import {UserAction, UpdateType, FilterType, EventType} from '../consts.js';
+import {remove, replace, isEscEvent, render, isAvailability} from '../utils/render.js';
+import {UserAction, UpdateType, EventType} from '../consts.js';
 
 export default class Film {
   constructor(changeData) {
@@ -28,6 +28,7 @@ export default class Film {
 
   init (film, container, filterType) {
     this._film = film;
+
     this._container = container;
     this._filterType = filterType;
 
@@ -37,13 +38,8 @@ export default class Film {
     this._filmComponent = new CardFilmView(this._film);
     this._popupComponent = new PopupView(this._film);
 
-    this._filmComponent.setFavoriteClickHandler(this._handleFavoriteClick);
-    this._filmComponent.setWatchListClickHandler(this._handleWatchListClick);
-    this._filmComponent.setAlreadyWatchedClickHandler(this._handleAlreadyWatchedClick);
-
-    this._filmComponent.setEditClickCardFilmHandler(this._handleCardFilmClick);
-
-    this._hangingEventPopup();
+    this._handingEventCardFilm();
+    this._handingEventPopup();
 
     if (prevFilmComponent === null || prevPopupComponent === null) {
       render(this._container, this._filmComponent);
@@ -57,7 +53,14 @@ export default class Film {
     remove(prevPopupComponent);
   }
 
-  _hangingEventPopup(){
+  _handingEventCardFilm(){
+    this._filmComponent.setFavoriteClickHandler(this._handleFavoriteClick);
+    this._filmComponent.setWatchListClickHandler(this._handleWatchListClick);
+    this._filmComponent.setAlreadyWatchedClickHandler(this._handleAlreadyWatchedClick);
+    this._filmComponent.setEditClickCardFilmHandler(this._handleCardFilmClick);
+  }
+
+  _handingEventPopup(){
     this._popupComponent.setEditClickPopupHandler(this._handleClosedPopupButtonClick);
     this._popupComponent.setFavoritePopupClickHandler(this._handleFavoriteClick);
     this._popupComponent.setWatchListPopupClickHandler(this._handleWatchListClick);
@@ -75,23 +78,17 @@ export default class Film {
   _renderPopup() {
     const filmDetails = document.querySelector('.film-details');
 
-    this._handleAvailability(filmDetails);
+    isAvailability(filmDetails);
 
+    this._handingEventPopup();
     this._openedPopup();
-
-    this._hangingEventPopup();
-  }
-
-  _handleAvailability(popup){
-    if (popup) {
-      popup.remove();
-    }
   }
 
   _openedPopup(){
     render(siteBodyElement, this._popupComponent);
     siteBodyElement.classList.add('hide-overflow');
     document.addEventListener('keydown', this._onEscKeyDown);
+    this._popupComponent.onCtrlEnterKeyDown();
   }
 
   _handleClosedPopupButtonClick(){
@@ -100,25 +97,25 @@ export default class Film {
   }
 
   _handleWatchListClick() {
-    this._changeEventButtons(EventType.WATCHLIST);
+    this._handleChangeEventButtons(EventType.WATCHLIST);
   }
 
   _handleAlreadyWatchedClick() {
-    this._changeEventButtons(EventType.HISTORY);
+    this._handleChangeEventButtons(EventType.HISTORY);
   }
 
   _handleFavoriteClick() {
-    this._changeEventButtons(EventType.FAVORITE);
+    this._handleChangeEventButtons(EventType.FAVORITE);
   }
 
-  _changeEventButtons(eventType) {
+  _handleChangeEventButtons(eventType) {
     const scrollY = this._saveScroll();
     const copyFilm = {...this._film};
     switch (eventType) {
-      case 'Favorite':
+      case 'Favorites':
         copyFilm.film.userDetails.favorite = !this._film.film.userDetails.favorite;
         break;
-      case 'WatchList':
+      case 'Watchlist':
         copyFilm.film.userDetails.watchList = !this._film.film.userDetails.watchList;
         break;
       case 'History':
@@ -127,7 +124,9 @@ export default class Film {
       default:
         return;
     }
-    this._isFilterType(copyFilm);
+
+    this._filterType === eventType ? this._changeData(UserAction.UPDATE_FILM, UpdateType.MINOR, copyFilm) : this._changeData(UserAction.UPDATE_FILM, UpdateType.PATCH,  copyFilm);
+
     this._loadScroll(scrollY);
   }
 
@@ -143,23 +142,18 @@ export default class Film {
     }
   }
 
-  _isFilterType(film){
-    return  FilterType.ALL_MOVIES === this._filterType ? this._changeData(UserAction.UPDATE_FILM, UpdateType.PATCH, film) : this._changeData(UserAction.UPDATE_FILM, UpdateType.MINOR, film);
-
-  }
-
   _handleDeleteCommentClick() {
-    return this._changeData(UserAction.UPDATE_FILM, UpdateType.PATCH, this._film);
+    this._changeData(UserAction.UPDATE_FILM, UpdateType.PATCH_POPUP, this._film);
   }
 
   _handleCreateCommentClick() {
-    return this._changeData(UserAction.UPDATE_FILM, UpdateType.PATCH, this._film);
+    this._changeData(UserAction.UPDATE_FILM, UpdateType.PATCH_POPUP, this._film);
   }
 
   _onEscKeyDown(evt) {
     if (isEscEvent(evt)) {
       evt.preventDefault();
-      this._popupComponent.reset();
+      this._popupComponent._reset();
       remove(this._popupComponent);
       siteBodyElement.classList.remove('hide-overflow');
       document.removeEventListener('keydown', this._onEscKeyDown);

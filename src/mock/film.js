@@ -1,6 +1,6 @@
 import {getRandomArray} from '../utils/card-film.js';
 import {getRandomInteger, getRandomIntegerFloat} from '../utils/common.js';
-import {DESCRIPTIONS, GENRES, POSTERS, SMILES, TITLES, ALTERNATIVE_TITLES, DIRECTORS, WRITERS, ACTORS, RATING, COUNTRIES, AUTHORS_COMMENT, DURATION, COUNT_RANDOM_DATE} from './data.js';
+import {DESCRIPTIONS, GENRES, POSTERS, SMILES, TITLES, ALTERNATIVE_TITLES, DIRECTORS, WRITERS, ACTORS, RATING, COUNTRIES, AUTHORS_COMMENT, DURATION, COUNT_RANDOM_DATE, COUNT_RANDOM_DATE_WATCHING} from './data.js';
 import {INDEX_COMMENT, COUNTS} from '../consts.js';
 import dayjs from 'dayjs';
 
@@ -12,19 +12,18 @@ export const generateData = (array) => {
   return array[randomIndex];
 };
 
-const generateDuration = (minutes) => {
-  let hour = 0;
-  while (minutes > 60) {
-    hour += 1;
-    minutes -= 60;
-  }
-  return hour === 0 ? `${minutes}m` : `${hour}h ${minutes}m`;
-};
-
 const generateDate = () => {
   const randYear = getRandomInteger(COUNT_RANDOM_DATE.YEAR.MIN, COUNT_RANDOM_DATE.YEAR.MAX);
   const randMonth = getRandomInteger(COUNT_RANDOM_DATE.MONTH.MIN, COUNT_RANDOM_DATE.MONTH.MAX);
   const randDay = getRandomInteger(COUNT_RANDOM_DATE.DAY.MIN, COUNT_RANDOM_DATE.DAY.MAX);
+
+  return `${randYear}-${randMonth}-${randDay}`;
+};
+
+const generateDateWatching = () => {
+  const randYear = getRandomInteger(COUNT_RANDOM_DATE_WATCHING.YEAR.MIN, COUNT_RANDOM_DATE_WATCHING.YEAR.MAX);
+  const randMonth = getRandomInteger(COUNT_RANDOM_DATE_WATCHING.MONTH.MIN, COUNT_RANDOM_DATE_WATCHING.MONTH.MAX);
+  const randDay = getRandomInteger(COUNT_RANDOM_DATE_WATCHING.DAY.MIN, COUNT_RANDOM_DATE_WATCHING.DAY.MAX);
 
   return `${randYear}-${randMonth}-${randDay}`;
 };
@@ -49,7 +48,7 @@ export const generateComment = () => {
 const generateUserDetails = () => ({
   watchList: Boolean(getRandomInteger(0, 1)),
   alreadyWatched: Boolean(getRandomInteger(0, 1)),
-  watchingDate: generateDate(),
+  watchingDate: generateDateWatching(),
   favorite: Boolean(getRandomInteger(0, 1)),
 });
 
@@ -75,7 +74,7 @@ const generateFIlmInfo = () => {
     writers: getRandomArray(1, 3, WRITERS),
     actors: getRandomArray(1, 3, ACTORS),
     releaseFilm,
-    runtime: generateDuration(getRandomInteger(DURATION.FILM.MIN,DURATION.FILM.MAX)),
+    runtime: getRandomInteger(DURATION.FILM.MIN,DURATION.FILM.MAX),
     genre: getRandomArray(1, 2, GENRES),
     description: String(getRandomArray(1, 5, DESCRIPTIONS)),
   };
@@ -95,7 +94,7 @@ const generateFilm = (commentsId) => {
 };
 
 export const generateCardFilmTemplate = () => {
-  const comments = new Array(getRandomInteger(1, COUNTS.MAX_COMMENTS_FILMS)).fill(null).map(generateComment);
+  const comments = new Array(getRandomInteger(0, COUNTS.MAX_COMMENTS_FILMS)).fill(null).map(generateComment);
   const commentsId = comments.map((item) => item.id);
   const film = generateFilm(commentsId);
   return {film, comments};

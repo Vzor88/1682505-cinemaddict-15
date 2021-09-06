@@ -16,7 +16,9 @@ export default class Filters extends AbstractView {
 
   _filterTypeChangeHandler(evt) {
     evt.preventDefault();
-    this._callback.filterTypeChange(evt.target.id);
+    if(evt.target.className === 'main-navigation__item'){
+      this._callback.filterTypeChange(evt.target.id);
+    }
   }
 
   setFilterTypeChangeHandler(callback) {

@@ -2,13 +2,13 @@ import AbstractView from '../abstract.js';
 import {createRankUserTemplate} from './rank-user-tpl.js';
 
 export default class RankUser extends AbstractView {
-  constructor(filter) {
+  constructor(films) {
     super();
-    this._filter = filter;
+    this._films = films;
   }
 
   getTemplate() {
-    return createRankUserTemplate(this._filter);
+    return createRankUserTemplate(this._films);
   }
 }
 

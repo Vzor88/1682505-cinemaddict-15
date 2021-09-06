@@ -1,10 +1,10 @@
-import {isClassNamePopup} from '../../utils/card-film.js';
+import {isClassNamePopup, generateDuration} from '../../utils/card-film.js';
 import dayjs from 'dayjs';
 import relativeTime from 'dayjs/plugin/relativeTime.js';
 
 dayjs.extend(relativeTime);
 
-const isGenre = (array) => array.length > 1 ? 'Genres' : 'Genre';
+const isGenre = (genres) => genres.length > 1 ? 'Genres' : 'Genre';
 
 const generateCommentsList = (commentary = {}) => {
   const {author, comment, date, emotion} = commentary;
@@ -79,7 +79,7 @@ export const createPopupTemplate = (card) => {
             </tr>
             <tr class="film-details__row">
               <td class="film-details__term">Runtime</td>
-              <td class="film-details__cell">${runtime}</td>
+              <td class="film-details__cell">${generateDuration(runtime)}</td>
             </tr>
             <tr class="film-details__row">
               <td class="film-details__term">Country</td>
@@ -99,7 +99,7 @@ export const createPopupTemplate = (card) => {
 
       <section class="film-details__controls">
         <button type="button" class="film-details__control-button film-details__control-button--watchlist ${isClassNamePopup(watchList)}" id="watchlist" name="watchlist">Add to watchlist</button>
-        <button type="button" class="film-details__control-button film-details__control-button--watched ${isClassNamePopup(alreadyWatched)}" id="watched " name="watched">Already watched</button>
+        <button type="button" class="film-details__control-button film-details__control-button--watched ${isClassNamePopup(alreadyWatched)}" id="watched" name="watched">Already watched</button>
         <button type="button" class="film-details__control-button film-details__control-button--favorite ${isClassNamePopup(favorite)}" id="favorite" name="favorite">Add to favorites</button>
       </section>
     </div>

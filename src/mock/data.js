@@ -13,6 +13,21 @@ export const COUNT_RANDOM_DATE = {
   },
 };
 
+export const COUNT_RANDOM_DATE_WATCHING = {
+  YEAR: {
+    MIN: 2021,
+    MAX: 2021,
+  },
+  MONTH: {
+    MIN: 7,
+    MAX: 8,
+  },
+  DAY: {
+    MIN: 1,
+    MAX: 30,
+  },
+};
+
 export const DURATION = {
   FILM: {
     MIN: 1,
@@ -40,12 +55,12 @@ export const SMILES = [
 ];
 
 export const GENRES = [
-  ' Musical',
-  ' Western',
-  ' Drama',
-  ' Comedy',
-  ' Cartoon',
-  ' Mystery',
+  'Musical',
+  'Western',
+  'Drama',
+  'Comedy',
+  'Cartoon',
+  'Mystery',
 ];
 
 export const DESCRIPTIONS = [

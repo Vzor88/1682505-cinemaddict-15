@@ -1,4 +1,4 @@
-export const createStatisticTemplate = (length) => (
+export const createStatsFooterTemplate = (length) => (
   `<section class="footer__statistics">
     <p>${length} movies inside</p>
    </section>`
