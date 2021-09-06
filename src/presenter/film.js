@@ -122,13 +122,13 @@ export default class Film {
     const copyFilm = {...this._film};
     switch (eventType) {
       case 'Favorites':
-        copyFilm.film.userDetails.favorite = !this._film.film.userDetails.favorite;
+        copyFilm.userDetails.favorite = !this._film.userDetails.favorite;
         break;
       case 'Watchlist':
-        copyFilm.film.userDetails.watchList = !this._film.film.userDetails.watchList;
+        copyFilm.userDetails.watchList = !this._film.userDetails.watchList;
         break;
       case 'History':
-        copyFilm.film.userDetails.alreadyWatched = !this._film.film.userDetails.alreadyWatched;
+        copyFilm.userDetails.alreadyWatched = !this._film.userDetails.alreadyWatched;
         break;
       default:
         return;

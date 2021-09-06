@@ -73,7 +73,7 @@ export const createChartTemplate = (films, dateFrom, dateTo, statsCtx) => (
 
 export const createStatsTemplate = (films, dateFrom, dateTo, activeRadioButton) => {
   const initialValue = 0;
-  let totalDuration = countWatchedFilmsInDateRange(films, dateTo, dateFrom).reduce( (accumulator, currentValue) => accumulator + currentValue.film.filmInfo.runtime, initialValue);
+  let totalDuration = countWatchedFilmsInDateRange(films, dateTo, dateFrom).reduce( (accumulator, currentValue) => accumulator + currentValue.filmInfo.runtime, initialValue);
   totalDuration = generateDuration(totalDuration, true);
   const statsCtxHeight = SIZES.BAR.HEIGHT * getWatchedFilmList(countWatchedFilmsInDateRange(films, dateFrom, dateTo)).genresList.length;
 

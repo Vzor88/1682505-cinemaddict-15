@@ -43,21 +43,21 @@ const getWeightForNullDate = (dateA, dateB) => {
 };
 
 export const sortFilmDate = (filmA, filmB) => {
-  const weight = getWeightForNullDate(filmA.film.filmInfo.releaseFilm.date, filmB.film.filmInfo.releaseFilm.date);
+  const weight = getWeightForNullDate(filmA.filmInfo.releaseFilm.date, filmB.filmInfo.releaseFilm.date);
 
   if (weight !== null) {
     return weight;
   }
 
-  return dayjs(filmB.film.filmInfo.releaseFilm.date).diff(dayjs(filmA.film.filmInfo.releaseFilm.date));
+  return dayjs(filmB.filmInfo.releaseFilm.date).diff(dayjs(filmA.filmInfo.releaseFilm.date));
 };
 
 export const sortFilmRating = (taskA, taskB) => {
-  const weight = getWeightForNullDate(taskA.film.filmInfo.totalRating, taskB.film.filmInfo.totalRating);
+  const weight = getWeightForNullDate(taskA.filmInfo.totalRating, taskB.filmInfo.totalRating);
 
   if (weight !== null) {
     return weight;
   }
 
-  return taskB.film.filmInfo.totalRating - taskA.film.filmInfo.totalRating;
+  return taskB.filmInfo.totalRating - taskA.filmInfo.totalRating;
 };

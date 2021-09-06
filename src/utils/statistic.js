@@ -19,7 +19,7 @@ export const isTopWatchingGenre = (films) => {
   const watchedFilmGenres = {};
 
   films.forEach((film) => {
-    for (const item of film.film.filmInfo.genre){
+    for (const item of film.filmInfo.genre){
       item in watchedFilmGenres ? watchedFilmGenres[item]++ :  watchedFilmGenres[item] = 1;
     }
   });
@@ -45,7 +45,7 @@ export const getWatchedFilmList = (films) => {
 export const countWatchedFilmsInDateRange = (films, dateFrom, dateTo) => {
   const sortFilmsInDateRange = [];
   films.forEach((film) => {
-    if(dayjs(film.film.userDetails.watchingDate).isSame(dateFrom, 'day') || dayjs(film.film.userDetails.watchingDate).isBetween(dateFrom, dateTo) || dayjs(film.film.userDetails.watchingDate).isSame(dateTo, 'day')){
+    if(dayjs(film.userDetails.watchingDate).isSame(dateFrom, 'day') || dayjs(film.userDetails.watchingDate).isBetween(dateFrom, dateTo) || dayjs(film.userDetails.watchingDate).isSame(dateTo, 'day')){
       sortFilmsInDateRange.push(film);
     }
   });

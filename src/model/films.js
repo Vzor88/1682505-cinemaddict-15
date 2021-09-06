@@ -67,11 +67,12 @@ export default class Films extends AbstractObserver {
   }
 
   static adaptToServer(film) {
-    const adaptedFilm =  {};
-    adaptedFilm['film_info'] = film.film.filmInfo;
-    adaptedFilm.comments = film.film.comments;
-    adaptedFilm['user_details'] = film.film.userDetails;
-    adaptedFilm.id = String(film.film['id']);
+    const adaptedFilm =  {...film};
+    adaptedFilm['film_info'] = film.filmInfo;
+    adaptedFilm['user_details'] = film.userDetails;
+    adaptedFilm.id = String(film['id']);
+    delete adaptedFilm['filmInfo'];
+    delete adaptedFilm['userDetails'];
 
     return adaptedFilm;
   }
