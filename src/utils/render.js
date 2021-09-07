@@ -53,6 +53,10 @@ export const remove = (component) => {
   component.removeElement();
 };
 
+export const getUpdateFilm = (presenter, update, container, filter) => {
+  presenter.get(update.id).init(update, container, filter);
+};
+
 export const replace = (newChild, oldChild) => {
   if (oldChild instanceof Abstract) {
     oldChild = oldChild.getElement();

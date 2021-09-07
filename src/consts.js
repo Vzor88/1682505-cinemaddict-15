@@ -1,21 +1,8 @@
 import dayjs from 'dayjs';
 
-export const AUTHORIZATION = 'Basic mS7sfS83wma2sa5i';
-export const END_POINT = 'https://15.ecmascript.pages.academy/cinemaddict/';
-
 export const RenderPosition = {
   AFTERBEGIN: 'afterbegin',
   BEFOREEND: 'beforeend',
-};
-
-export const MethodType = {
-  GET: 'GET',
-  PUT: 'PUT',
-};
-
-export const SuccessHTTPStatusRange = {
-  MIN: 200,
-  MAX: 299,
 };
 
 export const SortType = {

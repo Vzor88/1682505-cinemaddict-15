@@ -34,13 +34,11 @@ export default class Film {
     this._container = container;
     this._filterType = filterType;
 
-    this._getCommentsFromApi();
-
     const prevFilmComponent = this._filmComponent;
     const prevPopupComponent = this._popupComponent;
 
     this._filmComponent = new CardFilmView(this._film);
-    // this._popupComponent = new PopupView(this._film, this._comments);
+    this._getCommentsFromApi();
 
     this._handingEventCardFilm();
 

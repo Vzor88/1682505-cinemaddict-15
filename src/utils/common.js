@@ -4,5 +4,3 @@ export const getRandomInteger = (a = 0, b = 1) => {
 
   return Math.floor(lower + Math.random() * (upper - lower + 1));
 };
-
-export const getRandomIntegerFloat = (minNumber, maxNumber, float) => Number((Math.random() * (maxNumber - minNumber) + minNumber).toFixed(float));

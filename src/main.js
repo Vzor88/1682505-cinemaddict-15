@@ -1,9 +1,12 @@
-import {END_POINT, AUTHORIZATION, UpdateType} from './consts.js';
+import {UpdateType} from './consts.js';
 import FilmsList from './presenter/films-list.js';
 import FilmsModel from './model/films.js';
 import FiltersModel from './model/filters.js';
 import FiltersPresenter from './presenter/filters.js';
 import Api from './api.js';
+
+export const AUTHORIZATION = 'Basic mS7sfS83wma2sa5i';
+export const END_POINT = 'https://15.ecmascript.pages.academy/cinemaddict/';
 
 export const siteBodyElement = document.querySelector('.body');
 const siteMainElement = document.querySelector('.main');
@@ -24,7 +27,6 @@ api.getFilms()
   .catch(() => {
     filmsModel.setFilms(UpdateType.INIT, []);
     const filtersPresenter = new FiltersPresenter(siteMainElement, filtersModel, filmsModel);
-
     filtersPresenter.init();
   });
 

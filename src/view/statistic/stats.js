@@ -1,7 +1,6 @@
 import SmartView from '../smart.js';
 import {createStatsTemplate, createChartTemplate} from './stats-tpl.js';
 
-
 export default class Stats extends SmartView {
   constructor(films, dateFrom, dateTo, activeRadioButton) {
     super();

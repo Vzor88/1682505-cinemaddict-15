@@ -12,7 +12,6 @@ export default class Films extends AbstractObserver {
   }
 
   getFilms() {
-    console.log(this._films);
     return this._films;
   }
 
@@ -45,7 +44,7 @@ export default class Films extends AbstractObserver {
     adaptedFilm.userDetails = film['user_details'];
     adaptedFilm.userDetails.alreadyWatched = film.user_details['already_watched'];
     adaptedFilm.userDetails.watchList = film.user_details['watchlist'];
-    adaptedFilm.userDetails.watchingDate = new Date(film.user_details.watching_date);
+    adaptedFilm.userDetails.watchingDate = new Date(film.user_details['watching_date']);
     delete adaptedFilm.filmInfo['age_rating'];
     delete adaptedFilm.filmInfo['alternative_title'];
     delete adaptedFilm.filmInfo['total_rating'];

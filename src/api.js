@@ -1,5 +1,14 @@
-import {MethodType, SuccessHTTPStatusRange} from './consts.js';
 import FilmsModel from './model/films.js';
+
+export const MethodType = {
+  GET: 'GET',
+  PUT: 'PUT',
+};
+
+export const SuccessHTTPStatusRange = {
+  MIN: 200,
+  MAX: 299,
+};
 
 export default class Api {
   constructor(endPoint, authorization) {
