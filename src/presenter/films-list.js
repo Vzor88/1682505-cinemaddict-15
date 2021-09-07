@@ -53,7 +53,6 @@ export default class FilmsList {
   }
 
   init () {
-    this._renderStatsFooter(this._getFilms().length);
     this._renderedFilmCount = COUNTS.FILMS_PER_STEP;
     this._renderPage();
   }
@@ -146,7 +145,8 @@ export default class FilmsList {
   }
 
   _renderStatsFooter() {
-    render(this._filmListFooterContainer, new StatsFooterView(this._getFilms().length));
+    this._statsFooterComponent = new StatsFooterView(this._getFilms().length);
+    render(this._filmListFooterContainer, this._statsFooterComponent);
   }
 
   _renderSort() {
@@ -255,7 +255,7 @@ export default class FilmsList {
     if(this._rankComponent){
       remove(this._rankComponent);
     }
-
+    remove(this._statsFooterComponent);
     remove(this._filmsComponent);
     remove(this._noFilmsComponent);
     remove(this._loadingComponent);
@@ -281,9 +281,10 @@ export default class FilmsList {
 
     if(this._getFilms().length === 0) {
       this._renderNoFilms ();
+      this._renderStatsFooter(this._getFilms().length);
       return;
     }
-
+    this._renderStatsFooter(this._getFilms().length);
     this._renderRank ();
     this._renderSort ();
     this._renderMarkupFilmLists();

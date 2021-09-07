@@ -5,11 +5,11 @@ import {FilterType, UpdateType, RenderPosition} from '../consts.js';
 import StatisticView from '../view/statistic/stats-item-menu.js';
 
 export default class Filters {
-  constructor(filterContainer, filterModel, filmsModel, api) {
+  constructor(filterContainer, filterModel, filmsModel, films = []) {
     this._filterContainer = filterContainer;
     this._filterModel = filterModel;
     this._filmsModel = filmsModel;
-    this._api = api;
+    this._films = films;
 
     this._statisticComponent = new StatisticView();
 
@@ -69,14 +69,7 @@ export default class Filters {
     this._filterModel.setFilter(UpdateType.STATS);
   }
 
-  _getFilmsFromApi() {
-    const movies = [];
-    this._api.getFilms().then((films) => films.forEach((film) => movies.push(film)));
-    return movies;
-  }
-
   _getFilters() {
-    const films = this._getFilmsFromApi();
     return [
       {
         type: FilterType.ALL_MOVIES,
@@ -85,17 +78,17 @@ export default class Filters {
       {
         type: FilterType.WATCHLIST,
         name: 'Watchlist',
-        count: filter[FilterType.WATCHLIST](films).length,
+        count: filter[FilterType.WATCHLIST](this._films).length,
       },
       {
         type: FilterType.HISTORY,
         name: 'History',
-        count: filter[FilterType.HISTORY](films).length,
+        count: filter[FilterType.HISTORY](this._films).length,
       },
       {
         type: FilterType.FAVORITES,
         name: 'Favorites',
-        count: filter[FilterType.FAVORITES](films).length,
+        count: filter[FilterType.FAVORITES](this._films).length,
       },
     ];
   }

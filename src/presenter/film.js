@@ -40,10 +40,9 @@ export default class Film {
     const prevPopupComponent = this._popupComponent;
 
     this._filmComponent = new CardFilmView(this._film);
-    this._popupComponent = new PopupView(this._film, this._comments);
+    // this._popupComponent = new PopupView(this._film, this._comments);
 
     this._handingEventCardFilm();
-    this._handingEventPopup();
 
     if (prevFilmComponent === null || prevPopupComponent === null) {
       render(this._container, this._filmComponent);
@@ -59,7 +58,11 @@ export default class Film {
 
   _getCommentsFromApi() {
     return this._api.getComments(this._film)
-      .then((comments) => comments.forEach((comment) => this._comments.push(comment)));
+      .then((comments) => {
+        comments.forEach((comment) => this._comments.push(comment));
+        this._popupComponent = new PopupView(this._film, this._comments);
+        this._handingEventPopup();
+      });
   }
 
   _handingEventCardFilm(){
@@ -88,12 +91,11 @@ export default class Film {
     const filmDetails = document.querySelector('.film-details');
 
     isAvailability(filmDetails);
+    this._handingEventPopup();
     this._openedPopup();
   }
 
   _openedPopup(){
-    this._popupComponent = new PopupView(this._film, this._comments);
-    this._handingEventPopup();
     render(siteBodyElement, this._popupComponent);
     siteBodyElement.classList.add('hide-overflow');
     document.addEventListener('keydown', this._onEscKeyDown);

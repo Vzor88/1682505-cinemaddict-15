@@ -16,11 +16,17 @@ const filmsModel = new FilmsModel();
 const filtersModel = new FiltersModel();
 
 api.getFilms()
-  .then((films) => filmsModel.setFilms(UpdateType.INIT, films))
-  .catch(() => filmsModel.setFilms(UpdateType.INIT, []));
+  .then((films) => {
+    filmsModel.setFilms(UpdateType.INIT, films);
+    const filtersPresenter = new FiltersPresenter(siteMainElement, filtersModel, filmsModel, films);
+    filtersPresenter.init();
+  })
+  .catch(() => {
+    filmsModel.setFilms(UpdateType.INIT, []);
+    const filtersPresenter = new FiltersPresenter(siteMainElement, filtersModel, filmsModel);
+
+    filtersPresenter.init();
+  });
 
 const filmsListPresenter = new FilmsList(siteHeaderElement, siteMainElement, siteFooterElement, filmsModel, filtersModel, api);
-const filtersPresenter = new FiltersPresenter(siteMainElement, filtersModel, filmsModel, api);
-
-filtersPresenter.init();
 filmsListPresenter.init();

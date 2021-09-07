@@ -1,6 +1,5 @@
 import AbstractObserver from '../services/abstract-observer.js';
 
-
 export default class Films extends AbstractObserver {
   constructor() {
     super();
@@ -13,11 +12,12 @@ export default class Films extends AbstractObserver {
   }
 
   getFilms() {
+    console.log(this._films);
     return this._films;
   }
 
   updateFilm(updateType, update) {
-    const index = this._films.findIndex((film) => film.film.id === update.film.id);
+    const index = this._films.findIndex((film) => film.id === update.id);
 
     if (index === -1) {
       throw new Error('Can\'t update unexisting film');
