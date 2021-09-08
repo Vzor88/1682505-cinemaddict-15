@@ -47,6 +47,7 @@ export default class Filters {
   }
 
   _handleModelEvent() {
+    this._films = this._filmsModel.getFilms();
     this.init();
   }
 

@@ -34,12 +34,13 @@ export default class Films extends AbstractObserver {
   static adaptToClient(film) {
     const adaptedFilm =  {...film};
     adaptedFilm.id = Number(film['id']);
-    adaptedFilm.comments = film['comments'];
+    adaptedFilm.comments = [];
+    film.comments.forEach((comment) => adaptedFilm.comments.push(Number(comment)));
     adaptedFilm.filmInfo = film['film_info'];
     adaptedFilm.filmInfo.ageRating = film.film_info['age_rating'];
     adaptedFilm.filmInfo.alternativeTitle = film.film_info['alternative_title'];
     adaptedFilm.filmInfo.totalRating = film.film_info['total_rating'];
-    adaptedFilm.filmInfo.release.date = new Date(film.film_info.release.date);
+    adaptedFilm.filmInfo.release.date !== null ? new Date(film.film_info.release.date) : film.film_info.release.date;
     adaptedFilm.filmInfo.release.releaseCountry = film.film_info.release['release_country'];
     adaptedFilm.userDetails = film['user_details'];
     adaptedFilm.userDetails.alreadyWatched = film.user_details['already_watched'];
@@ -67,12 +68,28 @@ export default class Films extends AbstractObserver {
 
   static adaptToServer(film) {
     const adaptedFilm =  {...film};
+    adaptedFilm.comments = [];
+    film.comments.forEach((comment) => adaptedFilm.comments.push(String(comment)));
+    adaptedFilm.filmInfo['age_rating'] = film.filmInfo.ageRating;
+    adaptedFilm.filmInfo['alternative_title'] = film.filmInfo.alternativeTitle;
+    adaptedFilm.filmInfo['total_rating'] = film.filmInfo.totalRating;
+    adaptedFilm.filmInfo.release['release_country'] = film.filmInfo.release.releaseCountry;
+    adaptedFilm.filmInfo.release.date instanceof Date ? adaptedFilm.filmInfo.release.date.toISOString() : null;
     adaptedFilm['film_info'] = film.filmInfo;
+    adaptedFilm.userDetails['watching_date'] = film.userDetails.watchingDate.toISOString();
+    adaptedFilm.userDetails['already_watched'] = film.userDetails.alreadyWatched;
+    adaptedFilm.userDetails['watchlist'] = film.userDetails.watchList;
     adaptedFilm['user_details'] = film.userDetails;
     adaptedFilm.id = String(film['id']);
     delete adaptedFilm['filmInfo'];
+    delete adaptedFilm.film_info['ageRating'];
+    delete adaptedFilm.film_info['alternativeTitle'];
+    delete adaptedFilm.film_info['totalRating'];
+    delete adaptedFilm.film_info.release['releaseCountry'];
     delete adaptedFilm['userDetails'];
-
+    delete adaptedFilm.user_details['watchingDate'];
+    delete adaptedFilm.user_details['alreadyWatched'];
+    delete adaptedFilm.user_details['watchList'];
     return adaptedFilm;
   }
 }

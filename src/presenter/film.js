@@ -4,7 +4,6 @@ import {siteBodyElement} from '../main.js';
 import {remove, replace, isEscEvent, render, isAvailability} from '../utils/render.js';
 import {UserAction, UpdateType, EventType} from '../consts.js';
 
-
 export default class Film {
   constructor(changeData, api) {
     this._changeData = changeData;
@@ -38,6 +37,7 @@ export default class Film {
     const prevPopupComponent = this._popupComponent;
 
     this._filmComponent = new CardFilmView(this._film);
+
     this._getCommentsFromApi();
 
     this._handingEventCardFilm();
@@ -58,6 +58,10 @@ export default class Film {
     return this._api.getComments(this._film)
       .then((comments) => {
         comments.forEach((comment) => this._comments.push(comment));
+        this._popupComponent = new PopupView(this._film, this._comments);
+        this._handingEventPopup();
+      })
+      .catch(() => {
         this._popupComponent = new PopupView(this._film, this._comments);
         this._handingEventPopup();
       });
@@ -133,7 +137,6 @@ export default class Film {
       default:
         return;
     }
-
     this._filterType === eventType ? this._changeData(UserAction.UPDATE_FILM, UpdateType.MINOR, copyFilm) : this._changeData(UserAction.UPDATE_FILM, UpdateType.PATCH,  copyFilm);
 
     this._loadScroll(scrollY);

@@ -73,7 +73,6 @@ export default class FilmsList {
     if(actionType === UserAction.UPDATE_FILM){
       this._api.updateFilm(update).then((response) => {
         this._filmsModel.updateFilm(updateType, response);
-        this._filtersModel.setFilms(updateType, update);
       });
     }
   }
@@ -85,10 +84,10 @@ export default class FilmsList {
           getUpdateFilm(this._filmPresenter, update, this._filmsContainer, this._filterType);
         }
         if (this._filmPresenterTop.has(update.id)) {
-          getUpdateFilm(this._filmPresenterTop, update, this._filmsListExtra, this._filterType);
+          getUpdateFilm(this._filmPresenterTop, update, this._filmsListExtraContainer, this._filterType);
         }
         if (this._filmPresenterComment.has(update.id)) {
-          getUpdateFilm(this._filmPresenterComment, update, this._filmsListComment, this._filterType);
+          getUpdateFilm(this._filmPresenterComment, update, this._filmsListCommentContainer, this._filterType);
         }
         break;
       case UpdateType.PATCH_POPUP:
@@ -96,7 +95,12 @@ export default class FilmsList {
           getUpdateFilm(this._filmPresenter, update, this._filmsContainer, this._filterType);
         }
         if (this._filmPresenterTop.has(update.id)) {
-          getUpdateFilm(this._filmPresenterTop, update, this._filmsListExtra, this._filterType);
+          getUpdateFilm(this._filmPresenterTop, update, this._filmsListExtraContainer, this._filterType);
+        }
+        this._filmPresenterComment.forEach((presenter) => presenter.destroy());
+        this._filmPresenterComment.clear();
+        if(this._filmsListCommentContainer){
+          this._filmsListCommentContainer.remove();
         }
         this._renderFilmsListTopCommented();
         break;
@@ -196,11 +200,11 @@ export default class FilmsList {
   _renderFilmsListExtra () {
     if(isTopRatedFilms(this._filmsModel.getFilms()).length){
       renderElement(this._allFilmsContainer, this._filmsComponent.getTemplateFilmsListExtra(this._filmsModel.getFilms()), RenderPosition.BEFOREEND);
-      this._filmsListExtra = this._filmsComponent.getElement().querySelector('.films-list--top-rated').querySelector('.films-list__container');
+      this._filmsListExtraContainer = this._filmsComponent.getElement().querySelector('.films-list--top-rated').querySelector('.films-list__container');
       this._topRatingFilms = this._getFilms().slice().sort((prev, next) => next.filmInfo.totalRating - prev.filmInfo.totalRating);
 
       this._topRatingFilms = this._topRatingFilms.slice(COUNTS.SORT_FILMS.MIN, COUNTS.SORT_FILMS.MAX);
-      this._renderFilms(this._topRatingFilms, this._filmsListExtra);
+      this._renderFilms(this._topRatingFilms, this._filmsListExtraContainer);
     } else {
       this._filmsComponent.getElement().querySelector('.films-list--most-commented').classList.remove('films-list--extra');
     }
@@ -210,11 +214,11 @@ export default class FilmsList {
     if(isTopCommentedFilms(this._filmsModel.getFilms()).length){
       this._filmsComponent.getElement().querySelector('.films-list--top-rated').classList.add('films-list--extra');
       renderElement(this._allFilmsContainer, this._filmsComponent.getTemplateFilmsTopCommented(this._filmsModel.getFilms()), RenderPosition.BEFOREEND);
-      this._filmsListComment = this._filmsComponent.getElement().querySelector('.films-list--most-commented').querySelector('.films-list__container');
+      this._filmsListCommentContainer = this._filmsComponent.getElement().querySelector('.films-list--most-commented').querySelector('.films-list__container');
       this._topCommentFilms = isTopCommentedFilms(this._filmsModel.getFilms()).slice().sort((prev, next) => next.comments.length - prev.comments.length);
 
       this._topCommentFilms = this._topCommentFilms.slice(COUNTS.SORT_FILMS.MIN, COUNTS.SORT_FILMS.MAX);
-      this._renderFilms(this._topCommentFilms, this._filmsListComment);
+      this._renderFilms(this._topCommentFilms, this._filmsListCommentContainer);
     } else {
       this._filmsComponent.getElement().querySelector('.films-list--top-rated').classList.remove('films-list--extra');
     }
