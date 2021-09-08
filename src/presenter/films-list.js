@@ -70,9 +70,15 @@ export default class FilmsList {
   }
 
   _handleViewAction(actionType, updateType, update) {
+    const films = this._filmsModel.getFilms();
     if(actionType === UserAction.UPDATE_FILM){
       this._api.updateFilm(update).then((response) => {
-        this._filmsModel.updateFilm(updateType, response);
+        films.forEach((film) => {
+          if (film.id === update.id) {
+            response.comments = film.comments;
+            this._filmsModel.updateFilm(updateType, response);
+          }
+        });
       });
     }
   }
@@ -158,7 +164,7 @@ export default class FilmsList {
   }
 
   _renderFilm (films, film, container) {
-    const filmPresenter = new FilmPresenter(this._handleViewAction, this._api);
+    const filmPresenter = new FilmPresenter(this._handleViewAction);
     filmPresenter.init(film, container, this._filterType);
 
     switch (films) {

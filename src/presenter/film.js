@@ -5,9 +5,8 @@ import {remove, replace, isEscEvent, render, isAvailability} from '../utils/rend
 import {UserAction, UpdateType, EventType} from '../consts.js';
 
 export default class Film {
-  constructor(changeData, api) {
+  constructor(changeData) {
     this._changeData = changeData;
-    this._api = api;
 
     this._filmComponent = null;
     this._popupComponent = null;
@@ -29,7 +28,6 @@ export default class Film {
 
   init (film, container, filterType) {
     this._film = film;
-    this._comments = [];
     this._container = container;
     this._filterType = filterType;
 
@@ -37,10 +35,10 @@ export default class Film {
     const prevPopupComponent = this._popupComponent;
 
     this._filmComponent = new CardFilmView(this._film);
-
-    this._getCommentsFromApi();
+    this._popupComponent = new PopupView(this._film);
 
     this._handingEventCardFilm();
+    this._handingEventPopup();
 
     if (prevFilmComponent === null || prevPopupComponent === null) {
       render(this._container, this._filmComponent);
@@ -52,19 +50,6 @@ export default class Film {
 
     remove(prevFilmComponent);
     remove(prevPopupComponent);
-  }
-
-  _getCommentsFromApi() {
-    return this._api.getComments(this._film)
-      .then((comments) => {
-        comments.forEach((comment) => this._comments.push(comment));
-        this._popupComponent = new PopupView(this._film, this._comments);
-        this._handingEventPopup();
-      })
-      .catch(() => {
-        this._popupComponent = new PopupView(this._film, this._comments);
-        this._handingEventPopup();
-      });
   }
 
   _handingEventCardFilm(){

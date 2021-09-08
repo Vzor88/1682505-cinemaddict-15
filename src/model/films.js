@@ -7,7 +7,7 @@ export default class Films extends AbstractObserver {
   }
 
   setFilms(updateType, films) {
-    this._films = films.slice();
+    this._films = films;
     this._notify(updateType);
   }
 
@@ -56,14 +56,6 @@ export default class Films extends AbstractObserver {
     delete adaptedFilm.userDetails['watching_date'];
     delete adaptedFilm['user_details'];
     return adaptedFilm;
-  }
-
-  static adaptToClientComments(comments) {
-    const adaptedComments =  {...comments};
-    adaptedComments.date = new Date(comments.date);
-    adaptedComments.id = Number(comments['id']);
-
-    return adaptedComments;
   }
 
   static adaptToServer(film) {

@@ -28,8 +28,8 @@ const generateCommentsList = (commentary = {}) => {
 };
 const renderTemplateComment = (comments) => comments.map((comment) => generateCommentsList(comment)).join('');
 
-export const createPopupTemplate = (film, comments) => {
-  const {filmInfo, userDetails} = film;
+export const createPopupTemplate = (film) => {
+  const {filmInfo, userDetails, comments} = film;
   const {title, totalRating, release, genre, poster, description, ageRating, alternativeTitle, writers, director, actors, runtime} = filmInfo;
   const {date, releaseCountry} = release;
   const {watchList, alreadyWatched, favorite} = userDetails;

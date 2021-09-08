@@ -23,10 +23,9 @@ const AUTHORS_COMMENT = [
 ];
 
 export default class Popup extends SmartView {
-  constructor(film, comments) {
+  constructor(film) {
     super();
     this._film = film;
-    this._comments = comments;
 
     this._containerEmodji = this.getElement().querySelector('.film-details__add-emoji-label');
 
@@ -44,7 +43,7 @@ export default class Popup extends SmartView {
   }
 
   getTemplate() {
-    return createPopupTemplate(this._film, this._comments);
+    return createPopupTemplate(this._film);
   }
 
   restoreHandlers(){
