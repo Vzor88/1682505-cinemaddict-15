@@ -7,9 +7,9 @@ export default class Filters extends AbstractObserver {
     this._activeFilter = FilterType.ALL_MOVIES;
   }
 
-  setFilter(updateType, filter) {
+  setFilter(updateType, filter, films) {
     this._activeFilter = filter;
-    this._notify(updateType, filter);
+    this._notify(updateType, films);
   }
 
   getFilter() {

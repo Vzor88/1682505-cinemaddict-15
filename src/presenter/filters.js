@@ -1,14 +1,15 @@
-import FilterView from '../view/filters.js/filters.js';
-import {render, replace, remove} from '../utils/render.js';
+import FilterView from '../view/filters/filters.js';
+import {render, replace, remove, renderElement} from '../utils/render.js';
 import {filter} from '../utils/filters.js';
-import {FilterType, UpdateType} from '../consts.js';
+import {FilterType, UpdateType, RenderPosition} from '../consts.js';
 import StatisticView from '../view/statistic/stats-item-menu.js';
 
-export default class Filter {
-  constructor(filterContainer, filterModel, filmsModel) {
+export default class Filters {
+  constructor(filterContainer, filterModel, filmsModel, films = []) {
     this._filterContainer = filterContainer;
     this._filterModel = filterModel;
     this._filmsModel = filmsModel;
+    this._films = films;
 
     this._statisticComponent = new StatisticView();
 
@@ -32,7 +33,7 @@ export default class Filter {
     this._statisticComponent.setStatsItemMenuHandler(this._handleStatistic);
 
     if (prevFilterComponent === null) {
-      render(this._filterContainer, this._filterComponent);
+      renderElement(this._filterContainer, this._filterComponent, RenderPosition.AFTERBEGIN);
       this._navContainer = document.querySelector('.main-navigation');
       render(this._navContainer, this._statisticComponent);
       return;
@@ -46,6 +47,7 @@ export default class Filter {
   }
 
   _handleModelEvent() {
+    this._films = this._filmsModel.getFilms();
     this.init();
   }
 
@@ -64,13 +66,11 @@ export default class Filter {
 
   _handleStatistic() {
     const filterMenuItems = document.querySelectorAll('.main-navigation__item');
-    filterMenuItems.forEach((item)=> item.classList.remove('main-navigation__item--active'));
+    filterMenuItems.forEach((item) => item.classList.remove('main-navigation__item--active'));
     this._filterModel.setFilter(UpdateType.STATS);
   }
 
   _getFilters() {
-    const films = this._filmsModel.getFilms();
-
     return [
       {
         type: FilterType.ALL_MOVIES,
@@ -79,17 +79,17 @@ export default class Filter {
       {
         type: FilterType.WATCHLIST,
         name: 'Watchlist',
-        count: filter[FilterType.WATCHLIST](films).length,
+        count: filter[FilterType.WATCHLIST](this._films).length,
       },
       {
         type: FilterType.HISTORY,
         name: 'History',
-        count: filter[FilterType.HISTORY](films).length,
+        count: filter[FilterType.HISTORY](this._films).length,
       },
       {
         type: FilterType.FAVORITES,
         name: 'Favorites',
-        count: filter[FilterType.FAVORITES](films).length,
+        count: filter[FilterType.FAVORITES](this._films).length,
       },
     ];
   }

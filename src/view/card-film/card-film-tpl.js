@@ -2,11 +2,10 @@ import dayjs from 'dayjs';
 import {LENGTH_STRING_DESCRIPTION} from '../../consts.js';
 import {isClassName, generateDuration} from '../../utils/card-film.js';
 
-export const createCardFilmTemplate = (card) => {
-  const {film, comments} = card;
-  const {filmInfo, userDetails, id} = film;
-  const {title, totalRating, releaseFilm, runtime, genre, poster, description} = filmInfo;
-  const {date} = releaseFilm;
+export const createCardFilmTemplate = (film) => {
+  const {filmInfo, userDetails, id, comments} = film;
+  const {title, totalRating, release, runtime, genre, poster, description} = filmInfo;
+  const {date} = release;
   const {watchList, alreadyWatched, favorite} = userDetails;
 
   const dateYear = dayjs(date).format('YYYY');
@@ -18,7 +17,7 @@ export const createCardFilmTemplate = (card) => {
     <p class="film-card__info">
       <span class="film-card__year">${dateYear}</span>
       <span class="film-card__duration">${generateDuration(runtime)}</span>
-      <span class="film-card__genre">${genre.join(' ')}</span>
+      <span class="film-card__genre">${genre.join(', ')}</span>
     </p>
     <img src="${poster}" alt="" class="film-card__poster" id="film-card__poster-${id}">
     <p class="film-card__description">${descriptionShort(description)}</p>

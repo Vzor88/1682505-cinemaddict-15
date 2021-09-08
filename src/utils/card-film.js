@@ -1,9 +1,10 @@
 import {getRandomInteger} from './common.js';
 import dayjs from 'dayjs';
 
-export const getRandomArray = (minLength, maxLength, array) => {
-  const randomArray = new Array(getRandomInteger (minLength, maxLength)).fill(null).map(() => array[getRandomInteger (0, array.length -1)]);
-  return Array.from(new Set(randomArray));
+export const generateData = (array) => {
+  const randomIndex = getRandomInteger(0, array.length - 1);
+
+  return array[randomIndex];
 };
 
 export const generateDuration = (minutes, isRenderStats = false) => {
@@ -43,21 +44,21 @@ const getWeightForNullDate = (dateA, dateB) => {
 };
 
 export const sortFilmDate = (filmA, filmB) => {
-  const weight = getWeightForNullDate(filmA.film.filmInfo.releaseFilm.date, filmB.film.filmInfo.releaseFilm.date);
+  const weight = getWeightForNullDate(filmA.filmInfo.release.date, filmB.filmInfo.release.date);
 
   if (weight !== null) {
     return weight;
   }
 
-  return dayjs(filmB.film.filmInfo.releaseFilm.date).diff(dayjs(filmA.film.filmInfo.releaseFilm.date));
+  return dayjs(filmB.filmInfo.release.date).diff(dayjs(filmA.filmInfo.release.date));
 };
 
 export const sortFilmRating = (taskA, taskB) => {
-  const weight = getWeightForNullDate(taskA.film.filmInfo.totalRating, taskB.film.filmInfo.totalRating);
+  const weight = getWeightForNullDate(taskA.filmInfo.totalRating, taskB.filmInfo.totalRating);
 
   if (weight !== null) {
     return weight;
   }
 
-  return taskB.film.filmInfo.totalRating - taskA.film.filmInfo.totalRating;
+  return taskB.filmInfo.totalRating - taskA.filmInfo.totalRating;
 };

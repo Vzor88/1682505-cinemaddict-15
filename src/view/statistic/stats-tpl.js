@@ -73,7 +73,7 @@ export const createChartTemplate = (films, dateFrom, dateTo, statsCtx) => (
 
 export const createStatsTemplate = (films, dateFrom, dateTo, activeRadioButton) => {
   const initialValue = 0;
-  let totalDuration = countWatchedFilmsInDateRange(films, dateTo, dateFrom).reduce( (accumulator, currentValue) => accumulator + currentValue.film.filmInfo.runtime, initialValue);
+  let totalDuration = countWatchedFilmsInDateRange(films, dateTo, dateFrom).reduce( (accumulator, currentValue) => accumulator + currentValue.filmInfo.runtime, initialValue);
   totalDuration = generateDuration(totalDuration, true);
   const statsCtxHeight = SIZES.BAR.HEIGHT * getWatchedFilmList(countWatchedFilmsInDateRange(films, dateFrom, dateTo)).genresList.length;
 
@@ -106,7 +106,7 @@ export const createStatsTemplate = (films, dateFrom, dateTo, activeRadioButton) 
        </li>
        <li class="statistic__text-item">
          <h4 class="statistic__item-title">Top genre</h4>
-         <p class="statistic__item-text">${watchedListGenres.length > 0 ? watchedListGenres[0] : ' '}</p>
+         <p class="statistic__item-text">${watchedListGenres.length ? watchedListGenres[0] : ' '}</p>
        </li>
      </ul>
 

@@ -1,14 +1,26 @@
 import SmartView from '../smart.js';
 import {createPopupTemplate} from './popup-tpl.js';
 import {isCtrlEnterEvent} from '../../utils/render.js';
-import {AUTHORS_COMMENT} from '../../mock/data.js';
 import {getRandomInteger} from '../../utils/common.js';
 import {INDEX_COMMENT, SIZES} from '../../consts.js';
-import {generateData} from '../../mock/film.js';
+import {generateData} from '../../utils/card-film.js';
 import dayjs from 'dayjs';
 import he from 'he';
 import relativeTime from 'dayjs/plugin/relativeTime.js';
 dayjs.extend(relativeTime);
+
+const AUTHORS_COMMENT = [
+  ' Ванька',
+  ' Петька',
+  ' Илюха',
+  ' Нагибатор666',
+  ' Оленька',
+  ' Алена',
+  ' Злая девочка',
+  ' Просто придурок',
+  ' Альфонс',
+  ' Задрот',
+];
 
 export default class Popup extends SmartView {
   constructor(film) {
@@ -130,7 +142,7 @@ export default class Popup extends SmartView {
       evt.preventDefault();
       const newComment = this._createComment();
       this._film.comments.push(newComment);
-      this._film.film.comments.push(newComment.id);
+      this._film.comments.push(newComment.id);
       this._reset();
       this._callback.createCommentClick();
       document.querySelector('.film-details').scrollTo(0, scrollY);
@@ -155,7 +167,7 @@ export default class Popup extends SmartView {
     this._film.comments.forEach((item, index) => {
       if(parentElement.textContent.includes(he.decode(item.comment)) && parentElement.textContent.includes(item.author)){
         this._film.comments.splice(index, 1);
-        this._film.film.comments.splice(index, 1);
+        this._film.comments.splice(index, 1);
       }
     });
 

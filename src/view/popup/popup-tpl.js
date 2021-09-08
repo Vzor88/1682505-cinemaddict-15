@@ -26,13 +26,12 @@ const generateCommentsList = (commentary = {}) => {
       </div>
     </li>`;
 };
-const renderTemplateComment =(comments) => comments.map((comment) => generateCommentsList(comment)).join('');
+const renderTemplateComment = (comments) => comments.map((comment) => generateCommentsList(comment)).join('');
 
-export const createPopupTemplate = (card) => {
-  const {film, comments} = card;
-  const {filmInfo, userDetails} = film;
-  const {title, totalRating, releaseFilm, genre, poster, description, ageRating, alternativeTitle, writers, director, actors, runtime} = filmInfo;
-  const {date, releaseCountry} = releaseFilm;
+export const createPopupTemplate = (film) => {
+  const {filmInfo, userDetails, comments} = film;
+  const {title, totalRating, release, genre, poster, description, ageRating, alternativeTitle, writers, director, actors, runtime} = filmInfo;
+  const {date, releaseCountry} = release;
   const {watchList, alreadyWatched, favorite} = userDetails;
 
   return `<section class="film-details">
@@ -67,15 +66,15 @@ export const createPopupTemplate = (card) => {
             </tr>
             <tr class="film-details__row">
               <td class="film-details__term">Writers</td>
-              <td class="film-details__cell">${writers}</td>
+              <td class="film-details__cell">${writers.join(', ')}</td>
             </tr>
             <tr class="film-details__row">
               <td class="film-details__term">Actors</td>
-              <td class="film-details__cell">${actors}</td>
+              <td class="film-details__cell">${actors.join(', ')}</td>
             </tr>
             <tr class="film-details__row">
               <td class="film-details__term">Release Date</td>
-              <td class="film-details__cell">${date}</td>
+              <td class="film-details__cell">${dayjs(date).format('DD MMMM YYYY')}</td>
             </tr>
             <tr class="film-details__row">
               <td class="film-details__term">Runtime</td>
