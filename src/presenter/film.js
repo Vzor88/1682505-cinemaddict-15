@@ -2,7 +2,7 @@ import CardFilmView from '../view/card-film/card-film.js';
 import PopupView from '../view/popup/popup.js';
 import {siteBodyElement} from '../main.js';
 import {remove, replace, isEscEvent, render, isAvailability} from '../utils/render.js';
-import {UserAction, UpdateType, EventType} from '../consts.js';
+import {UserAction, UpdateType, EventType, FilterType} from '../consts.js';
 
 export default class Film {
   constructor(changeData) {
@@ -110,13 +110,13 @@ export default class Film {
     const scrollY = this._saveScroll();
     const copyFilm = {...this._film};
     switch (eventType) {
-      case 'Favorites':
+      case FilterType.FAVORITES:
         copyFilm.userDetails.favorite = !this._film.userDetails.favorite;
         break;
-      case 'Watchlist':
+      case FilterType.WATCHLIST:
         copyFilm.userDetails.watchList = !this._film.userDetails.watchList;
         break;
-      case 'History':
+      case FilterType.HISTORY:
         copyFilm.userDetails.alreadyWatched = !this._film.userDetails.alreadyWatched;
         break;
       default:
