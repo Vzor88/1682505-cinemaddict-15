@@ -3,6 +3,7 @@ import PopupView from '../view/popup/popup.js';
 import {siteBodyElement} from '../main.js';
 import {remove, replace, isEscEvent, render, isAvailability} from '../utils/render.js';
 import {UserAction, UpdateType, EventType, FilterType} from '../consts.js';
+import he from 'he';
 
 export default class Film {
   constructor(changeData) {
@@ -123,7 +124,6 @@ export default class Film {
         return;
     }
     this._filterType === eventType ? this._changeData(UserAction.UPDATE_FILM, UpdateType.MINOR, copyFilm) : this._changeData(UserAction.UPDATE_FILM, UpdateType.PATCH,  copyFilm);
-
     this._loadScroll(scrollY);
   }
 
@@ -133,24 +133,39 @@ export default class Film {
     }
   }
 
-  _loadScroll(heigth){
+  _loadScroll(height){
     if(document.querySelector('.film-details')){
-      return  document.querySelector('.film-details').scrollTo(0, heigth);
+      return  document.querySelector('.film-details').scrollTo(0, height);
     }
   }
 
-  _handleDeleteCommentClick() {
+  _handleDeleteCommentClick(comment) {
+    const scrollY = this._saveScroll();
+    this._film.comments.forEach((item, index) => {
+      if(comment.textContent.includes(he.decode(item.comment)) && comment.textContent.includes(item.author)){
+        this._film.comments.splice(index, 1);
+      }
+    });
+
+    this._popupComponent.reset();
     this._changeData(UserAction.UPDATE_FILM, UpdateType.PATCH_POPUP, this._film);
+    this._loadScroll(scrollY);
   }
 
   _handleCreateCommentClick() {
+    const scrollY = this._saveScroll();
+    const newComment = this._popupComponent.createComment();
+    this._film.comments.push(newComment);
+    this._popupComponent.reset();
     this._changeData(UserAction.UPDATE_FILM, UpdateType.PATCH_POPUP, this._film);
+    this._loadScroll(scrollY);
+
   }
 
   _onEscKeyDown(evt) {
     if (isEscEvent(evt)) {
       evt.preventDefault();
-      this._popupComponent._reset();
+      this._popupComponent.reset();
       remove(this._popupComponent);
       siteBodyElement.classList.remove('hide-overflow');
       document.removeEventListener('keydown', this._onEscKeyDown);

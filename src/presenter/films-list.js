@@ -104,12 +104,15 @@ export default class FilmsList {
         if (this._filmPresenterTop.has(update.id)) {
           getUpdateFilm(this._filmPresenterTop, update, this._filmsListExtraContainer, this._filterType);
         }
-        this._filmPresenterComment.forEach((presenter) => presenter.destroy());
-        this._filmPresenterComment.clear();
-        if(this._filmsListCommentContainer){
-          this._filmsListCommentContainer.remove();
+        if (this._filmPresenterComment.has(update.id)) {
+          getUpdateFilm(this._filmPresenterComment, update, this._filmsListCommentContainer, this._filterType);
+        }
+
+        if(this._filmsListComment){
+          this._filmsListComment.remove();
         }
         this._renderFilmsListTopCommented();
+
         break;
       case UpdateType.MINOR:
         this._clearPage();
@@ -201,6 +204,7 @@ export default class FilmsList {
 
     this._filmsList = this._filmsComponent.getElement().querySelector('.films-list--all');
     this._filmsContainer = this._filmsList.querySelector('.films-list__container');
+
     this._allFilmsContainer = document.querySelector('.films');
   }
 
@@ -222,7 +226,8 @@ export default class FilmsList {
     if(isTopCommentedFilms(this._filteredFilms).length){
       filmsListTopRatedContainer.classList.add('films-list--extra');
       renderElement(this._allFilmsContainer, this._filmsComponent.getTemplateFilmsTopCommented(this._filteredFilms), RenderPosition.BEFOREEND);
-      this._filmsListCommentContainer = this._filmsComponent.getElement().querySelector('.films-list--most-commented').querySelector('.films-list__container');
+      this._filmsListComment = this._filmsComponent.getElement().querySelector('.films-list--most-commented');
+      this._filmsListCommentContainer = this._filmsListComment.querySelector('.films-list__container');
       this._topCommentFilms = isTopCommentedFilms(this._filteredFilms).slice().sort((prev, next) => next.comments.length - prev.comments.length);
 
       this._topCommentFilms = this._topCommentFilms.slice(COUNTS.SORT_FILMS.MIN, COUNTS.SORT_FILMS.MAX);

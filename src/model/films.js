@@ -40,7 +40,10 @@ export default class Films extends AbstractObserver {
     adaptedFilm.filmInfo.ageRating = film.film_info['age_rating'];
     adaptedFilm.filmInfo.alternativeTitle = film.film_info['alternative_title'];
     adaptedFilm.filmInfo.totalRating = film.film_info['total_rating'];
-    adaptedFilm.filmInfo.release.date !== null ? new Date(film.film_info.release.date) : film.film_info.release.date;
+    adaptedFilm.filmInfo.release.newDate = new Date(film.film_info.release.date);
+    delete adaptedFilm.filmInfo.release.date;
+    adaptedFilm.filmInfo.release.date = adaptedFilm.filmInfo.release.newDate;
+    delete adaptedFilm.filmInfo.release.newDate;
     adaptedFilm.filmInfo.release.releaseCountry = film.film_info.release['release_country'];
     adaptedFilm.userDetails = film['user_details'];
     adaptedFilm.userDetails.alreadyWatched = film.user_details['already_watched'];
@@ -60,13 +63,15 @@ export default class Films extends AbstractObserver {
 
   static adaptToServer(film) {
     const adaptedFilm =  {...film};
-    adaptedFilm.comments = [];
-    film.comments.forEach((comment) => adaptedFilm.comments.push(String(comment)));
+    adaptedFilm.commentsId = film.comments.map((comment) => String(comment.id));
+    adaptedFilm.comments = adaptedFilm.commentsId;
     adaptedFilm.filmInfo['age_rating'] = film.filmInfo.ageRating;
     adaptedFilm.filmInfo['alternative_title'] = film.filmInfo.alternativeTitle;
     adaptedFilm.filmInfo['total_rating'] = film.filmInfo.totalRating;
     adaptedFilm.filmInfo.release['release_country'] = film.filmInfo.release.releaseCountry;
-    adaptedFilm.filmInfo.release.date instanceof Date ? adaptedFilm.filmInfo.release.date.toISOString() : null;
+    adaptedFilm.filmInfo.release.newDate = film.filmInfo.release.date.toISOString();
+    delete adaptedFilm.filmInfo.release.date;
+    adaptedFilm.filmInfo.release.date = adaptedFilm.filmInfo.release.newDate;
     adaptedFilm['film_info'] = film.filmInfo;
     adaptedFilm.userDetails['watching_date'] = film.userDetails.watchingDate.toISOString();
     adaptedFilm.userDetails['already_watched'] = film.userDetails.alreadyWatched;
@@ -82,6 +87,8 @@ export default class Films extends AbstractObserver {
     delete adaptedFilm.user_details['watchingDate'];
     delete adaptedFilm.user_details['alreadyWatched'];
     delete adaptedFilm.user_details['watchList'];
+    delete adaptedFilm.commentsId;
+    delete adaptedFilm.film_info.release.newDate;
     return adaptedFilm;
   }
 }

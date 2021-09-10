@@ -49,8 +49,8 @@ export default class Popup extends SmartView {
   restoreHandlers(){
     this.getElement().querySelector('.film-details__emoji-list').addEventListener('click', this._emojiListHandler);
 
-    this._buttonsDeleteComment = this.getElement().querySelectorAll('.film-details__comment-delete');
-    this._buttonsDeleteComment.forEach((item) => item.addEventListener('click', this._deleteCommentClickHandler));
+    const buttonsDeleteComment = this.getElement().querySelectorAll('.film-details__comment-delete');
+    buttonsDeleteComment.forEach((item) => item.addEventListener('click', this._deleteCommentClickHandler));
 
     this.getElement().querySelector('.film-details__close-btn').addEventListener('click', this._editClickPopupHandler);
     this.getElement().querySelector('.film-details__control-button--favorite').addEventListener('click', this._favoriteClickPopupHandler);
@@ -86,7 +86,7 @@ export default class Popup extends SmartView {
     this._callback.createCommentClick = callback;
   }
 
-  _reset() {
+  reset() {
     this.updateElement(true);
     if(this._containerEmodji){
       this._containerEmodji.innerHTML = ' ';
@@ -138,18 +138,12 @@ export default class Popup extends SmartView {
 
   _createCommentHandler(evt) {
     if(isCtrlEnterEvent(evt) && document.querySelector('.film-details__add-emoji-label').firstChild && this._textCommentInput()){
-      const scrollY = document.querySelector('.film-details').scrollTop;
       evt.preventDefault();
-      const newComment = this._createComment();
-      this._film.comments.push(newComment);
-      this._film.comments.push(newComment.id);
-      this._reset();
       this._callback.createCommentClick();
-      document.querySelector('.film-details').scrollTo(0, scrollY);
     }
   }
 
-  _createComment() {
+  createComment() {
     return {
       id: getRandomInteger(INDEX_COMMENT.MIN, INDEX_COMMENT.MAX),
       author: generateData(AUTHORS_COMMENT),
@@ -161,18 +155,7 @@ export default class Popup extends SmartView {
 
   _deleteCommentClickHandler(evt){
     evt.preventDefault();
-    const scrollY = document.querySelector('.film-details').scrollTop;
     const parentElement = evt.target.parentElement.parentElement;
-
-    this._film.comments.forEach((item, index) => {
-      if(parentElement.textContent.includes(he.decode(item.comment)) && parentElement.textContent.includes(item.author)){
-        this._film.comments.splice(index, 1);
-        this._film.comments.splice(index, 1);
-      }
-    });
-
-    this._reset();
-    this._callback.deleteCommentClick();
-    document.querySelector('.film-details').scrollTo(0, scrollY);
+    this._callback.deleteCommentClick(parentElement);
   }
 }
