@@ -31,6 +31,25 @@ export default class Films extends AbstractObserver {
     this._notify(updateType, update);
   }
 
+  addComment(updateType, update) {
+    this._notify(updateType, update);
+  }
+
+  deleteComment(updateType, update, commentId) {
+    const index = update.comments.findIndex((comment) => comment.id === commentId);
+
+    if (index === -1) {
+      throw new Error('Can\'t delete unexisting task');
+    }
+
+    update.comments = [
+      ...update.comments.slice(0, index),
+      ...update.comments.slice(index + 1),
+    ];
+
+    this._notify(updateType, update);
+  }
+
   static adaptToClient(film) {
     const adaptedFilm =  {...film};
     adaptedFilm.id = Number(film['id']);

@@ -139,16 +139,15 @@ export default class Film {
     }
   }
 
-  _handleDeleteCommentClick(comment) {
+  _handleDeleteCommentClick(commentary) {
     const scrollY = this._saveScroll();
-    this._film.comments.forEach((item, index) => {
-      if(comment.textContent.includes(he.decode(item.comment)) && comment.textContent.includes(item.author)){
-        this._film.comments.splice(index, 1);
+    const commentId = commentary.querySelector('.film-details__comment-id').textContent;
+    this._film.comments.forEach((comment) => {
+      if(comment.id === commentId){
+        this._changeData(UserAction.DELETE_COMMENT, UpdateType.PATCH_POPUP, this._film, commentId);
       }
     });
-
     this._popupComponent.reset();
-    this._changeData(UserAction.UPDATE_FILM, UpdateType.PATCH_POPUP, this._film);
     this._loadScroll(scrollY);
   }
 
@@ -157,7 +156,7 @@ export default class Film {
     const newComment = this._popupComponent.createComment();
     this._film.comments.push(newComment);
     this._popupComponent.reset();
-    this._changeData(UserAction.UPDATE_FILM, UpdateType.PATCH_POPUP, this._film);
+    this._changeData(UserAction.ADD_COMMENT, UpdateType.PATCH_POPUP, this._film);
     this._loadScroll(scrollY);
 
   }

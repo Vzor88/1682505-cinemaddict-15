@@ -70,17 +70,28 @@ export default class FilmsList {
     }
   }
 
-  _handleViewAction(actionType, updateType, update) {
+  _handleViewAction(actionType, updateType, update, commentId) {
     const films = this._filmsModel.getFilms();
-    if(actionType === UserAction.UPDATE_FILM){
-      this._api.updateFilm(update).then((response) => {
-        films.forEach((film) => {
-          if (film.id === update.id) {
-            response.comments = film.comments;
-            this._filmsModel.updateFilm(updateType, response);
-          }
+    switch (actionType) {
+      case UserAction.UPDATE_FILM:
+        this._api.updateFilm(update).then((response) => {
+          films.forEach((film) => {
+            if (film.id === update.id) {
+              response.comments = film.comments;
+              this._filmsModel.updateFilm(updateType, response);
+            }
+          });
         });
-      });
+        break;
+      case UserAction.ADD_COMMENT:
+        this._api.addComment(update).then((response) => {
+          this._filmsModel.addComment(updateType, response);
+        });
+        break;
+      case UserAction.DELETE_COMMENT:
+        this._api.deleteComment(update, commentId).then(() => {
+          this._filmsModel.deleteComment(updateType, update, commentId);
+        });
     }
   }
 
@@ -98,6 +109,7 @@ export default class FilmsList {
         }
         break;
       case UpdateType.PATCH_POPUP:
+        console.log(update);
         if (this._filmPresenter.has(update.id)) {
           getUpdateFilm(this._filmPresenter, update, this._filmsContainer, this._filterType);
         }

@@ -7,7 +7,7 @@ dayjs.extend(relativeTime);
 const isGenre = (genres) => genres.length > 1 ? 'Genres' : 'Genre';
 
 const generateCommentsList = (commentary = {}) => {
-  const {author, comment, date, emotion} = commentary;
+  const {author, comment, date, emotion, id} = commentary;
 
   const timePassed = dayjs(date).fromNow();
 
@@ -19,6 +19,7 @@ const generateCommentsList = (commentary = {}) => {
       <div>
         <p class="film-details__comment-text">${comment}</p>
         <p class="film-details__comment-info">
+        <span class="film-details__comment-id visually-hidden">${id}</span>
           <span class="film-details__comment-author">${author}</span>
           <span class="film-details__comment-day">${timePassed}</span>
           <button class="film-details__comment-delete">Delete</button>
