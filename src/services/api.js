@@ -33,18 +33,13 @@ export default class Api {
       .then(Api.toJSON);
   }
 
-  updateComments(comments) {
-    return this._update(`comments/${comments.id}`, comments);
-  }
-
-  addComment(film) {
-    return this._load( `comments/${film.id}`, MethodType.POST, JSON.stringify(FilmsModel.adaptToServer(film)), new Headers({'Content-Type': 'application/json'}))
+  addComment(film, comment) {
+    return this._load( `comments/${film.id}`, MethodType.POST, JSON.stringify(FilmsModel.adaptToServerComments(comment)), new Headers({'Content-Type': 'application/json'}))
       .then(Api.toJSON)
-      .then(FilmsModel.adaptToClient);
+      .then(FilmsModel.adaptToClientComments);
   }
 
   deleteComment(film, commentId) {
-    console.log(film, commentId);
     return this._load( `comments/${commentId}`, MethodType.DELETE);
   }
 

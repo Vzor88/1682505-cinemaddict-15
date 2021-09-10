@@ -3,7 +3,6 @@ import PopupView from '../view/popup/popup.js';
 import {siteBodyElement} from '../main.js';
 import {remove, replace, isEscEvent, render, isAvailability} from '../utils/render.js';
 import {UserAction, UpdateType, EventType, FilterType} from '../consts.js';
-import he from 'he';
 
 export default class Film {
   constructor(changeData) {
@@ -156,7 +155,7 @@ export default class Film {
     const newComment = this._popupComponent.createComment();
     this._film.comments.push(newComment);
     this._popupComponent.reset();
-    this._changeData(UserAction.ADD_COMMENT, UpdateType.PATCH_POPUP, this._film);
+    this._changeData(UserAction.ADD_COMMENT, UpdateType.PATCH_POPUP, this._film, newComment);
     this._loadScroll(scrollY);
 
   }

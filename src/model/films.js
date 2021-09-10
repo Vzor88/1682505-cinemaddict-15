@@ -110,4 +110,35 @@ export default class Films extends AbstractObserver {
     delete adaptedFilm.film_info.release.newDate;
     return adaptedFilm;
   }
+
+  static adaptToClientComments(film) {
+    const adaptedFilm =  {};
+    adaptedFilm.comments = film.comments;
+    adaptedFilm.filmInfo = film.movie.film_info;
+    adaptedFilm.userDetails = film.movie.user_details;
+    adaptedFilm.id = Number(film.movie['id']);
+    adaptedFilm.filmInfo.ageRating = film.movie.film_info['age_rating'];
+    adaptedFilm.filmInfo.alternativeTitle = film.movie.film_info['alternative_title'];
+    adaptedFilm.filmInfo.totalRating = film.movie.film_info['total_rating'];
+    adaptedFilm.filmInfo.release.newDate = new Date(film.movie.film_info.release.date);
+    delete adaptedFilm.filmInfo.release.date;
+    adaptedFilm.filmInfo.release.date = adaptedFilm.filmInfo.release.newDate;
+    delete adaptedFilm.filmInfo.release.newDate;
+    adaptedFilm.filmInfo.release.releaseCountry = film.movie.film_info.release['release_country'];
+    adaptedFilm.userDetails.alreadyWatched = film.movie.user_details['already_watched'];
+    adaptedFilm.userDetails.watchList = film.movie.user_details['watchlist'];
+    adaptedFilm.userDetails.watchingDate = new Date(film.movie.user_details['watching_date']);
+    delete adaptedFilm.filmInfo['age_rating'];
+    delete adaptedFilm.filmInfo['alternative_title'];
+    delete adaptedFilm.filmInfo['total_rating'];
+    delete adaptedFilm.filmInfo.release['release_country'];
+    delete adaptedFilm.userDetails['already_watched'];
+    delete adaptedFilm.userDetails['watchlist'];
+    delete adaptedFilm.userDetails['watching_date'];
+    return adaptedFilm;
+  }
+
+  static adaptToServerComments(comment){
+    return comment;
+  }
 }

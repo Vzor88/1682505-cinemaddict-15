@@ -1,26 +1,11 @@
 import SmartView from '../smart.js';
 import {createPopupTemplate} from './popup-tpl.js';
 import {isCtrlEnterEvent} from '../../utils/render.js';
-import {getRandomInteger} from '../../utils/common.js';
-import {INDEX_COMMENT, SIZES} from '../../consts.js';
-import {generateData} from '../../utils/card-film.js';
+import {SIZES} from '../../consts.js';
 import dayjs from 'dayjs';
 import he from 'he';
 import relativeTime from 'dayjs/plugin/relativeTime.js';
 dayjs.extend(relativeTime);
-
-const AUTHORS_COMMENT = [
-  ' Ванька',
-  ' Петька',
-  ' Илюха',
-  ' Нагибатор666',
-  ' Оленька',
-  ' Алена',
-  ' Злая девочка',
-  ' Просто придурок',
-  ' Альфонс',
-  ' Задрот',
-];
 
 export default class Popup extends SmartView {
   constructor(film) {
@@ -145,10 +130,7 @@ export default class Popup extends SmartView {
 
   createComment() {
     return {
-      id: getRandomInteger(INDEX_COMMENT.MIN, INDEX_COMMENT.MAX),
-      author: generateData(AUTHORS_COMMENT),
       comment: this._textCommentInput(),
-      date: dayjs(),
       emotion: document.querySelector('.film-details__add-emoji-label').firstElementChild.id,
     };
   }

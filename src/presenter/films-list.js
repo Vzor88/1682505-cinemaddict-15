@@ -70,7 +70,7 @@ export default class FilmsList {
     }
   }
 
-  _handleViewAction(actionType, updateType, update, commentId) {
+  _handleViewAction(actionType, updateType, update, comment) {
     const films = this._filmsModel.getFilms();
     switch (actionType) {
       case UserAction.UPDATE_FILM:
@@ -84,13 +84,13 @@ export default class FilmsList {
         });
         break;
       case UserAction.ADD_COMMENT:
-        this._api.addComment(update).then((response) => {
+        this._api.addComment(update, comment).then((response) => {
           this._filmsModel.addComment(updateType, response);
         });
         break;
       case UserAction.DELETE_COMMENT:
-        this._api.deleteComment(update, commentId).then(() => {
-          this._filmsModel.deleteComment(updateType, update, commentId);
+        this._api.deleteComment(update, comment).then(() => {
+          this._filmsModel.deleteComment(updateType, update, comment);
         });
     }
   }
@@ -109,7 +109,6 @@ export default class FilmsList {
         }
         break;
       case UpdateType.PATCH_POPUP:
-        console.log(update);
         if (this._filmPresenter.has(update.id)) {
           getUpdateFilm(this._filmPresenter, update, this._filmsContainer, this._filterType);
         }
