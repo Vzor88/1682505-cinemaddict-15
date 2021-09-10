@@ -30,6 +30,12 @@ export const renderElement = (container, child, place) => {
   }
 };
 
+export const getScrollPosition = () =>{
+  if(document.querySelector('.film-details')){
+    return  document.querySelector('.film-details').scrollTop = document.querySelector('.film-details').scrollHeight;
+  }
+};
+
 export const render = (container, element) => {
   renderElement(container, element.getElement(), RenderPosition.BEFOREEND);
 };

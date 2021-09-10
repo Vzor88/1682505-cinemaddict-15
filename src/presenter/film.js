@@ -125,7 +125,6 @@ export default class Film {
   }
 
   _handleChangeEventButtons(eventType) {
-    const scrollY = this._saveScroll();
     const copyFilm = {...this._film};
     switch (eventType) {
       case FilterType.FAVORITES:
@@ -141,23 +140,9 @@ export default class Film {
         return;
     }
     this._filterType === eventType ? this._changeData(UserAction.UPDATE_FILM, UpdateType.MINOR, copyFilm) : this._changeData(UserAction.UPDATE_FILM, UpdateType.PATCH,  copyFilm);
-    this._loadScroll(scrollY);
-  }
-
-  _saveScroll(){
-    if(document.querySelector('.film-details')){
-      return document.querySelector('.film-details').scrollTop;
-    }
-  }
-
-  _loadScroll(height){
-    if(document.querySelector('.film-details')){
-      return  document.querySelector('.film-details').scrollTo(0, height);
-    }
   }
 
   _handleDeleteCommentClick(commentary) {
-    const scrollY = this._saveScroll();
     const commentId = commentary.querySelector('.film-details__comment-id').textContent;
     this._film.comments.forEach((comment) => {
       if(comment.id === commentId){
@@ -165,17 +150,13 @@ export default class Film {
       }
     });
     this._popupComponent.reset();
-    this._loadScroll(scrollY);
   }
 
   _handleCreateCommentClick() {
-    const scrollY = this._saveScroll();
     const newComment = this._popupComponent.createComment();
     this._film.comments.push(newComment);
     this._popupComponent.reset();
     this._changeData(UserAction.ADD_COMMENT, UpdateType.PATCH_POPUP, this._film, newComment);
-    this._loadScroll(scrollY);
-
   }
 
   _onEscKeyDown(evt) {

@@ -67,11 +67,6 @@ export const NoFilmsTextType = {
   [FilterType.FAVORITES]: 'There are no favorite movies now',
 };
 
-export const INDEX_COMMENT = {
-  MIN: 0,
-  MAX: 10000,
-};
-
 export const RANKS = {
   FAN: {
     MIN: 11,

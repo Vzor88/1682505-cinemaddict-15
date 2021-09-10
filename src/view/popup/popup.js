@@ -81,6 +81,20 @@ export default class Popup extends SmartView {
     }
   }
 
+  updateFilm(update, film) {
+    if (!update) {
+      return;
+    }
+
+    this._film = Object.assign(
+      {},
+      film,
+      update,
+    );
+
+    this.updateElement();
+  }
+
   _editClickPopupHandler() {
     this._callback.editClickPopup();
   }

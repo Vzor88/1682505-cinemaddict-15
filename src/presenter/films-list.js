@@ -1,4 +1,4 @@
-import {render, remove, isTopRatedFilms, isTopCommentedFilms, renderElement, getUpdateFilm} from '../utils/render.js';
+import {render, remove, isTopRatedFilms, isTopCommentedFilms, renderElement, getUpdateFilm, getScrollPosition} from '../utils/render.js';
 import {COUNTS, SortType, UpdateType, FilterType, UserAction, DateRangeTime, RenderPosition, StateType} from '../consts.js';
 import RankUserView from '../view/rank-user/rank-user.js';
 import SortView from '../view/sort/sort.js';
@@ -51,7 +51,6 @@ export default class FilmsList {
 
   init () {
     this._renderedFilmCount = COUNTS.FILMS_PER_STEP;
-
     this._renderPage();
   }
 
@@ -99,32 +98,16 @@ export default class FilmsList {
   _handleModelEvent(updateType, update) {
     switch (updateType) {
       case UpdateType.PATCH:
-        if (this._filmPresenter.has(update.id)) {
-          getUpdateFilm(this._filmPresenter, update, this._filmsContainer, this._filterType);
-        }
-        if (this._filmPresenterTop.has(update.id)) {
-          getUpdateFilm(this._filmPresenterTop, update, this._filmsListExtraContainer, this._filterType);
-        }
-        if (this._filmPresenterComment.has(update.id)) {
-          getUpdateFilm(this._filmPresenterComment, update, this._filmsListCommentContainer, this._filterType);
-        }
+        this._getRoundPresenter(update);
         break;
       case UpdateType.PATCH_POPUP:
-        if (this._filmPresenter.has(update.id)) {
-          getUpdateFilm(this._filmPresenter, update, this._filmsContainer, this._filterType);
-        }
-        if (this._filmPresenterTop.has(update.id)) {
-          getUpdateFilm(this._filmPresenterTop, update, this._filmsListExtraContainer, this._filterType);
-        }
-        if (this._filmPresenterComment.has(update.id)) {
-          getUpdateFilm(this._filmPresenterComment, update, this._filmsListCommentContainer, this._filterType);
-        }
+        this._getRoundPresenter(update);
 
         if(this._filmsListComment){
           this._filmsListComment.remove();
         }
         this._renderFilmsListTopCommented();
-
+        getScrollPosition();
         break;
       case UpdateType.MINOR:
         this._clearPage();
@@ -146,6 +129,18 @@ export default class FilmsList {
         remove(this._loadingComponent);
         this._renderPage();
         break;
+    }
+  }
+
+  _getRoundPresenter(update) {
+    if (this._filmPresenter.has(update.id)) {
+      getUpdateFilm(this._filmPresenter, update, this._filmsContainer, this._filterType);
+    }
+    if (this._filmPresenterTop.has(update.id)) {
+      getUpdateFilm(this._filmPresenterTop, update, this._filmsListExtraContainer, this._filterType);
+    }
+    if (this._filmPresenterComment.has(update.id)) {
+      getUpdateFilm(this._filmPresenterComment, update, this._filmsListCommentContainer, this._filterType);
     }
   }
 

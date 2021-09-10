@@ -31,7 +31,7 @@ const generateCommentsList = (commentary = {}, isDisabled, isDeleting, commentId
 const renderTemplateComment = (comments, isDisabled, isDeleting, commentId) => comments.map((comment) => generateCommentsList(comment, isDisabled, isDeleting, commentId)).join('');
 
 export const createPopupTemplate = (film) => {
-  const {filmInfo, userDetails, comments, isDisabled, isDeleting, commentId} = film;
+  const {filmInfo, userDetails, comments, isDisabled, isDeleting, commentId, isCreating} = film;
   const {title, totalRating, release, genre, poster, description, ageRating, alternativeTitle, writers, director, actors, runtime} = filmInfo;
   const {date, releaseCountry} = release;
   const {watchList, alreadyWatched, favorite} = userDetails;
@@ -120,7 +120,7 @@ export const createPopupTemplate = (film) => {
         <div class="film-details__add-emoji-label"></div>
 
         <label class="film-details__comment-label">
-          <textarea class="film-details__comment-input" placeholder="Select reaction below and write comment here" name="comment"></textarea>
+          <textarea class="film-details__comment-input" placeholder="Select reaction below and write comment here" name="comment" ${isCreating ? 'disabled' : ''}></textarea>
         </label>
 
         <div class="film-details__emoji-list">

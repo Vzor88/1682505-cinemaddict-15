@@ -6,20 +6,6 @@ export default class Smart extends Abstract {
     this._film = {};
   }
 
-  updateFilm(update, film) {
-    if (!update) {
-      return;
-    }
-
-    this._film = Object.assign(
-      {},
-      film,
-      update,
-    );
-
-    this.updateElement();
-  }
-
   updateElement(scrollDown) {
     const prevElement = this.getElement();
     const parent = prevElement.parentElement;
