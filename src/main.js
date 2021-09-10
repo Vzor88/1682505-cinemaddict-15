@@ -33,11 +33,11 @@ api.getFilms()
             filtersPresenter.init();
           }
         })
-        .catch(() => {
-          filmsModel.setFilms(UpdateType.INIT, []);
-          const filtersPresenter = new FiltersPresenter(siteMainElement, filtersModel, filmsModel, films);
-          filtersPresenter.init();
-        });
+        // .catch(() => {
+        //   filmsModel.setFilms(UpdateType.INIT, []);
+        //   const filtersPresenter = new FiltersPresenter(siteMainElement, filtersModel, filmsModel, films);
+        //   filtersPresenter.init();
+        // });
     });
   });
 

@@ -5,8 +5,9 @@ import relativeTime from 'dayjs/plugin/relativeTime.js';
 dayjs.extend(relativeTime);
 
 const isGenre = (genres) => genres.length > 1 ? 'Genres' : 'Genre';
+const isDeletingComment = (comment, commentId) => comment === commentId ? 'Deleting' : 'Delete';
 
-const generateCommentsList = (commentary = {}) => {
+const generateCommentsList = (commentary = {}, isDisabled, isDeleting, commentId) => {
   const {author, comment, date, emotion, id} = commentary;
 
   const timePassed = dayjs(date).fromNow();
@@ -22,15 +23,15 @@ const generateCommentsList = (commentary = {}) => {
         <span class="film-details__comment-id visually-hidden">${id}</span>
           <span class="film-details__comment-author">${author}</span>
           <span class="film-details__comment-day">${timePassed}</span>
-          <button class="film-details__comment-delete">Delete</button>
+          <button class="film-details__comment-delete" ${isDisabled ? 'disabled' : ''}>${isDeleting ? isDeletingComment(id, commentId) : 'Delete'}</button>
         </p>
       </div>
     </li>`;
 };
-const renderTemplateComment = (comments) => comments.map((comment) => generateCommentsList(comment)).join('');
+const renderTemplateComment = (comments, isDisabled, isDeleting, commentId) => comments.map((comment) => generateCommentsList(comment, isDisabled, isDeleting, commentId)).join('');
 
 export const createPopupTemplate = (film) => {
-  const {filmInfo, userDetails, comments} = film;
+  const {filmInfo, userDetails, comments, isDisabled, isDeleting, commentId} = film;
   const {title, totalRating, release, genre, poster, description, ageRating, alternativeTitle, writers, director, actors, runtime} = filmInfo;
   const {date, releaseCountry} = release;
   const {watchList, alreadyWatched, favorite} = userDetails;
@@ -112,7 +113,7 @@ export const createPopupTemplate = (film) => {
       </h3>
       <ul class="film-details__comments-list">
 
-            ${renderTemplateComment(comments)}
+            ${renderTemplateComment(comments, isDisabled, isDeleting, commentId)}
 
       </ul>
       <div class="film-details__new-comment">

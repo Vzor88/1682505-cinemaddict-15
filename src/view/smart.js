@@ -3,6 +3,21 @@ import Abstract from './abstract.js';
 export default class Smart extends Abstract {
   constructor() {
     super();
+    this._film = {};
+  }
+
+  updateFilm(update, film) {
+    if (!update) {
+      return;
+    }
+
+    this._film = Object.assign(
+      {},
+      film,
+      update,
+    );
+
+    this.updateElement();
   }
 
   updateElement(scrollDown) {

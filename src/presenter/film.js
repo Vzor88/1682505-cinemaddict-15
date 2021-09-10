@@ -2,7 +2,7 @@ import CardFilmView from '../view/card-film/card-film.js';
 import PopupView from '../view/popup/popup.js';
 import {siteBodyElement} from '../main.js';
 import {remove, replace, isEscEvent, render, isAvailability} from '../utils/render.js';
-import {UserAction, UpdateType, EventType, FilterType} from '../consts.js';
+import {UserAction, UpdateType, EventType, FilterType, StateType} from '../consts.js';
 
 export default class Film {
   constructor(changeData) {
@@ -50,6 +50,24 @@ export default class Film {
 
     remove(prevFilmComponent);
     remove(prevPopupComponent);
+  }
+
+  setViewState(state, commentId = {}) {
+    switch (state) {
+      case StateType.CREATING:
+        this._popupComponent.updateFilm({
+          isDisabled: true,
+          isCreating: true,
+        }, this._film);
+        break;
+      case StateType.DELETING:
+        this._popupComponent.updateFilm({
+          isDisabled: true,
+          isDeleting: true,
+          commentId,
+        }, this._film);
+        break;
+    }
   }
 
   _handingEventCardFilm(){

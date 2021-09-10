@@ -1,5 +1,5 @@
 import {render, remove, isTopRatedFilms, isTopCommentedFilms, renderElement, getUpdateFilm} from '../utils/render.js';
-import {COUNTS, SortType, UpdateType, FilterType, UserAction, DateRangeTime, RenderPosition} from '../consts.js';
+import {COUNTS, SortType, UpdateType, FilterType, UserAction, DateRangeTime, RenderPosition, StateType} from '../consts.js';
 import RankUserView from '../view/rank-user/rank-user.js';
 import SortView from '../view/sort/sort.js';
 import FilmContainersView from '../view/films/film-containers.js';
@@ -89,6 +89,7 @@ export default class FilmsList {
         });
         break;
       case UserAction.DELETE_COMMENT:
+        this._filmPresenter.get(update.id).setViewState(StateType.DELETING, comment);
         this._api.deleteComment(update, comment).then(() => {
           this._filmsModel.deleteComment(updateType, update, comment);
         });

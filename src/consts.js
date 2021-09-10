@@ -11,6 +11,11 @@ export const SortType = {
   RATING: 'rating',
 };
 
+export const StateType = {
+  CREATING: 'CREATING',
+  DELETING: 'DELETING',
+};
+
 export const UserAction = {
   UPDATE_FILM: 'UPDATE_FILM',
   ADD_COMMENT: 'ADD_COMMENT',
