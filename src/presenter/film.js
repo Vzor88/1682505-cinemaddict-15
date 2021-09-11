@@ -53,19 +53,38 @@ export default class Film {
   }
 
   setViewState(state, commentId = {}) {
+    const resetFormState = () => {
+      this._popupComponent.updateFilm({
+        isDisabled: false,
+        isCreating: false,
+        isDeleting: false,
+      }, this._film, scroll);
+    };
     switch (state) {
       case StateType.CREATING:
         this._popupComponent.updateFilm({
           isDisabled: true,
           isCreating: true,
-        }, this._film);
+        }, this._film, scroll);
         break;
       case StateType.DELETING:
         this._popupComponent.updateFilm({
           isDisabled: true,
           isDeleting: true,
           commentId,
-        }, this._film);
+        }, this._film, scroll);
+        break;
+      case StateType.ABORTING_UPDATE:
+        this._filmComponent.shake();
+        this._popupComponent.shake();
+        break;
+      case StateType.ABORTING_DELETING:
+        this._popupComponent.shake(resetFormState);
+        break;
+      case StateType.ABORTING_CREATING:
+        this._commentInput.removeAttribute('disabled');
+        this._buttonsDeleteComment.forEach((button) => button.removeAttribute('disabled'));
+        this._popupComponent.shake();
         break;
     }
   }
@@ -149,14 +168,14 @@ export default class Film {
         this._changeData(UserAction.DELETE_COMMENT, UpdateType.PATCH_POPUP, this._film, commentId);
       }
     });
-    this._popupComponent.reset();
   }
 
   _handleCreateCommentClick() {
-    const newComment = this._popupComponent.createComment();
-    this._film.comments.push(newComment);
-    this._popupComponent.reset();
-    this._changeData(UserAction.ADD_COMMENT, UpdateType.PATCH_POPUP, this._film, newComment);
+    this._buttonsDeleteComment = this._popupComponent.getElement().querySelectorAll('.film-details__comment-delete');
+    this._commentInput = this._popupComponent.getElement().querySelector('.film-details__comment-input');
+    this._commentInput.disabled = true;
+    this._buttonsDeleteComment.forEach((button) => button.disabled = true);
+    this._changeData(UserAction.ADD_COMMENT, UpdateType.PATCH_POPUP, this._film, this._popupComponent.createComment());
   }
 
   _onEscKeyDown(evt) {

@@ -46,7 +46,8 @@ export default class Api {
   _update(url, body) {
     return this._load(url, MethodType.PUT, JSON.stringify(body), new Headers({'Content-Type': 'application/json'}))
       .then(Api.toJSON)
-      .then(FilmsModel.adaptToClient);
+      .then(FilmsModel.adaptToClient)
+      .catch(Api.catchError);
   }
 
   _load(url, method = MethodType.GET, body = null, headers = new Headers()) {

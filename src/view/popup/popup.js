@@ -72,7 +72,6 @@ export default class Popup extends SmartView {
   }
 
   reset() {
-    this.updateElement(true);
     if(this._containerEmodji){
       this._containerEmodji.innerHTML = ' ';
     }
@@ -81,7 +80,7 @@ export default class Popup extends SmartView {
     }
   }
 
-  updateFilm(update, film) {
+  updateFilm(update, film, scroll = true) {
     if (!update) {
       return;
     }
@@ -92,7 +91,7 @@ export default class Popup extends SmartView {
       update,
     );
 
-    this.updateElement();
+    this.updateElement(scroll);
   }
 
   _editClickPopupHandler() {

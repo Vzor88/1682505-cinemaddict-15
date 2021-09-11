@@ -14,6 +14,9 @@ export const SortType = {
 export const StateType = {
   CREATING: 'CREATING',
   DELETING: 'DELETING',
+  ABORTING_UPDATE: 'ABORTING_UPDATE',
+  ABORTING_DELETING: 'ABORTING_DELETING',
+  ABORTING_CREATING: 'ABORTING_CREATING',
 };
 
 export const UserAction = {
