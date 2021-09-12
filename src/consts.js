@@ -100,3 +100,5 @@ export const SIZES = {
 };
 
 export const LENGTH_STRING_DESCRIPTION = 139;
+export const SHAKE_ANIMATION_TIMEOUT = 600;
+

@@ -2,7 +2,7 @@ import CardFilmView from '../view/card-film/card-film.js';
 import PopupView from '../view/popup/popup.js';
 import {siteBodyElement} from '../main.js';
 import {remove, replace, isEscEvent, render, isAvailability} from '../utils/render.js';
-import {UserAction, UpdateType, EventType, FilterType, StateType} from '../consts.js';
+import {UserAction, UpdateType, EventType, FilterType, StateType, SHAKE_ANIMATION_TIMEOUT} from '../consts.js';
 
 export default class Film {
   constructor(changeData) {
@@ -79,7 +79,7 @@ export default class Film {
         this._popupComponent.shake();
         break;
       case StateType.ABORTING_DELETING:
-        this._popupComponent.shake(resetFormState);
+        this._shakeCommentsList(resetFormState);
         break;
       case StateType.ABORTING_CREATING:
         this._commentInput.removeAttribute('disabled');
@@ -186,6 +186,17 @@ export default class Film {
       siteBodyElement.classList.remove('hide-overflow');
       document.removeEventListener('keydown', this._onEscKeyDown);
     }
+  }
+
+  _shakeCommentsList(callback) {
+    const commentsList = this._popupComponent.getElement().querySelector('.film-details__comments-list');
+    commentsList.style.animation = `shake ${SHAKE_ANIMATION_TIMEOUT / 1000}s`;
+    setTimeout(() => {
+      commentsList.style.animation = '';
+      if(callback){
+        callback();
+      }
+    }, SHAKE_ANIMATION_TIMEOUT);
   }
 }
 
