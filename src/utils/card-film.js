@@ -1,11 +1,4 @@
-import {getRandomInteger} from './common.js';
 import dayjs from 'dayjs';
-
-export const generateData = (array) => {
-  const randomIndex = getRandomInteger(0, array.length - 1);
-
-  return array[randomIndex];
-};
 
 export const generateDuration = (minutes, isRenderStats = false) => {
   let hours = 0;

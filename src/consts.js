@@ -11,8 +11,18 @@ export const SortType = {
   RATING: 'rating',
 };
 
+export const StateType = {
+  CREATING: 'CREATING',
+  DELETING: 'DELETING',
+  ABORTING_UPDATE: 'ABORTING_UPDATE',
+  ABORTING_DELETING: 'ABORTING_DELETING',
+  ABORTING_CREATING: 'ABORTING_CREATING',
+};
+
 export const UserAction = {
   UPDATE_FILM: 'UPDATE_FILM',
+  ADD_COMMENT: 'ADD_COMMENT',
+  DELETE_COMMENT: 'DELETE_COMMENT',
 };
 
 export const EventType = {
@@ -60,11 +70,6 @@ export const NoFilmsTextType = {
   [FilterType.FAVORITES]: 'There are no favorite movies now',
 };
 
-export const INDEX_COMMENT = {
-  MIN: 0,
-  MAX: 10000,
-};
-
 export const RANKS = {
   FAN: {
     MIN: 11,
@@ -95,3 +100,5 @@ export const SIZES = {
 };
 
 export const LENGTH_STRING_DESCRIPTION = 139;
+export const SHAKE_ANIMATION_TIMEOUT = 600;
+

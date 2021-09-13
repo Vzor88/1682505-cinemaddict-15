@@ -5,9 +5,10 @@ import relativeTime from 'dayjs/plugin/relativeTime.js';
 dayjs.extend(relativeTime);
 
 const isGenre = (genres) => genres.length > 1 ? 'Genres' : 'Genre';
+const isDeletingComment = (comment, commentId) => comment === commentId ? 'Deleting' : 'Delete';
 
-const generateCommentsList = (commentary = {}) => {
-  const {author, comment, date, emotion} = commentary;
+const generateCommentsList = (commentary = {}, isDisabled, isDeleting, commentId) => {
+  const {author, comment, date, emotion, id} = commentary;
 
   const timePassed = dayjs(date).fromNow();
 
@@ -19,17 +20,18 @@ const generateCommentsList = (commentary = {}) => {
       <div>
         <p class="film-details__comment-text">${comment}</p>
         <p class="film-details__comment-info">
+        <span class="film-details__comment-id visually-hidden">${id}</span>
           <span class="film-details__comment-author">${author}</span>
           <span class="film-details__comment-day">${timePassed}</span>
-          <button class="film-details__comment-delete">Delete</button>
+          <button class="film-details__comment-delete" ${isDisabled ? 'disabled' : ''}>${isDeleting ? isDeletingComment(id, commentId) : 'Delete'}</button>
         </p>
       </div>
     </li>`;
 };
-const renderTemplateComment = (comments) => comments.map((comment) => generateCommentsList(comment)).join('');
+const renderTemplateComment = (comments, isDisabled, isDeleting, commentId) => comments.map((comment) => generateCommentsList(comment, isDisabled, isDeleting, commentId)).join('');
 
 export const createPopupTemplate = (film) => {
-  const {filmInfo, userDetails, comments} = film;
+  const {filmInfo, userDetails, comments, isDisabled, isDeleting, commentId, isCreating} = film;
   const {title, totalRating, release, genre, poster, description, ageRating, alternativeTitle, writers, director, actors, runtime} = filmInfo;
   const {date, releaseCountry} = release;
   const {watchList, alreadyWatched, favorite} = userDetails;
@@ -111,14 +113,14 @@ export const createPopupTemplate = (film) => {
       </h3>
       <ul class="film-details__comments-list">
 
-            ${renderTemplateComment(comments)}
+            ${renderTemplateComment(comments, isDisabled, isDeleting, commentId)}
 
       </ul>
       <div class="film-details__new-comment">
         <div class="film-details__add-emoji-label"></div>
 
         <label class="film-details__comment-label">
-          <textarea class="film-details__comment-input" placeholder="Select reaction below and write comment here" name="comment"></textarea>
+          <textarea class="film-details__comment-input" placeholder="Select reaction below and write comment here" name="comment" ${isCreating ? 'disabled' : ''}></textarea>
         </label>
 
         <div class="film-details__emoji-list">
