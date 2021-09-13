@@ -1,5 +1,7 @@
 import {render, remove, isTopRatedFilms, isTopCommentedFilms, renderElement, getUpdateFilm} from '../utils/render.js';
 import {COUNTS, SortType, UpdateType, FilterType, UserAction, DateRangeTime, RenderPosition, StateType} from '../consts.js';
+import {sortFilmDate, sortFilmRating} from '../utils/card-film.js';
+import {filter} from '../utils/filters.js';
 import RankUserView from '../view/rank-user/rank-user.js';
 import SortView from '../view/sort/sort.js';
 import FilmContainersView from '../view/films/film-containers.js';
@@ -9,18 +11,18 @@ import NoFilmsView from '../view/no-films/no-films.js';
 import FilmPresenter from './film.js';
 import LoadingView from '../view/loading/loading.js';
 import StatsPresenter from './stats.js';
-import {sortFilmDate, sortFilmRating} from '../utils/card-film.js';
-import {filter} from '../utils/filters.js';
-import {siteBodyElement} from '../main.js';
+
+export const siteBodyElement = document.querySelector('.body');
 
 export default class FilmsList {
-  constructor(filmListHeaderContainer, filmListMainContainer, filmListFooterContainer, filmsModel, filtersModel, api) {
+  constructor(filmListMainContainer, filmsModel, filtersModel, api) {
     this._filmsModel = filmsModel;
     this._filtersModel = filtersModel;
     this._api = api;
-    this._filmListHeaderContainer = filmListHeaderContainer;
     this._filmListMainContainer = filmListMainContainer;
-    this._filmListFooterContainer = filmListFooterContainer;
+
+    this._filmListHeaderContainer = document.querySelector('.header');
+    this._filmListFooterContainer = document.querySelector('.footer');
 
     this._filmsComponent = null;
     this._showMoreButtonComponent = null;
@@ -54,10 +56,13 @@ export default class FilmsList {
     this._renderPage();
   }
 
+  _takeAllFilms() {
+    return this._filmsModel.getFilms();
+  }
+
   _getFilms() {
     this._filterType = this._filtersModel.getFilter();
-    const films = this._filmsModel.getFilms();
-    this._filteredFilms = filter[this._filterType](films);
+    this._filteredFilms = filter[this._filterType](this._takeAllFilms());
 
     switch (this._currentSortType) {
       case SortType.DATE:
@@ -70,12 +75,11 @@ export default class FilmsList {
   }
 
   _handleViewAction(actionType, updateType, update, comment) {
-    const films = this._filmsModel.getFilms();
     switch (actionType) {
       case UserAction.UPDATE_FILM:
         this._api.updateFilm(update)
           .then((response) => {
-            films.forEach((film) => {
+            this._takeAllFilms().forEach((film) => {
               if (film.id === update.id) {
                 response.comments = film.comments;
                 this._filmsModel.updateFilm(updateType, response);
@@ -83,26 +87,27 @@ export default class FilmsList {
             });
           })
           .catch(() => {
-            this._filmPresenter.get(update.id).setViewState(StateType.ABORTING_UPDATE);
+            this._getRoundPresentersViewState(StateType.ABORTING_UPDATE, update);
+
           });
         break;
       case UserAction.ADD_COMMENT:
         this._api.addComment(update, comment)
           .then((response) => {
-            this._filmsModel.addComment(updateType, response);
+            this._filmsModel.updateFilm(updateType, response);
           })
           .catch(() => {
-            this._filmPresenter.get(update.id).setViewState(StateType.ABORTING_CREATING);
+            this._getRoundPresentersViewState(StateType.ABORTING_CREATING, update);
           });
         break;
       case UserAction.DELETE_COMMENT:
-        this._filmPresenter.get(update.id).setViewState(StateType.DELETING, comment);
+        this._getRoundPresentersViewState(StateType.DELETING, update);
         this._api.deleteComment(update, comment)
           .then(() => {
             this._filmsModel.deleteComment(updateType, update, comment);
           })
           .catch(() => {
-            this._filmPresenter.get(update.id).setViewState(StateType.ABORTING_DELETING);
+            this._getRoundPresentersViewState(StateType.ABORTING_DELETING, update);
           });
     }
   }
@@ -155,6 +160,18 @@ export default class FilmsList {
     }
     if (this._filmPresenterComment.has(update.id)) {
       getUpdateFilm(this._filmPresenterComment, update, this._filmsListCommentContainer, this._filterType);
+    }
+  }
+
+  _getRoundPresentersViewState(stateType, update) {
+    if (this._filmPresenter.has(update.id)) {
+      return this._filmPresenter.get(update.id).setViewState(stateType, update);
+    }
+    if (this._filmPresenterTop.has(update.id)) {
+      return this._filmPresenterTop.get(update.id).setViewState(stateType, update);
+    }
+    if (this._filmPresenterComment.has(update.id)) {
+      return this._filmPresenterComment.get(update.id).setViewState(stateType, update);
     }
   }
 

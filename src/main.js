@@ -7,16 +7,18 @@ import Api from './services/api.js';
 
 export const AUTHORIZATION = 'Basic mS7sfS83wma2sa5ret58rt1i';
 export const END_POINT = 'https://15.ecmascript.pages.academy/cinemaddict/';
+
 const copyFilms = [];
-export const siteBodyElement = document.querySelector('.body');
+
 const siteMainElement = document.querySelector('.main');
-const siteHeaderElement = document.querySelector('.header');
-const siteFooterElement = document.querySelector('.footer');
-
 const api = new Api(END_POINT, AUTHORIZATION);
-
 const filmsModel = new FilmsModel();
 const filtersModel = new FiltersModel();
+
+const getInitFiltersPresenter = (films) => {
+  const filtersPresenter = new FiltersPresenter(siteMainElement, filtersModel, filmsModel, films);
+  filtersPresenter.init();
+};
 
 api.getFilms()
   .then((films) => {
@@ -29,17 +31,15 @@ api.getFilms()
         .then(() => {
           if(films.length === copyFilms.length){
             filmsModel.setFilms(UpdateType.INIT, films);
-            const filtersPresenter = new FiltersPresenter(siteMainElement, filtersModel, filmsModel, films);
-            filtersPresenter.init();
+            getInitFiltersPresenter(films);
           }
         })
         .catch(() => {
           filmsModel.setFilms(UpdateType.INIT, []);
-          const filtersPresenter = new FiltersPresenter(siteMainElement, filtersModel, filmsModel, films);
-          filtersPresenter.init();
+          getInitFiltersPresenter(films);
         });
     });
   });
 
-const filmsListPresenter = new FilmsList(siteHeaderElement, siteMainElement, siteFooterElement, filmsModel, filtersModel, api);
+const filmsListPresenter = new FilmsList(siteMainElement, filmsModel, filtersModel, api);
 filmsListPresenter.init();

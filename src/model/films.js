@@ -31,10 +31,6 @@ export default class Films extends AbstractObserver {
     this._notify(updateType, update);
   }
 
-  addComment(updateType, update) {
-    this._notify(updateType, update);
-  }
-
   deleteComment(updateType, update, commentId) {
     const index = update.comments.findIndex((comment) => comment.id === commentId);
 
@@ -51,7 +47,7 @@ export default class Films extends AbstractObserver {
   }
 
   static adaptToClient(film) {
-    const adaptedFilm =  {...film};
+    const adaptedFilm = {...film};
     adaptedFilm.id = Number(film['id']);
     adaptedFilm.comments = [];
     film.comments.forEach((comment) => adaptedFilm.comments.push(Number(comment)));
@@ -81,7 +77,7 @@ export default class Films extends AbstractObserver {
   }
 
   static adaptToServer(film) {
-    const adaptedFilm =  {...film};
+    const adaptedFilm = {...film};
     adaptedFilm.commentsId = film.comments.map((comment) => String(comment.id));
     adaptedFilm.comments = adaptedFilm.commentsId;
     adaptedFilm.filmInfo['age_rating'] = film.filmInfo.ageRating;
@@ -111,8 +107,8 @@ export default class Films extends AbstractObserver {
     return adaptedFilm;
   }
 
-  static adaptToClientComments(film) {
-    const adaptedFilm =  {};
+  static adaptToClientMovieAndComments(film) {
+    const adaptedFilm = {};
     adaptedFilm.comments = film.comments;
     adaptedFilm.filmInfo = film.movie.film_info;
     adaptedFilm.userDetails = film.movie.user_details;
@@ -136,9 +132,5 @@ export default class Films extends AbstractObserver {
     delete adaptedFilm.userDetails['watchlist'];
     delete adaptedFilm.userDetails['watching_date'];
     return adaptedFilm;
-  }
-
-  static adaptToServerComments(comment){
-    return comment;
   }
 }

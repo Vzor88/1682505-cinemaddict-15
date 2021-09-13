@@ -1,7 +1,7 @@
 import {RenderPosition} from '../consts.js';
 import Abstract from '../view/abstract.js';
+import {siteBodyElement} from '../presenter/films-list.js';
 
-export const isEscEvent = (evt) => evt.key === 'Escape' || evt.key === 'Esc';
 export const isCtrlEnterEvent = (evt) => evt.ctrlKey && 'Enter'.includes(evt.key);
 export const isTopRatedFilms = (films) =>  films.filter((film) => film.filmInfo.totalRating > 0);
 export const isTopCommentedFilms = (films) =>  films.filter((film) => film.comments.length > 0);
@@ -9,6 +9,15 @@ export const isTopCommentedFilms = (films) =>  films.filter((film) => film.comme
 export const isAvailability = (element) => {
   if (element && !(element instanceof Abstract)) {
     element.remove();
+  }
+};
+
+export const onEscKeyDown = (evt) => {
+  if (evt.key === 'Escape' || evt.key === 'Esc') {
+    evt.preventDefault();
+    siteBodyElement.classList.remove('hide-overflow');
+    const filmDetails = document.querySelector('.film-details');
+    isAvailability(filmDetails);
   }
 };
 
@@ -27,12 +36,6 @@ export const renderElement = (container, child, place) => {
       break;
     default:
       container.append(child);
-  }
-};
-
-export const getScrollPosition = () =>{
-  if(document.querySelector('.film-details')){
-    return  document.querySelector('.film-details').scrollTop = document.querySelector('.film-details').scrollHeight;
   }
 };
 
@@ -74,5 +77,7 @@ export const replace = (newChild, oldChild) => {
 
   const parent = oldChild.parentElement;
 
-  parent.replaceChild(newChild, oldChild);
+  if(parent) {
+    parent.replaceChild(newChild, oldChild);
+  }
 };

@@ -1,7 +1,7 @@
 import CardFilmView from '../view/card-film/card-film.js';
 import PopupView from '../view/popup/popup.js';
-import {siteBodyElement} from '../main.js';
-import {remove, replace, isEscEvent, render, isAvailability} from '../utils/render.js';
+import {siteBodyElement} from './films-list.js';
+import {remove, replace, onEscKeyDown, render, isAvailability} from '../utils/render.js';
 import {UserAction, UpdateType, EventType, FilterType, StateType, SHAKE_ANIMATION_TIMEOUT} from '../consts.js';
 
 export default class Film {
@@ -11,7 +11,6 @@ export default class Film {
     this._filmComponent = null;
     this._popupComponent = null;
 
-    this._onEscKeyDown = this._onEscKeyDown.bind(this);
     this._handleFavoriteClick = this._handleFavoriteClick.bind(this);
     this._handleWatchListClick = this._handleWatchListClick.bind(this);
     this._handleDeleteCommentClick = this._handleDeleteCommentClick.bind(this);
@@ -108,13 +107,11 @@ export default class Film {
   }
 
   _handleCardFilmClick(){
+    this._closedPopup();
     this._renderPopup();
   }
 
   _renderPopup() {
-    const filmDetails = document.querySelector('.film-details');
-
-    isAvailability(filmDetails);
     this._handingEventPopup();
     this._openedPopup();
   }
@@ -122,13 +119,18 @@ export default class Film {
   _openedPopup(){
     render(siteBodyElement, this._popupComponent);
     siteBodyElement.classList.add('hide-overflow');
-    document.addEventListener('keydown', this._onEscKeyDown);
-    this._popupComponent.onCtrlEnterKeyDown();
+    document.addEventListener('keydown', onEscKeyDown);
+  }
+
+  _closedPopup(){
+    const filmDetails = document.querySelector('.film-details');
+    isAvailability(filmDetails);
+    document.removeEventListener('keydown', onEscKeyDown);
+    siteBodyElement.classList.remove('hide-overflow');
   }
 
   _handleClosedPopupButtonClick(){
-    remove(this._popupComponent);
-    siteBodyElement.classList.remove('hide-overflow');
+    this._closedPopup();
   }
 
   _handleWatchListClick() {
@@ -145,6 +147,7 @@ export default class Film {
 
   _handleChangeEventButtons(eventType) {
     const copyFilm = {...this._film};
+    this._popupComponent.getElement().querySelectorAll('.film-details__control-button').forEach((button) => button.disabled = true);
     switch (eventType) {
       case FilterType.FAVORITES:
         copyFilm.userDetails.favorite = !this._film.userDetails.favorite;
@@ -176,16 +179,6 @@ export default class Film {
     this._commentInput.disabled = true;
     this._buttonsDeleteComment.forEach((button) => button.disabled = true);
     this._changeData(UserAction.ADD_COMMENT, UpdateType.PATCH_POPUP, this._film, this._popupComponent.createComment());
-  }
-
-  _onEscKeyDown(evt) {
-    if (isEscEvent(evt)) {
-      evt.preventDefault();
-      this._popupComponent.reset();
-      remove(this._popupComponent);
-      siteBodyElement.classList.remove('hide-overflow');
-      document.removeEventListener('keydown', this._onEscKeyDown);
-    }
   }
 
   _shakeCommentsList(callback) {

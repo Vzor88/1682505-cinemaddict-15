@@ -34,9 +34,9 @@ export default class Api {
   }
 
   addComment(film, comment) {
-    return this._load( `comments/${film.id}`, MethodType.POST, JSON.stringify(FilmsModel.adaptToServerComments(comment)), new Headers({'Content-Type': 'application/json'}))
+    return this._load( `comments/${film.id}`, MethodType.POST, JSON.stringify(comment), new Headers({'Content-Type': 'application/json'}))
       .then(Api.toJSON)
-      .then(FilmsModel.adaptToClientComments);
+      .then(FilmsModel.adaptToClientMovieAndComments);
   }
 
   deleteComment(film, commentId) {

@@ -41,6 +41,8 @@ export default class Popup extends SmartView {
     this.getElement().querySelector('.film-details__control-button--favorite').addEventListener('click', this._favoriteClickPopupHandler);
     this.getElement().querySelector('.film-details__control-button--watchlist').addEventListener('click', this._watchListClickPopupHandler);
     this.getElement().querySelector('.film-details__control-button--watched').addEventListener('click', this._alreadyWatchedClickPopupHandler);
+    this.getElement().querySelector('.film-details__new-comment').addEventListener('keydown', this._createCommentHandler);
+
   }
 
   setEditClickPopupHandler(callback) {
@@ -57,10 +59,6 @@ export default class Popup extends SmartView {
 
   setAlreadyWatchedPopupClickHandler(callback) {
     this._callback.alreadyWatchedClickPopup = callback;
-  }
-
-  onCtrlEnterKeyDown(){
-    window.addEventListener('keydown', this._createCommentHandler);
   }
 
   setDeleteCommentClickHandler(callback) {
