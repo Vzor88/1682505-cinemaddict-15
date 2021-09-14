@@ -34,9 +34,9 @@ export default class Api {
   }
 
   addComment(film, comment) {
-    return this._load( `comments/${film.id}`, MethodType.POST, JSON.stringify(FilmsModel.adaptToServerComments(comment)), new Headers({'Content-Type': 'application/json'}))
+    return this._load( `comments/${film.id}`, MethodType.POST, JSON.stringify(comment))
       .then(Api.toJSON)
-      .then(FilmsModel.adaptToClientComments);
+      .then(FilmsModel.adaptToClientMovieAndComments);
   }
 
   deleteComment(film, commentId) {
@@ -44,13 +44,13 @@ export default class Api {
   }
 
   _update(url, body) {
-    return this._load(url, MethodType.PUT, JSON.stringify(body), new Headers({'Content-Type': 'application/json'}))
+    return this._load(url, MethodType.PUT, JSON.stringify(body))
       .then(Api.toJSON)
       .then(FilmsModel.adaptToClient)
       .catch(Api.catchError);
   }
 
-  _load(url, method = MethodType.GET, body = null, headers = new Headers()) {
+  _load(url, method = MethodType.GET, body = null, headers = new Headers({'Content-Type': 'application/json'})) {
     headers.append('Authorization', this._authorization);
 
     return fetch(

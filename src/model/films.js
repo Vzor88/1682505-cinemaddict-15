@@ -1,4 +1,5 @@
 import AbstractObserver from '../services/abstract-observer.js';
+import _ from 'lodash';
 
 export default class Films extends AbstractObserver {
   constructor() {
@@ -31,10 +32,6 @@ export default class Films extends AbstractObserver {
     this._notify(updateType, update);
   }
 
-  addComment(updateType, update) {
-    this._notify(updateType, update);
-  }
-
   deleteComment(updateType, update, commentId) {
     const index = update.comments.findIndex((comment) => comment.id === commentId);
 
@@ -51,94 +48,47 @@ export default class Films extends AbstractObserver {
   }
 
   static adaptToClient(film) {
-    const adaptedFilm =  {...film};
+    const adaptedFilm = _.mapKeys(film, (value, key) => _.camelCase(key));
+    adaptedFilm.filmInfo = _.mapKeys(film.film_info, (value, key) => _.camelCase(key));
+    adaptedFilm.filmInfo.release = _.mapKeys(film.film_info.release, (value, key) => _.camelCase(key));
+    adaptedFilm.userDetails = _.mapKeys(film.user_details, (value, key) => _.camelCase(key));
+
     adaptedFilm.id = Number(film['id']);
     adaptedFilm.comments = [];
     film.comments.forEach((comment) => adaptedFilm.comments.push(Number(comment)));
-    adaptedFilm.filmInfo = film['film_info'];
-    adaptedFilm.filmInfo.ageRating = film.film_info['age_rating'];
-    adaptedFilm.filmInfo.alternativeTitle = film.film_info['alternative_title'];
-    adaptedFilm.filmInfo.totalRating = film.film_info['total_rating'];
-    adaptedFilm.filmInfo.release.newDate = new Date(film.film_info.release.date);
-    delete adaptedFilm.filmInfo.release.date;
-    adaptedFilm.filmInfo.release.date = adaptedFilm.filmInfo.release.newDate;
-    delete adaptedFilm.filmInfo.release.newDate;
-    adaptedFilm.filmInfo.release.releaseCountry = film.film_info.release['release_country'];
-    adaptedFilm.userDetails = film['user_details'];
-    adaptedFilm.userDetails.alreadyWatched = film.user_details['already_watched'];
+    adaptedFilm.filmInfo.release.date = new Date(adaptedFilm.filmInfo.release.date);
     adaptedFilm.userDetails.watchList = film.user_details['watchlist'];
     adaptedFilm.userDetails.watchingDate = new Date(film.user_details['watching_date']);
-    delete adaptedFilm.filmInfo['age_rating'];
-    delete adaptedFilm.filmInfo['alternative_title'];
-    delete adaptedFilm.filmInfo['total_rating'];
-    delete adaptedFilm.filmInfo.release['release_country'];
-    delete adaptedFilm['film_info'];
-    delete adaptedFilm.userDetails['already_watched'];
     delete adaptedFilm.userDetails['watchlist'];
-    delete adaptedFilm.userDetails['watching_date'];
-    delete adaptedFilm['user_details'];
     return adaptedFilm;
   }
 
   static adaptToServer(film) {
-    const adaptedFilm =  {...film};
-    adaptedFilm.commentsId = film.comments.map((comment) => String(comment.id));
-    adaptedFilm.comments = adaptedFilm.commentsId;
-    adaptedFilm.filmInfo['age_rating'] = film.filmInfo.ageRating;
-    adaptedFilm.filmInfo['alternative_title'] = film.filmInfo.alternativeTitle;
-    adaptedFilm.filmInfo['total_rating'] = film.filmInfo.totalRating;
-    adaptedFilm.filmInfo.release['release_country'] = film.filmInfo.release.releaseCountry;
-    adaptedFilm.filmInfo.release.newDate = film.filmInfo.release.date.toISOString();
-    delete adaptedFilm.filmInfo.release.date;
-    adaptedFilm.filmInfo.release.date = adaptedFilm.filmInfo.release.newDate;
-    adaptedFilm['film_info'] = film.filmInfo;
-    adaptedFilm.userDetails['watching_date'] = film.userDetails.watchingDate.toISOString();
-    adaptedFilm.userDetails['already_watched'] = film.userDetails.alreadyWatched;
-    adaptedFilm.userDetails['watchlist'] = film.userDetails.watchList;
-    adaptedFilm['user_details'] = film.userDetails;
+    const adaptedFilm = _.mapKeys(film, (value, key) => _.snakeCase(key));
+    adaptedFilm['film_info'] = _.mapKeys(film.filmInfo, (value, key) => _.snakeCase(key));
+    adaptedFilm['film_info'].release = _.mapKeys(film.filmInfo.release, (value, key) => _.snakeCase(key));
+    adaptedFilm['user_details'] = _.mapKeys(film.userDetails, (value, key) => _.snakeCase(key));
     adaptedFilm.id = String(film['id']);
-    delete adaptedFilm['filmInfo'];
-    delete adaptedFilm.film_info['ageRating'];
-    delete adaptedFilm.film_info['alternativeTitle'];
-    delete adaptedFilm.film_info['totalRating'];
-    delete adaptedFilm.film_info.release['releaseCountry'];
-    delete adaptedFilm['userDetails'];
-    delete adaptedFilm.user_details['watchingDate'];
-    delete adaptedFilm.user_details['alreadyWatched'];
-    delete adaptedFilm.user_details['watchList'];
-    delete adaptedFilm.commentsId;
-    delete adaptedFilm.film_info.release.newDate;
+    adaptedFilm.comments = film.comments.map((comment) => String(comment.id));
+    adaptedFilm['film_info'].release.date = film.filmInfo.release.date.toISOString();
+    adaptedFilm['user_details']['watching_date'] = film.userDetails.watchingDate.toISOString();
+    adaptedFilm['user_details']['watchlist'] = film.userDetails.watchList;
+    delete adaptedFilm.user_details['watch_list'];
     return adaptedFilm;
   }
 
-  static adaptToClientComments(film) {
-    const adaptedFilm =  {};
+  static adaptToClientMovieAndComments(film) {
+    const adaptedFilm = {};
     adaptedFilm.comments = film.comments;
-    adaptedFilm.filmInfo = film.movie.film_info;
-    adaptedFilm.userDetails = film.movie.user_details;
+    adaptedFilm.filmInfo = _.mapKeys(film.movie.film_info, (value, key) => _.camelCase(key));
+    adaptedFilm.userDetails = _.mapKeys(film.movie.user_details, (value, key) => _.camelCase(key));
+    adaptedFilm.filmInfo.release = _.mapKeys(film.movie.film_info.release, (value, key) => _.camelCase(key));
+
     adaptedFilm.id = Number(film.movie['id']);
-    adaptedFilm.filmInfo.ageRating = film.movie.film_info['age_rating'];
-    adaptedFilm.filmInfo.alternativeTitle = film.movie.film_info['alternative_title'];
-    adaptedFilm.filmInfo.totalRating = film.movie.film_info['total_rating'];
-    adaptedFilm.filmInfo.release.newDate = new Date(film.movie.film_info.release.date);
-    delete adaptedFilm.filmInfo.release.date;
-    adaptedFilm.filmInfo.release.date = adaptedFilm.filmInfo.release.newDate;
-    delete adaptedFilm.filmInfo.release.newDate;
-    adaptedFilm.filmInfo.release.releaseCountry = film.movie.film_info.release['release_country'];
-    adaptedFilm.userDetails.alreadyWatched = film.movie.user_details['already_watched'];
+    adaptedFilm.filmInfo.release.date = new Date(film.movie.film_info.release.date);
     adaptedFilm.userDetails.watchList = film.movie.user_details['watchlist'];
     adaptedFilm.userDetails.watchingDate = new Date(film.movie.user_details['watching_date']);
-    delete adaptedFilm.filmInfo['age_rating'];
-    delete adaptedFilm.filmInfo['alternative_title'];
-    delete adaptedFilm.filmInfo['total_rating'];
-    delete adaptedFilm.filmInfo.release['release_country'];
-    delete adaptedFilm.userDetails['already_watched'];
     delete adaptedFilm.userDetails['watchlist'];
-    delete adaptedFilm.userDetails['watching_date'];
     return adaptedFilm;
-  }
-
-  static adaptToServerComments(comment){
-    return comment;
   }
 }
