@@ -62,7 +62,7 @@ export default class Api {
   }
 
   static checkStatus(response) {
-    if (
+    if(
       response.status < SuccessHTTPStatusRange.MIN ||
       response.status > SuccessHTTPStatusRange.MAX
     ) {

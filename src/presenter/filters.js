@@ -1,7 +1,7 @@
-import FilterView from '../view/filters/filters.js';
+import {FilterType, UpdateType, RenderPosition} from '../consts.js';
 import {render, replace, remove, renderElement} from '../utils/render.js';
 import {filter} from '../utils/filters.js';
-import {FilterType, UpdateType, RenderPosition} from '../consts.js';
+import FilterView from '../view/filters/filters.js';
 import StatisticView from '../view/statistic/stats-item-menu.js';
 
 export default class Filters {
@@ -32,7 +32,7 @@ export default class Filters {
     this._filterComponent.setFilterTypeChangeHandler(this._handleFilterTypeChange);
     this._statisticComponent.setStatsItemMenuHandler(this._handleStatistic);
 
-    if (prevFilterComponent === null) {
+    if(prevFilterComponent === null) {
       renderElement(this._filterContainer, this._filterComponent, RenderPosition.AFTERBEGIN);
       this._navContainer = document.querySelector('.main-navigation');
       render(this._navContainer, this._statisticComponent);
@@ -54,11 +54,11 @@ export default class Filters {
   _handleFilterTypeChange(filterType) {
     const statsMenuItem = document.querySelector('.main-navigation__additional--active');
 
-    if (statsMenuItem) {
+    if(statsMenuItem) {
       statsMenuItem.classList.remove('main-navigation__additional--active');
     }
 
-    if (this._filterModel.getFilter() === filterType || 'Stats' === filterType) {
+    if(this._filterModel.getFilter() === filterType || 'Stats' === filterType) {
       return;
     }
     this._filterModel.setFilter(UpdateType.MAJOR, filterType);

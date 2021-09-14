@@ -1,25 +1,38 @@
-import {RANKS} from '../consts.js';
-import {ucFirstName} from './card-film.js';
+// import {RANKS} from '../consts.js';
 import dayjs from 'dayjs';
 import isBetween from 'dayjs/plugin/isBetween.js';
 
 dayjs.extend(isBetween);
 
+const RankType = {
+  NOVICE: 'Novice',
+  FAN: 'Fan',
+  MOVIE_BUFF: 'Movie buff',
+};
+
+export const RANKS = {
+  FAN: {
+    MIN: 11,
+    MAX: 20,
+  },
+  MOVIE_BUFF: 21,
+};
+
 export const isNameRank = (count) => {
-  let nameRank = 'novice';
+  let nameRank = RankType.NOVICE;
   if (count >= RANKS.FAN.MIN && count <= RANKS.FAN.MAX) {
-    nameRank = 'fan';
+    nameRank = RankType.FAN;
   } else if (count >= RANKS.MOVIE_BUFF) {
-    nameRank = 'movie buff';
+    nameRank = RankType.MOVIE_BUFF;
   }
-  return ucFirstName(nameRank);
+  return nameRank;
 };
 
 export const isTopWatchingGenre = (films) => {
   const watchedFilmGenres = {};
 
   films.forEach((film) => {
-    for (const item of film.filmInfo.genre){
+    for(const item of film.filmInfo.genre) {
       item in watchedFilmGenres ? watchedFilmGenres[item]++ :  watchedFilmGenres[item] = 1;
     }
   });

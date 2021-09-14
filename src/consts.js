@@ -63,21 +63,6 @@ export const FilterType = {
   FAVORITES: 'Favorites',
 };
 
-export const NoFilmsTextType = {
-  [FilterType.ALL_MOVIES]: 'There are no movies in our database',
-  [FilterType.WATCHLIST]:'There are no movies to watch now',
-  [FilterType.HISTORY]: 'There are no watched movies now',
-  [FilterType.FAVORITES]: 'There are no favorite movies now',
-};
-
-export const RANKS = {
-  FAN: {
-    MIN: 11,
-    MAX: 20,
-  },
-  MOVIE_BUFF: 21,
-};
-
 export const COUNTS = {
   SORT_FILMS: {
     MIN: 0,
@@ -96,6 +81,5 @@ export const SIZES = {
   },
 };
 
-export const LENGTH_STRING_DESCRIPTION = 139;
 export const SHAKE_ANIMATION_TIMEOUT = 600;
 

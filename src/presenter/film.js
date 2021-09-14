@@ -1,7 +1,7 @@
 import CardFilmView from '../view/card-film/card-film.js';
 import PopupView from '../view/popup/popup.js';
 import {siteBodyElement} from './films-list.js';
-import {remove, replace, onEscKeyDown, render, isAvailability} from '../utils/render.js';
+import {remove, replace, escKeyDownHandler, render, isAvailability} from '../utils/render.js';
 import {UserAction, UpdateType, EventType, FilterType, StateType, SHAKE_ANIMATION_TIMEOUT} from '../consts.js';
 
 export default class Film {
@@ -51,7 +51,7 @@ export default class Film {
     remove(prevPopupComponent);
   }
 
-  setViewState(state, commentId = {}) {
+  setViewState(state, update, commentId = {}) {
     const resetFormState = () => {
       this._popupComponent.updateFilm({
         isDisabled: false,
@@ -113,19 +113,21 @@ export default class Film {
 
   _renderPopup() {
     this._handingEventPopup();
+    this._popupComponent.reset();
     this._openedPopup();
   }
 
   _openedPopup() {
     render(siteBodyElement, this._popupComponent);
     siteBodyElement.classList.add('hide-overflow');
-    document.addEventListener('keydown', onEscKeyDown);
+    document.addEventListener('keydown', escKeyDownHandler);
   }
 
   _closedPopup() {
+    this._popupComponent.reset();
     const filmDetails = document.querySelector('.film-details');
     isAvailability(filmDetails);
-    document.removeEventListener('keydown', onEscKeyDown);
+    document.removeEventListener('keydown', escKeyDownHandler);
     siteBodyElement.classList.remove('hide-overflow');
   }
 
@@ -175,6 +177,7 @@ export default class Film {
     this._commentInput.disabled = true;
     this._buttonsDeleteComment.forEach((button) => button.disabled = true);
     this._changeData(UserAction.ADD_COMMENT, UpdateType.PATCH_POPUP, this._film, this._popupComponent.createComment());
+    this._popupComponent.reset();
   }
 
   _shakeCommentsList(callback) {

@@ -21,8 +21,8 @@ export default class Stats extends SmartView {
     return createChartTemplate(films, dateFrom, dateTo, statsCtx);
   }
 
-  _statsClickRadioButtonHandler(evt){
-    if(evt.target.type === 'radio'){
+  _statsClickRadioButtonHandler(evt) {
+    if(evt.target.type === 'radio') {
       this._callback.statistic(evt.target.value);
     }
   }

@@ -1,6 +1,7 @@
-import dayjs from 'dayjs';
-import {LENGTH_STRING_DESCRIPTION} from '../../consts.js';
 import {isClassName, generateDuration} from '../../utils/card-film.js';
+import dayjs from 'dayjs';
+
+export const LENGTH_STRING_DESCRIPTION = 139;
 
 export const createCardFilmTemplate = (film) => {
   const {filmInfo, userDetails, id, comments} = film;
@@ -9,7 +10,7 @@ export const createCardFilmTemplate = (film) => {
   const {watchList, alreadyWatched, favorite} = userDetails;
 
   const dateYear = dayjs(date).format('YYYY');
-  const descriptionShort = (text) => text.length >= LENGTH_STRING_DESCRIPTION ? `${text.substr(0, LENGTH_STRING_DESCRIPTION)} <span class='more'>...</span>` : text;
+  const getDescriptionShort = (text) => text.length >= LENGTH_STRING_DESCRIPTION ? `${text.substr(0, LENGTH_STRING_DESCRIPTION)} <span class='more'>...</span>` : text;
 
   return `<article class="film-card">
     <h3 class="film-card__title">${title}</h3>
@@ -20,7 +21,7 @@ export const createCardFilmTemplate = (film) => {
       <span class="film-card__genre">${genre.join(', ')}</span>
     </p>
     <img src="${poster}" alt="" class="film-card__poster" id="film-card__poster-${id}">
-    <p class="film-card__description">${descriptionShort(description)}</p>
+    <p class="film-card__description">${getDescriptionShort(description)}</p>
     <a class="film-card__comments">${comments.length} comments</a>
     <div class="film-card__controls">
       <button class="film-card__controls-item film-card__controls-item--add-to-watchlist ${isClassName(watchList)}" type="button">Add to watchlist</button>

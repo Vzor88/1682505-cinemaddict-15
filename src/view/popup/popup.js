@@ -1,9 +1,9 @@
-import SmartView from '../smart.js';
-import {createPopupTemplate} from './popup-tpl.js';
-import {isCtrlEnterEvent} from '../../utils/render.js';
 import {SIZES} from '../../consts.js';
-import dayjs from 'dayjs';
+import {isCtrlEnterEvent} from '../../utils/render.js';
+import {createPopupTemplate} from './popup-tpl.js';
+import SmartView from '../smart.js';
 import he from 'he';
+import dayjs from 'dayjs';
 import relativeTime from 'dayjs/plugin/relativeTime.js';
 dayjs.extend(relativeTime);
 
@@ -31,7 +31,7 @@ export default class Popup extends SmartView {
     return createPopupTemplate(this._film);
   }
 
-  restoreHandlers(){
+  restoreHandlers() {
     this.getElement().querySelector('.film-details__emoji-list').addEventListener('click', this._emojiListHandler);
 
     const buttonsDeleteComment = this.getElement().querySelectorAll('.film-details__comment-delete');
@@ -69,7 +69,7 @@ export default class Popup extends SmartView {
   }
 
   updateFilm(update, film, scroll = true) {
-    if (!update) {
+    if(!update) {
       return;
     }
 
@@ -80,6 +80,16 @@ export default class Popup extends SmartView {
     );
 
     this.updateElement(scroll);
+  }
+
+  reset() {
+    const textCommentContainer = document.querySelector('.film-details__comment-input');
+    if(this._containerEmodji) {
+      this._containerEmodji.innerHTML = ' ';
+    }
+    if(textCommentContainer) {
+      textCommentContainer.value = '';
+    }
   }
 
   _editClickPopupHandler() {
@@ -101,17 +111,16 @@ export default class Popup extends SmartView {
     this._callback.alreadyWatchedClickPopup();
   }
 
-  _textCommentInput(){
+  _textCommentInput() {
     return he.encode(document.querySelector('.film-details__comment-input').value);
   }
 
   _emojiListHandler(evt) {
-    this._containerEmodji = document.querySelector('.film-details__add-emoji-label');
     evt.preventDefault();
-    if (evt.target.alt !== 'emoji') {
+    if(evt.target.alt !== 'emoji') {
       return;
     }
-    if(this._containerEmodji){
+    if(this._containerEmodji) {
       this._containerEmodji.innerHTML = '';
     }
 
@@ -123,7 +132,7 @@ export default class Popup extends SmartView {
   }
 
   _createCommentHandler(evt) {
-    if(isCtrlEnterEvent(evt) && document.querySelector('.film-details__add-emoji-label').firstChild && this._textCommentInput()){
+    if(isCtrlEnterEvent(evt) && this._containerEmodji.firstChild && this._textCommentInput()) {
       evt.preventDefault();
       this._callback.createCommentClick();
     }
@@ -132,11 +141,11 @@ export default class Popup extends SmartView {
   createComment() {
     return {
       comment: this._textCommentInput(),
-      emotion: document.querySelector('.film-details__add-emoji-label').firstElementChild.id,
+      emotion: this._containerEmodji.firstElementChild.id,
     };
   }
 
-  _deleteCommentClickHandler(evt){
+  _deleteCommentClickHandler(evt) {
     evt.preventDefault();
     const parentElement = evt.target.parentElement.parentElement;
     this._callback.deleteCommentClick(parentElement);

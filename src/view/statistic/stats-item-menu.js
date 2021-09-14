@@ -12,7 +12,7 @@ export default class StatsItemMenu extends AbstractView {
     return createStatsItemMenuTemplate();
   }
 
-  _statsItemMenuHandler(evt){
+  _statsItemMenuHandler(evt) {
     this._callback.statistic();
     evt.target.classList.add('main-navigation__additional--active');
   }

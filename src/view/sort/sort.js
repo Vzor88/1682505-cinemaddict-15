@@ -14,7 +14,7 @@ export default class Sort extends AbstractView {
   }
 
   _sortTypeChangeHandler(evt) {
-    if (evt.target.className !== 'sort__button') {
+    if(evt.target.className !== 'sort__button') {
       return;
     }
     evt.preventDefault();

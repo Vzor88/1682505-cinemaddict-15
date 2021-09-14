@@ -3,34 +3,37 @@ import Abstract from '../view/abstract.js';
 import {siteBodyElement} from '../presenter/films-list.js';
 
 export const isCtrlEnterEvent = (evt) => evt.ctrlKey && 'Enter'.includes(evt.key);
-export const isTopRatedFilms = (films) =>  films.filter((film) => film.filmInfo.totalRating > 0);
-export const isTopCommentedFilms = (films) =>  films.filter((film) => film.comments.length > 0);
+export const isTopRatedFilms = (films) => films.filter((film) => film.filmInfo.totalRating > 0);
+export const isTopCommentedFilms = (films) => films.filter((film) => film.comments.length > 0);
 
 export const isAvailability = (element) => {
-  if (element && !(element instanceof Abstract)) {
+  if(element && !(element instanceof Abstract)) {
     element.remove();
   }
 };
 
-export const onEscKeyDown = (evt) => {
-  if (evt.key === 'Escape' || evt.key === 'Esc') {
+export const escKeyDownHandler = (evt) => {
+  if(evt.key === 'Escape' || evt.key === 'Esc') {
     evt.preventDefault();
     siteBodyElement.classList.remove('hide-overflow');
     const filmDetails = document.querySelector('.film-details');
+    filmDetails.querySelector('.film-details__add-emoji-label').innerHTML = ' ';
+    const textCommentContainer = filmDetails.querySelector('.film-details__comment-input');
+    textCommentContainer.value = '';
     isAvailability(filmDetails);
   }
 };
 
 export const renderElement = (container, child, place) => {
-  if (container instanceof Abstract) {
+  if(container instanceof Abstract) {
     container = container.getElement();
   }
 
-  if (child instanceof Abstract) {
+  if(child instanceof Abstract) {
     child = child.getElement();
   }
 
-  switch (place) {
+  switch(place) {
     case RenderPosition.AFTERBEGIN:
       container.prepend(child);
       break;
@@ -50,11 +53,11 @@ export const createElement = (template) => {
 };
 
 export const remove = (component) => {
-  if (component === null) {
+  if(component === null) {
     return;
   }
 
-  if (!(component instanceof Abstract)) {
+  if(!(component instanceof Abstract)) {
     component.remove();
   }
 
@@ -67,15 +70,16 @@ export const getUpdateFilm = (presenter, update, container, filter) => {
 };
 
 export const replace = (newChild, oldChild) => {
-  if (oldChild instanceof Abstract) {
+  if(oldChild instanceof Abstract) {
     oldChild = oldChild.getElement();
   }
 
-  if (newChild instanceof Abstract) {
+  if(newChild instanceof Abstract) {
     newChild = newChild.getElement();
   }
 
   const parent = oldChild.parentElement;
-
-  parent.replaceChild(newChild, oldChild);
+  if(parent) {
+    parent.replaceChild(newChild, oldChild);
+  }
 };

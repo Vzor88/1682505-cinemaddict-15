@@ -1,8 +1,8 @@
+import {DateRangeTime, RadioButtonType, FilterType} from '../consts.js';
+import {render, remove} from '../utils/render.js';
+import {filter} from '../utils/filters.js';
 import StatsView from '../view/statistic/stats.js';
 import dayjs from 'dayjs';
-import {render, remove} from '../utils/render.js';
-import {DateRangeTime, RadioButtonType, FilterType} from '../consts.js';
-import {filter} from '../utils/filters.js';
 
 export default class Stats {
   constructor(container, films) {
@@ -30,7 +30,7 @@ export default class Stats {
   _handleRadioButtonClick(radioButton) {
     this._currentInDateRangeType = radioButton;
     remove(this._statsComponent);
-    switch (this._currentInDateRangeType) {
+    switch(this._currentInDateRangeType) {
       case RadioButtonType.TODAY:
         this.init(DateRangeTime.TODAY);
         break;

@@ -33,6 +33,8 @@ export default class FilmsList {
     this._loadingComponent = new LoadingView();
 
     this._filmPresenter = new Map();
+    this._filmPresenterTop = new Map();
+    this._filmPresenterComment = new Map();
 
     this._filterType = FilterType.ALL_MOVIES;
     this._currentSortType = SortType.DEFAULT;
@@ -72,6 +74,30 @@ export default class FilmsList {
     }
   }
 
+  _getRoundPresenter(update) {
+    if (this._filmPresenter.has(update.id)) {
+      getUpdateFilm(this._filmPresenter, update, this._filmsContainer, this._filterType);
+    }
+    if (this._filmPresenterTop.has(update.id)) {
+      getUpdateFilm(this._filmPresenterTop, update, this._filmsListExtraContainer, this._filterType);
+    }
+    if (this._filmPresenterComment.has(update.id)) {
+      getUpdateFilm(this._filmPresenterComment, update, this._filmsListCommentContainer, this._filterType);
+    }
+  }
+
+  _getRoundPresenterStateView(stateType, update, comment) {
+    if (this._filmPresenter.has(update.id)) {
+      this._filmPresenter.get(update.id).setViewState(stateType, update, comment);
+    }
+    if (this._filmPresenterTop.has(update.id)) {
+      this._filmPresenterTop.get(update.id).setViewState(stateType, update, comment);
+    }
+    if (this._filmPresenterComment.has(update.id)) {
+      this._filmPresenterComment.get(update.id).setViewState(stateType, update, comment);
+    }
+  }
+
   _renderLoading() {
     render(this._filmListMainContainer, this._loadingComponent);
   }
@@ -105,14 +131,24 @@ export default class FilmsList {
   _renderFilm (films, film, container) {
     const filmPresenter = new FilmPresenter(this._handleViewAction);
     filmPresenter.init(film, container, this._filterType);
-    this._filmPresenter.set(film.id, filmPresenter);
+
+    switch(films) {
+      case this._topRatingFilms:
+        this._filmPresenterTop.set(film.id, filmPresenter);
+        break;
+      case this._topCommentFilms:
+        this._filmPresenterComment.set(film.id, filmPresenter);
+        break;
+      default:
+        this._filmPresenter.set(film.id, filmPresenter);
+    }
   }
 
   _renderFilms (films, container) {
     films.forEach((film) => this._renderFilm(films, film, container));
   }
 
-  _renderAllFilmsList () {
+  _renderAllFilmsList() {
     const filmCount = this._getFilms().length;
     const films = this._getFilms().slice(0, Math.min(filmCount, Math.max(COUNTS.FILMS_PER_STEP, this._renderedFilmCount)));
 
@@ -133,13 +169,11 @@ export default class FilmsList {
     this._allFilmsContainer = document.querySelector('.films');
   }
 
-  _renderFilmsListExtra () {
+  _renderFilmsListExtra() {
     if(isTopRatedFilms(this._filteredFilms).length){
       renderElement(this._allFilmsContainer, this._filmsComponent.getTemplateFilmsListExtra(this._filteredFilms), RenderPosition.BEFOREEND);
       this._filmsListExtraContainer = this._filmsComponent.getElement().querySelector('.films-list--top-rated').querySelector('.films-list__container');
-      this._topRatingFilms = this._filteredFilms.slice().sort((prev, next) => next.filmInfo.totalRating - prev.filmInfo.totalRating);
-
-      this._topRatingFilms = this._topRatingFilms.slice(COUNTS.SORT_FILMS.MIN, COUNTS.SORT_FILMS.MAX);
+      this._topRatingFilms = this._filteredFilms.slice().sort((prev, next) => next.filmInfo.totalRating - prev.filmInfo.totalRating).slice(COUNTS.SORT_FILMS.MIN, COUNTS.SORT_FILMS.MAX);
       this._renderFilms(this._topRatingFilms, this._filmsListExtraContainer);
     } else {
       this._filmsComponent.getElement().querySelector('.films-list--most-commented').classList.remove('films-list--extra');
@@ -153,9 +187,7 @@ export default class FilmsList {
       renderElement(this._allFilmsContainer, this._filmsComponent.getTemplateFilmsTopCommented(this._filteredFilms), RenderPosition.BEFOREEND);
       this._filmsListComment = this._filmsComponent.getElement().querySelector('.films-list--most-commented');
       this._filmsListCommentContainer = this._filmsListComment.querySelector('.films-list__container');
-      this._topCommentFilms = isTopCommentedFilms(this._filteredFilms).slice().sort((prev, next) => next.comments.length - prev.comments.length);
-
-      this._topCommentFilms = this._topCommentFilms.slice(COUNTS.SORT_FILMS.MIN, COUNTS.SORT_FILMS.MAX);
+      this._topCommentFilms = isTopCommentedFilms(this._filteredFilms).slice().sort((prev, next) => next.comments.length - prev.comments.length).slice(COUNTS.SORT_FILMS.MIN, COUNTS.SORT_FILMS.MAX);
       this._renderFilms(this._topCommentFilms, this._filmsListCommentContainer);
     } else {
       filmsListTopRatedContainer.classList.remove('films-list--extra');
@@ -180,9 +212,15 @@ export default class FilmsList {
     this._filmPresenter.forEach((presenter) => presenter.destroy());
     this._filmPresenter.clear();
 
+    this._filmPresenterTop.forEach((presenter) => presenter.destroy());
+    this._filmPresenterTop.clear();
+
+    this._filmPresenterComment.forEach((presenter) => presenter.destroy());
+    this._filmPresenterComment.clear();
+
     remove(this._showMoreButtonComponent);
     remove(this._sortComponent);
-    if(this._rankComponent){
+    if(this._rankComponent) {
       remove(this._rankComponent);
     }
     remove(this._statsFooterComponent);
@@ -201,56 +239,58 @@ export default class FilmsList {
     }
   }
 
-  _renderPage () {
+  _renderPage() {
     siteBodyElement.classList.remove('hide-overflow');
 
-    if (this._isLoading) {
+    if(this._isLoading) {
       this._renderLoading();
       return;
     }
 
-    if(this._getFilms().length === 0) {
+    if(!this._getFilms().length) {
       this._renderNoFilms ();
       this._renderStatsFooter();
       return;
     }
     this._renderStatsFooter();
-    this._renderRank ();
-    this._renderSort ();
+    this._renderRank();
+    this._renderSort();
     this._renderMarkupFilmLists();
-    this._renderAllFilmsList ();
-    if(isTopRatedFilms(this._filteredFilms).length || isTopCommentedFilms(this._filteredFilms).length){
+    this._renderAllFilmsList();
+    if(isTopRatedFilms(this._filteredFilms).length || isTopCommentedFilms(this._filteredFilms).length) {
       this._renderFilmsListExtra();
       this._renderFilmsListTopCommented();
     }
   }
 
-  _saveScrollPosition(){
-    if(document.querySelector('.film-details')) {
-      return document.querySelector('.film-details').scrollTop;
+  _saveScrollPosition() {
+    const popupContainer = document.querySelector('.film-details');
+    if(popupContainer) {
+      return popupContainer.scrollTop;
     }
   }
 
-  _loadScrollPosition(scrollPosition){
-    if(document.querySelector('.film-details')) {
-      return document.querySelector('.film-details').scrollTop = scrollPosition;
+  _loadScrollPosition(scrollPosition) {
+    const popupContainer = document.querySelector('.film-details');
+    if(popupContainer) {
+      return popupContainer.scrollTop = scrollPosition;
     }
   }
 
   _handleViewAction(actionType, updateType, update, comment) {
-    switch (actionType) {
+    switch(actionType) {
       case UserAction.UPDATE_FILM:
         this._api.updateFilm(update)
           .then((response) => {
             this._takeAllFilms().forEach((film) => {
-              if (film.id === update.id) {
+              if(film.id === update.id) {
                 response.comments = film.comments;
                 this._filmsModel.updateFilm(updateType, response);
               }
             });
           })
           .catch(() => {
-            this._filmPresenter.get(update.id).setViewState(StateType.ABORTING_UPDATE, update);
+            this._getRoundPresenterStateView(StateType.ABORTING_UPDATE, update);
           });
         break;
       case UserAction.ADD_COMMENT:
@@ -259,17 +299,17 @@ export default class FilmsList {
             this._filmsModel.updateFilm(updateType, response);
           })
           .catch(() => {
-            this._filmPresenter.get(update.id).setViewState(StateType.ABORTING_CREATING, update);
+            this._getRoundPresenterStateView(StateType.ABORTING_CREATING, update);
           });
         break;
       case UserAction.DELETE_COMMENT:
-        this._filmPresenter.get(update.id).setViewState(StateType.DELETING, comment);
+        this._getRoundPresenterStateView(StateType.DELETING, update, comment);
         this._api.deleteComment(update, comment)
           .then(() => {
             this._filmsModel.deleteComment(updateType, update, comment);
           })
           .catch(() => {
-            this._filmPresenter.get(update.id).setViewState(StateType.ABORTING_DELETING, update);
+            this._getRoundPresenterStateView(StateType.ABORTING_DELETING, update);
           });
     }
   }
@@ -278,19 +318,21 @@ export default class FilmsList {
     const scrollY = this._saveScrollPosition();
     switch (updateType) {
       case UpdateType.PATCH:
-        getUpdateFilm(this._filmPresenter, update, this._filmsContainer, this._filterType);
+        this._getRoundPresenter(update);
         this._loadScrollPosition(scrollY);
         break;
       case UpdateType.PATCH_POPUP:
-        getUpdateFilm(this._filmPresenter, update, this._filmsContainer, this._filterType);
+        this._getRoundPresenter(update);
 
         if(this._filmsListComment){
           this._filmsListComment.remove();
         }
         this._renderFilmsListTopCommented();
 
-        this._filmPresenter.get(update.id).init(update, this._filmsListCommentContainer, this._filterType);
-        this._filmPresenter.get(update.id).handleCardFilmClick();
+        if(this._filmPresenterComment.has(update.id)) {
+          getUpdateFilm(this._filmPresenterComment, update, this._filmsListCommentContainer, this._filterType);
+          this._filmPresenterComment.get(update.id).handleCardFilmClick();
+        }
         this._loadScrollPosition(scrollY);
         break;
       case UpdateType.MINOR:
@@ -317,7 +359,7 @@ export default class FilmsList {
   }
 
   _handleSortTypeChange(sortType) {
-    if (this._currentSortType === sortType) {
+    if(this._currentSortType === sortType) {
       return;
     }
 
@@ -326,7 +368,7 @@ export default class FilmsList {
     this._renderPage();
   }
 
-  _handleShowMoreButtonClick () {
+  _handleShowMoreButtonClick() {
     const filmCount = this._getFilms().length;
     const newRenderedFilmCount = Math.min(filmCount, this._renderedFilmCount + COUNTS.FILMS_PER_STEP);
     const films = this._getFilms().slice(this._renderedFilmCount, newRenderedFilmCount);
@@ -335,7 +377,7 @@ export default class FilmsList {
 
     this._renderedFilmCount = newRenderedFilmCount;
 
-    if (this._renderedFilmCount >= filmCount) {
+    if(this._renderedFilmCount >= filmCount) {
       remove(this._showMoreButtonComponent);
     }
   }

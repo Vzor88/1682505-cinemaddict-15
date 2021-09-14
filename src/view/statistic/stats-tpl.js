@@ -1,19 +1,18 @@
-import {isNameRank} from '../../utils/statistic.js';
-import {generateDuration, ucFirstName} from '../../utils/card-film.js';
+import {getWatchedFilmList, countWatchedFilmsInDateRange, isWatchedList, isNameRank} from '../../utils/statistic.js';
+import {generateDuration} from '../../utils/card-film.js';
 import {RadioButtonType, SIZES} from '../../consts.js';
 import Chart from 'chart.js';
 import ChartDataLabels from 'chartjs-plugin-datalabels';
-import {getWatchedFilmList, countWatchedFilmsInDateRange, isWatchedList} from '../../utils/statistic.js';
 
 const generateRadioButton = (buttons, activeButton) => (
   `<input type="radio" class="statistic__filters-input visually-hidden" name="statistic-filter" id="statistic-${buttons}" value="${buttons}" ${buttons === activeButton ? 'checked' : ' '}>
-  <label for="statistic-${buttons}" class="statistic__filters-label">${ucFirstName(buttons)}</label>`
+  <label for="statistic-${buttons}" class="statistic__filters-label">${buttons}</label>`
 );
 
 const renderRadioButtonsTemplate = (radioButtons, activeRadioButton) => radioButtons.map((radioButtonValue) => generateRadioButton(radioButtonValue, activeRadioButton)).join('');
 
 export const createChartTemplate = (films, dateFrom, dateTo, statsCtx) => (
-  new Chart(statsCtx,  {
+  new Chart(statsCtx, {
     plugins: [ChartDataLabels],
     type: 'horizontalBar',
     data: {
@@ -73,7 +72,7 @@ export const createChartTemplate = (films, dateFrom, dateTo, statsCtx) => (
 
 export const createStatsTemplate = (films, dateFrom, dateTo, activeRadioButton) => {
   const initialValue = 0;
-  let totalDuration = countWatchedFilmsInDateRange(films, dateTo, dateFrom).reduce( (accumulator, currentValue) => accumulator + currentValue.filmInfo.runtime, initialValue);
+  let totalDuration = countWatchedFilmsInDateRange(films, dateTo, dateFrom).reduce((accumulator, currentValue) => accumulator + currentValue.filmInfo.runtime, initialValue);
   totalDuration = generateDuration(totalDuration, true);
   const statsCtxHeight = SIZES.BAR.HEIGHT * getWatchedFilmList(countWatchedFilmsInDateRange(films, dateFrom, dateTo)).genresList.length;
 

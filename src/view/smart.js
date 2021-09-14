@@ -15,7 +15,7 @@ export default class Smart extends Abstract {
     const newElement = this.getElement();
     parent.replaceChild(newElement, prevElement);
 
-    if(scrollDown){
+    if(scrollDown) {
       this.getElement().scrollTop = scrollY;
     }
 

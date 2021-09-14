@@ -3,7 +3,7 @@ import {SHAKE_ANIMATION_TIMEOUT} from '../consts.js';
 
 export default class Abstract {
   constructor() {
-    if (new.target === Abstract) {
+    if(new.target === Abstract) {
       throw new Error('Can\'t instantiate Abstract, only concrete one.');
     }
 
@@ -16,7 +16,7 @@ export default class Abstract {
   }
 
   getElement() {
-    if (!this._element) {
+    if(!this._element) {
       this._element = createElement(this.getTemplate());
     }
 
