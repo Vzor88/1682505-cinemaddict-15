@@ -7,7 +7,7 @@ export const generateDuration = (minutes, isRenderStats = false) => {
     minutes -= 60;
   }
 
-  if(isRenderStats){
+  if(isRenderStats) {
     return {hours, minutes};
   }
   return !hours  ? `${minutes}m` : `${hours}h ${minutes}m`;
@@ -44,12 +44,12 @@ export const sortFilmDate = (filmA, filmB) => {
   return dayjs(filmB.filmInfo.release.date).diff(dayjs(filmA.filmInfo.release.date));
 };
 
-export const sortFilmRating = (taskA, taskB) => {
-  const weight = getWeightForNullDate(taskA.filmInfo.totalRating, taskB.filmInfo.totalRating);
+export const sortFilmRating = (filmA, filmB) => {
+  const weight = getWeightForNullDate(filmA.filmInfo.totalRating, filmB.filmInfo.totalRating);
 
   if(weight !== null) {
     return weight;
   }
 
-  return taskB.filmInfo.totalRating - taskA.filmInfo.totalRating;
+  return filmB.filmInfo.totalRating - filmA.filmInfo.totalRating;
 };

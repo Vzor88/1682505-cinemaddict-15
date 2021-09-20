@@ -9,7 +9,6 @@ export default class CardFilm extends AbstractView {
     this._favoriteClickHandler = this._favoriteClickHandler.bind(this);
     this._watchListClickHandler = this._watchListClickHandler.bind(this);
     this._alreadyWatchedClickHandler = this._alreadyWatchedClickHandler.bind(this);
-
     this._editClickOpenPopupHandler = this._editClickOpenPopupHandler.bind(this);
   }
 

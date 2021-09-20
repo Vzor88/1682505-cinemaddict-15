@@ -35,7 +35,7 @@ export default class Films extends AbstractObserver {
   deleteComment(updateType, update, commentId) {
     const index = update.comments.findIndex((comment) => comment.id === commentId);
 
-    if (index === -1) {
+    if(index === -1) {
       throw new Error('Can\'t delete unexisting task');
     }
 
@@ -59,6 +59,7 @@ export default class Films extends AbstractObserver {
     adaptedFilm.filmInfo.release.date = new Date(adaptedFilm.filmInfo.release.date);
     adaptedFilm.userDetails.watchList = film.user_details['watchlist'];
     adaptedFilm.userDetails.watchingDate = new Date(film.user_details['watching_date']);
+
     delete adaptedFilm.userDetails['watchlist'];
     return adaptedFilm;
   }
@@ -68,11 +69,13 @@ export default class Films extends AbstractObserver {
     adaptedFilm['film_info'] = _.mapKeys(film.filmInfo, (value, key) => _.snakeCase(key));
     adaptedFilm['film_info'].release = _.mapKeys(film.filmInfo.release, (value, key) => _.snakeCase(key));
     adaptedFilm['user_details'] = _.mapKeys(film.userDetails, (value, key) => _.snakeCase(key));
+
     adaptedFilm.id = String(film['id']);
     adaptedFilm.comments = film.comments.map((comment) => String(comment.id));
     adaptedFilm['film_info'].release.date = film.filmInfo.release.date.toISOString();
     adaptedFilm['user_details']['watching_date'] = film.userDetails.watchingDate.toISOString();
     adaptedFilm['user_details']['watchlist'] = film.userDetails.watchList;
+
     delete adaptedFilm.user_details['watch_list'];
     return adaptedFilm;
   }
@@ -88,6 +91,7 @@ export default class Films extends AbstractObserver {
     adaptedFilm.filmInfo.release.date = new Date(film.movie.film_info.release.date);
     adaptedFilm.userDetails.watchList = film.movie.user_details['watchlist'];
     adaptedFilm.userDetails.watchingDate = new Date(film.movie.user_details['watching_date']);
+
     delete adaptedFilm.userDetails['watchlist'];
     return adaptedFilm;
   }

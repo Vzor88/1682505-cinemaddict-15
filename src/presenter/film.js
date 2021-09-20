@@ -17,7 +17,7 @@ export default class Film {
     this._handleCreateCommentClick = this._handleCreateCommentClick.bind(this);
     this._handleAlreadyWatchedClick = this._handleAlreadyWatchedClick.bind(this);
     this.handleCardFilmClick = this.handleCardFilmClick.bind(this);
-    this._closedPopup = this._closedPopup.bind(this);
+    this._handleClosedPopup = this._handleClosedPopup.bind(this);
   }
 
   destroy() {
@@ -101,13 +101,12 @@ export default class Film {
   }
 
   _handingEventPopup() {
-    this._popupComponent.setEditClickPopupHandler(this._closedPopup);
+    this._popupComponent.setEditClickPopupHandler(this._handleClosedPopup);
     this._popupComponent.setFavoritePopupClickHandler(this._handleFavoriteClick);
     this._popupComponent.setWatchListPopupClickHandler(this._handleWatchListClick);
     this._popupComponent.setAlreadyWatchedPopupClickHandler(this._handleAlreadyWatchedClick);
     this._popupComponent.setDeleteCommentClickHandler(this._handleDeleteCommentClick);
     this._popupComponent.setCreateCommentClickHandler(this._handleCreateCommentClick);
-
     this._popupComponent.restoreHandlers();
   }
 
@@ -129,6 +128,10 @@ export default class Film {
     isAvailability(filmDetails);
     document.removeEventListener('keydown', escKeyDownHandler);
     siteBodyElement.classList.remove('hide-overflow');
+  }
+
+  _handleClosedPopup() {
+    this._closedPopup();
   }
 
   _handleWatchListClick() {
@@ -165,7 +168,7 @@ export default class Film {
   _handleDeleteCommentClick(commentary) {
     const commentId = commentary.querySelector('.film-details__comment-id').textContent;
     this._film.comments.forEach((comment) => {
-      if(comment.id === commentId){
+      if(comment.id === commentId) {
         this._changeData(UserAction.DELETE_COMMENT, UpdateType.PATCH_POPUP, this._film, commentId);
       }
     });
@@ -185,7 +188,7 @@ export default class Film {
     commentsList.style.animation = `shake ${SHAKE_ANIMATION_TIMEOUT / 1000}s`;
     setTimeout(() => {
       commentsList.style.animation = '';
-      if(callback){
+      if(callback) {
         callback();
       }
     }, SHAKE_ANIMATION_TIMEOUT);

@@ -5,8 +5,8 @@ import FiltersModel from './model/filters.js';
 import FiltersPresenter from './presenter/filters.js';
 import Api from './services/api.js';
 
-export const AUTHORIZATION = 'Basic mS7sfS83wma2sa5ret58rt1i';
-export const END_POINT = 'https://15.ecmascript.pages.academy/cinemaddict/';
+const AUTHORIZATION = 'Basic mS7sfS83wma2sa5ret58rt1i';
+const END_POINT = 'https://15.ecmascript.pages.academy/cinemaddict/';
 
 const copyFilms = [];
 

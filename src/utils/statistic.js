@@ -1,4 +1,3 @@
-// import {RANKS} from '../consts.js';
 import dayjs from 'dayjs';
 import isBetween from 'dayjs/plugin/isBetween.js';
 
@@ -10,7 +9,7 @@ const RankType = {
   MOVIE_BUFF: 'Movie buff',
 };
 
-export const RANKS = {
+const RANKS = {
   FAN: {
     MIN: 11,
     MAX: 20,

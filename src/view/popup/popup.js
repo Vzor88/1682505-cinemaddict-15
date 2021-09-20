@@ -15,11 +15,9 @@ export default class Popup extends SmartView {
     this._containerEmodji = this.getElement().querySelector('.film-details__add-emoji-label');
 
     this._editClickPopupHandler = this._editClickPopupHandler.bind(this);
-
     this._favoriteClickPopupHandler = this._favoriteClickPopupHandler.bind(this);
     this._watchListClickPopupHandler = this._watchListClickPopupHandler.bind(this);
     this._alreadyWatchedClickPopupHandler = this._alreadyWatchedClickPopupHandler.bind(this);
-
     this._emojiListHandler = this._emojiListHandler.bind(this);
     this._createCommentHandler = this._createCommentHandler.bind(this);
     this._deleteCommentClickHandler = this._deleteCommentClickHandler.bind(this);
